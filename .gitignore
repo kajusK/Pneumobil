@@ -1,0 +1,11 @@
+*.bak
+*-bak
+*.cod
+*.hex
+*.elf
+*.epp
+*.lst
+*.o
+*.d
+fw/*/obj/
+doc/datasheets
