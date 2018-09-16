@@ -46,7 +46,7 @@ USE_FPU = no
 # Project, sources and paths
 
 # Define project name here
-PROJECT = pneumatic
+PROJECT = ecu
 
 SOURCES = ../../sources
 EXTERNAL = $(SOURCES)/external
