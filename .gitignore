@@ -7,5 +7,6 @@
 *.lst
 *.o
 *.d
-fw/*/obj/
+fw/projects/*/obj/
+fw/projects/tests/run_tests
 doc/datasheets

@@ -75,7 +75,8 @@ LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CSRC = $(ALLCSRC) \
-	$(APP_DIR)/main.c
+	$(wildcard $(APP_DIR)/*.c) \
+	$(wildcard $(SOURCES)/modules/*.c)
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -105,7 +106,7 @@ TCPPSRC =
 ASMSRC = $(ALLASMSRC)
 ASMXSRC = $(ALLXASMSRC)
 
-INCDIR = $(ALLINC) $(CONFDIR)
+INCDIR = $(ALLINC) $(CONFDIR) $(SOURCES)
 
 ##############################################################################
 # Compiler settings
