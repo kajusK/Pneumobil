@@ -1,0 +1,47 @@
+Indentation - 4 spaces
+
+Function names:
+    Module_FunctionName
+    Module_CallbackI (interrupt callback, must return asap)
+    Module_Callback (normal callback, can wait in processing)
+    Modulei_FunctionName (static module function)
+
+variables outside function (global, static in whole file), function parameters
+    extern int module_some_variable
+    static int modulei_some_local_variable
+
+types:
+    some_random_type_t
+
+Documentation - all non static function must contain doxygen documentation,
+brief description, all parameters and return value if any, each file must
+contain header with file and brief. Each file must contain GNU GPL copyright
+notice.
+
+Includes:
+all includes required for external functions, defines, etc must be in header
+file only and header must be included into it's source file
+
+Source code organization
+ - GPL notice
+ - Doxygen header
+ - Includes external
+ - Includes internal
+ - Include src header
+ - Local defines
+ - Local typedefs
+ - Internal variables
+ - External variables
+ - Local functions
+ - Global functions
+
+Header source organization
+ - GPL notice
+ - Doxygen header
+ - Ifdef block
+ - Includes required for declarations in current file
+ - Defines
+ - Typedefs
+ - External variables
+ - Functions declaration
+ - endif

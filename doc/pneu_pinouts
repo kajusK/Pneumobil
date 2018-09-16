@@ -1,0 +1,113 @@
+Rotační enkodér
+===============
+Typ: LPD3806-360BM-G5-24C
+Datasheet: https://wemakethings.net/2014/05/26/rotary-encoder-teardown/
+Napájení: 5-24DC (30mA, 7805 inside)
+Výstup: Otevřený kolektor
+	360 pulzů/otáčku jedna fáze, 1440 p/rot dvě fáze
+
+Zapojení:
+---------
+Zelená - A
+Bílá - B
+Červená - Vcc
+Černá - GND
+
+Magnetické senzory krajních poloh pístu
+=======================================
+Typ: Aventics ST6 0830100629
+Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=EN&Variant=internet&file=en/pdf/PDF_509814_p9196_en.pdf
+Napájení: 10-30DC
+Výstup: Otevřeno = Vcc, Sepnuto = GND
+
+Zapojení:
+---------
+Modrá - GND/Vcc
+Hnědá - GND/Vcc
+Černá - out
+
+Indukcak
+========
+Typ: LJ12A3-4-Z/BX
+Datasheet: https://arduino-shop.cz/arduino/1140-indukcni-priblizovaci-cidlo-lj12a3-4-z-bx-1449885814.html
+Napájení: 6-36DC (300mA?)
+Výstup: Nesepnutý - Vcc, Sepnutý - nepřipojeno
+
+Zapojení:
+---------
+Modrá - GND
+Hnědá - Vcc
+Černá - out
+
+Optická brána (rychlost vozu)
+=============================
+Typ: LTH301-07
+Datasheet: https://www.gme.cz/data/attachments/dsh.521-040.1.pdf
+Napětí na diodě: 1.2V typicky při 20mA
+
+
+
+Ventil
+======
+Typ: Aventics R412000127
+Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=en&Variant=internet&file=en/pdf/PDF_p31133_en.pdf
+Napájení: 24V
+Spotřeba: 2,1W
+Swith-on: 37ms
+Swith-off: 97ms
+
+Dvě možné polohy (+zavřeno) - řízeno elektromagnety - dva třížilové vodiče.
+Sepnuta první cívka - otevřena jedna strana
+Sepnuta druhá dívka - otevřena druhá strana
+Obě sepnuty/rozepnuty - zavřeno
+
+Zapojení:
+---------
+Žlutozelená: Kostra
+Černá: jedne konce cívky
+Černá: Druhý konec cívky
+
+
+Redukční ventil
+===============
+Typ: Aventics ED02 R414002411
+Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=EN&file=en%2Fpdf%2FPDF_g38881_en.pdf
+Napájení: 24 V
+Ovládání: Proudová smyčka 4-20 mA
+
+Zapojení:
+---------
+Hnědá: 24 V
+Bílá: 0-20 mA kladné napětí
+Modrá: GND
+Černá: 0-20 mA reálný tlak
+Šedá: Kostra
+
+Proudový senzor
+===============
+Typ: ACS712
+Datasheet: https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf
+Napájení: 5 V
+Výstup: Nulový proud - Vcc/2, 185mV/A
+
+Telemetrie
+==========
+Typ: nRF24L01
+Datasheet: https://www.sparkfun.com/datasheets/Components/SMD/nRF24L01Pluss_Preliminary_Product_Specification_v1_0.pdf
+Napájení 3.3 V
+Rozhraní: SPI
+
+Tlakoměr
+========
+Typ: R412010773
+Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=en&Variant=internet&file=en/pdf/PDF_p626745_en.pdf
+Napájení: 24 V
+Rozhraní: 4-20 mA, 0-10 V (0-10 Bar)
+
+Zapojeni:
+---------
+Seda - NC
+Hneda - 1 - ucc
+Bila - 2 - out 2 - analog or digital
+Modra - 3 - GND
+Cerna - 4 - Digital
