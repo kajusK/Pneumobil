@@ -31,5 +31,6 @@
 #include <unity_fixture.h>
 
 extern void Log_RunTests(void);
+extern void Eeprom_RunTests(void);
 
 #endif

@@ -77,6 +77,7 @@ LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 CSRC = $(ALLCSRC) \
 	$(wildcard $(APP_DIR)/*.c) \
 	$(wildcard $(SOURCES)/modules/*.c) \
+	$(wildcard $(SOURCES)/drivers/*.c) \
 	$(wildcard $(SOURCES)/utils/*.c)
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global

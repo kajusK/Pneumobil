@@ -30,6 +30,7 @@
 static void RunAll(void)
 {
     Log_RunTests();
+    Eeprom_RunTests();
 }
 
 int main(int argc, const char *argv[])

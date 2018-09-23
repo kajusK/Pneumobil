@@ -1,3 +1,4 @@
+
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
@@ -18,38 +19,40 @@
 */
 
 /**
- * @file    ch.h
- * @brief   Header files with Chibios defines for tests
+ * @file    eeprom.h
+ * @brief   I2C Eeprom driver
  *
- * @addtogroup tests
+ * @addtogroup drivers
  * @{
  */
 
-#ifndef __CH_H_
-#define __CH_H_
+#ifndef __DRIVERS_EEPROM_H
+#define __DRIVERS_EEPROM_H
 
 #include <inttypes.h>
-#include <stdlib.h>
 
-typedef _Bool bool;
-#define true 1
-#define false 0
+/**
+ * Write data to eeprom
+ *
+ * @param [in] address      Address to write data to
+ * @param [in] buf          Data to write
+ * @param [in] size         Length of data buffer
+ *
+ * @return  Successfulness of the operation
+ */
+extern bool Eepromd_Write(uint16_t address, const uint8_t *buf, size_t size);
 
-#define THD_WORKING_AREA(name, size) void *name
-#define THD_FUNCTION(name, arg) void name(int arg)
-#define MEMORYPOOL_DECL(name, size, align, foo) char name
-#define MAILBOX_DECL(name, point, size) void *name = point
-#define TIME_I2S(data) data
-#define TIME_MS2I(data) data
-#define TIME_INFINITE -1
-#define TIME_IMMEDIATE 0
-#define NORMALPRIO 100
-
-typedef void *msg_t;
-
-uint32_t chVTGetSystemTime(void);
-void chThdSleep(uint32_t interval);
-uint32_t *chThdCreateStatic(void *wsp, size_t size,
-                             uint32_t prio, void (*pf)(int arg), void *arg);
+/**
+ * Write data to eeprom
+ *
+ * @param [in] address      Address to read data from
+ * @param [in] buf          Data buffer
+ * @param [in] size         Amount of data to receive
+ *
+ * @return  Successfulness of the operation
+ */
+extern bool Eepromd_Read(uint16_t address, uint8_t *buf, size_t size);
 
 #endif
+
+/** @} */

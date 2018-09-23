@@ -34,6 +34,11 @@ uint32_t chVTGetSystemTime(void)
     return time++;
 }
 
+void chThdSleep(uint32_t interval)
+{
+    (void) interval;
+}
+
 uint32_t *chThdCreateStatic(void *wsp, size_t size,
                              uint32_t prio, void (*pf)(int arg), void *arg)
 {

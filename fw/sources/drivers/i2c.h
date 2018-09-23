@@ -18,38 +18,39 @@
 */
 
 /**
- * @file    ch.h
- * @brief   Header files with Chibios defines for tests
+ * @file    i2c.h
+ * @brief   I2C driver
  *
- * @addtogroup tests
+ * @addtogroup drivers
  * @{
  */
 
-#ifndef __CH_H_
-#define __CH_H_
+#ifndef __DRIVERS_I2C_H
+#define __DRIVERS_I2C_H
 
 #include <inttypes.h>
-#include <stdlib.h>
 
-typedef _Bool bool;
-#define true 1
-#define false 0
+/**
+ * Send and receive data over i2c
+ *
+ * @param [in] address      i2c device address without rw bit
+ * @param [in] txbuf        Data to be send
+ * @param [in] txbytes      Amount of bytes to send
+ * @param [out] rxbuf       Data buffer for received data
+ * @param [in] rxbytes      Amount of data to receive, 0 for transmit only
+ *
+ * @return  Successfulness of the operation
+ */
+extern bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf,
+        size_t txbytes, uint8_t *rxbuf, size_t rxbytes);
 
-#define THD_WORKING_AREA(name, size) void *name
-#define THD_FUNCTION(name, arg) void name(int arg)
-#define MEMORYPOOL_DECL(name, size, align, foo) char name
-#define MAILBOX_DECL(name, point, size) void *name = point
-#define TIME_I2S(data) data
-#define TIME_MS2I(data) data
-#define TIME_INFINITE -1
-#define TIME_IMMEDIATE 0
-#define NORMALPRIO 100
-
-typedef void *msg_t;
-
-uint32_t chVTGetSystemTime(void);
-void chThdSleep(uint32_t interval);
-uint32_t *chThdCreateStatic(void *wsp, size_t size,
-                             uint32_t prio, void (*pf)(int arg), void *arg);
+/**
+ * Initialize I2C module
+ *
+ * @param [in] full_speed   true for 400 kHz, false for 100 kHz
+ */
+extern void I2Cd_Init(bool full_speed);
 
 #endif
+
+/** @} */
