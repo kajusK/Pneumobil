@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "utils/assert.h"
 #include "modules/log.h"
 
 #define LOG_BUFFER_LEN 16
@@ -59,6 +60,8 @@ static void Logi_SendLog(log_msg_t *msg)
 {
     int i;
 
+    ASSERT_NOT(msg == NULL);
+
     for (i = 0; i < LOG_CALLBACKS_NUM; i++) {
         if (logi_subscriptions[i].cb == NULL) {
             continue;
@@ -67,7 +70,6 @@ static void Logi_SendLog(log_msg_t *msg)
             logi_subscriptions[i].cb(msg);
         }
     }
-
 }
 
 static THD_FUNCTION(Logi_Thread, arg)
@@ -95,6 +97,8 @@ static void Logi_AddEntry(log_src_t src, log_severity_t severity,
 {
     log_msg_t *msg;
 
+    ASSERT_NOT(format == NULL);
+
     if (severity > logi_max_severity) {
         return;
     }
@@ -112,6 +116,7 @@ static void Logi_AddEntry(log_src_t src, log_severity_t severity,
 
     /** no need to check the return value, if it fails, it fails, log is lost */
     chMBPostTimeout(&logi_mailbox, (msg_t) msg, TIME_IMMEDIATE);
+
 }
 
 /**
@@ -142,6 +147,8 @@ static log_severity_t Logi_GetHighestSeverity(void)
 bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[])
 {
     int i;
+
+    ASSERT_NOT(severity == NULL);
 
     for (i = 0; i < LOG_CALLBACKS_NUM; i++) {
         if (logi_subscriptions[i].cb == NULL) {
@@ -174,6 +181,8 @@ bool Log_UpdateSubscription(log_callback_t cb, const log_severity_t severity[])
 {
     int i;
 
+    ASSERT_NOT(severity == NULL);
+
     for (i = 0; i < LOG_CALLBACKS_NUM; i++) {
         if (logi_subscriptions[i].cb == cb) {
             memcpy(logi_subscriptions[i].sources,
@@ -188,6 +197,9 @@ bool Log_UpdateSubscription(log_callback_t cb, const log_severity_t severity[])
 void Log_Debug(log_src_t src, const char *format, ...)
 {
     va_list ap;
+
+    ASSERT_NOT(format == NULL);
+
     va_start(ap, format);
     Logi_AddEntry(src, LOG_SEVERITY_DEBUG, format, ap);
     va_end(ap);
@@ -196,6 +208,9 @@ void Log_Debug(log_src_t src, const char *format, ...)
 void Log_Info(log_src_t src, const char *format, ...)
 {
     va_list ap;
+
+    ASSERT_NOT(format == NULL);
+
     va_start(ap, format);
     Logi_AddEntry(src, LOG_SEVERITY_INFO, format, ap);
     va_end(ap);
@@ -204,6 +219,9 @@ void Log_Info(log_src_t src, const char *format, ...)
 void Log_Warn(log_src_t src, const char *format, ...)
 {
     va_list ap;
+
+    ASSERT_NOT(format == NULL);
+
     va_start(ap, format);
     Logi_AddEntry(src, LOG_SEVERITY_WARNING, format, ap);
     va_end(ap);
@@ -212,6 +230,9 @@ void Log_Warn(log_src_t src, const char *format, ...)
 void Log_Error(log_src_t src, const char *format, ...)
 {
     va_list ap;
+
+    ASSERT_NOT(format == NULL);
+
     va_start(ap, format);
     Logi_AddEntry(src, LOG_SEVERITY_ERROR, format, ap);
     va_end(ap);

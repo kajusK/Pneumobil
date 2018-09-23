@@ -60,7 +60,7 @@ typedef enum {
     LOG_SOURCE_UNKNOWN,
     LOG_SOURCE_DB,
     LOG_SOURCE_SYSTEM,
-    LOG_SOURCE_COMS,
+    LOG_SOURCE_COMM,
     LOG_SOURCE_COUNT,
 } log_src_t;
 
@@ -85,7 +85,7 @@ typedef void (*log_callback_t)(log_msg_t *msg);
  *
  * @return  true if succeeded
  */
-bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[]);
+extern bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[]);
 
 /**
  * Unsubscribe callback from logs
@@ -94,7 +94,7 @@ bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[]);
  *
  * @return  true if succeeded
  */
-bool Log_Unsubscribe(log_callback_t cb);
+extern bool Log_Unsubscribe(log_callback_t cb);
 
 /**
  * Subscribe to logs
@@ -104,7 +104,8 @@ bool Log_Unsubscribe(log_callback_t cb);
  *
  * @return  true if succeeded
  */
-bool Log_UpdateSubscription(log_callback_t cb, const log_severity_t severity[]);
+extern bool Log_UpdateSubscription(log_callback_t cb,
+        const log_severity_t severity[]);
 
 /**
  * Log debug message
@@ -148,3 +149,5 @@ extern void Log_Error(log_src_t src, const char *format, ...);
 extern void Log_Init(void);
 
 #endif
+
+/** @} */
