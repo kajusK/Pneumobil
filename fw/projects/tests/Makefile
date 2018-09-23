@@ -100,7 +100,7 @@ $(TARGET): $(DIRS) $(OBJS)
 	$(LD) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $@
 
 tests: $(TARGET)
-	./$<
+	./$< -v
 
 clean:
 	$(RM) -r $(OBJDIR) $(TARGET)
