@@ -45,3 +45,11 @@ Header source organization
  - External variables
  - Functions declaration
  - endif
+
+Test source organisation
+ - GPL Notice
+ - Doxygen header
+ - Includes
+ - Include source under test
+ - mocks
+ - test cases
