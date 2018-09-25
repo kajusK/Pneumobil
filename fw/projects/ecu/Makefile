@@ -74,11 +74,14 @@ LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(ALLCSRC) \
-	$(wildcard $(APP_DIR)/*.c) \
+USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(wildcard $(SOURCES)/modules/*.c) \
+	$(wildcard $(SOURCES)/modules/*/*.c) \
 	$(wildcard $(SOURCES)/drivers/*.c) \
 	$(wildcard $(SOURCES)/utils/*.c)
+
+CSRC = $(ALLCSRC) \
+	$(USRSRC)
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -167,10 +170,15 @@ STFLASH	= $(shell which st-flash)
 
 STYLECHECK	:= /checkpatch.pl
 STYLECHECK_FLAGS	:= --no-tree -f --terse --mailback
-STYLECHECK_FILES	:= $(USRSRC) $(shell find $(UINCIDR) -name '*.[ch]')
+STYLECHECK_FILES	:= $(USRSRC) \
+    $(shell find $(SOURCES) -name '*.h' | grep -v $(EXTERNAL) | grep -v $(SOURCES)/tests)
 
 CODECHECK	:= cppcheck
-CODECHECK_FLAGS :=
+CODECHECK_FLAGS := --enable=warning,performance -j 4 \
+    $(addprefix -I, $(SOURCES)) \
+    --template=gcc --suppress=missingIncludeSystem \
+    --suppress=unusedFunction --suppress=unmatchedSuppression \
+    --suppress=missingInclude --platform=unix32 -q
 
 ##############################################################################
 
@@ -182,7 +190,7 @@ flash: build/$(PROJECT).bin
 	$(STFLASH) write $< 0x8000000
 
 codecheck:
-	$(CODECHECK) $(CODECHECK_FLAGS) $(STYLECHECK_FILES)
+	@$(CODECHECK) $(CODECHECK_FLAGS) $(STYLECHECK_FILES)
 
 stylecheck:
 	$(OPENCM3_SCRIPT_DIR)$(STYLECHECK) $(STYLECHECK_FLAGS) $(STYLECHECK_FILES)
