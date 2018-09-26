@@ -33,6 +33,30 @@
 /** Timeout for i2c transmit command */
 #define I2CD_TIMEOUT_MS 100
 
+static uint32_t I2Cdi_CalcTiming(bool full_speed)
+{
+    uint32_t retval;
+
+#if STM32_I2C1CLK != 8000000
+    #error "I2C timing parameters defined only for 8 MHz"
+#endif
+    if (full_speed) {
+        retval = 0x00 << I2C_TIMINGR_PRESC_Pos;
+        retval |= 0x9 << I2C_TIMINGR_SCLL_Pos;
+        retval |= 0x3 << I2C_TIMINGR_SCLH_Pos;
+        retval |= 0x1 << I2C_TIMINGR_SDADEL_Pos;
+        retval |= 0x3 << I2C_TIMINGR_SCLDEL_Pos;
+    } else {
+        retval = 0x01 << I2C_TIMINGR_PRESC_Pos;
+        retval |= 0x13 << I2C_TIMINGR_SCLL_Pos;
+        retval |= 0xf << I2C_TIMINGR_SCLH_Pos;
+        retval |= 0x2 << I2C_TIMINGR_SDADEL_Pos;
+        retval |= 0x4 << I2C_TIMINGR_SCLDEL_Pos;
+    }
+
+    return retval;
+}
+
 bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
         uint8_t *rxbuf, size_t rxbytes)
 {
@@ -62,13 +86,7 @@ void I2Cd_Init(bool full_speed)
 
     config.cr1 = 0;
     config.cr2 = 0;
-
-    /* TODO fix timing */
-    if (full_speed) {
-        config.timingr = 0;
-    } else {
-        config.timingr = 0;
-    }
+    config.timingr = I2Cdi_CalcTiming(full_speed);
 
     i2cStart(&I2CD1, &config);
 }
