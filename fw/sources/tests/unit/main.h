@@ -32,5 +32,6 @@
 
 extern void Log_RunTests(void);
 extern void Eeprom_RunTests(void);
+extern void CRC_RunTests(void);
 
 #endif

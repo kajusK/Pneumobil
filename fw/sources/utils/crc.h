@@ -18,25 +18,41 @@
 */
 
 /**
- * @file    assert.h
- * @brief   ASSERT macros
+ * @file    crc.h
+ * @brief   Crc calculation
  *
  * @addtogroup utils
  * @{
  */
 
-#ifndef __UTILS_ASSERT_H
-#define __UTILS_ASSERT_H
+#ifndef __UTILS_CRC_H
+#define __UTILS_CRC_H
 
-#define ASSERT(condition) \
-    if (!(condition)) { \
-        while (1); \
-    }
+#include <inttypes.h>
+#include <stdlib.h>
 
-#define ASSERT_NOT(condition) \
-    if (condition) { \
-        while (1); \
-    }
+/** Initial value for CRC8 calculation */
+#define CRC8_INITIAL_VALUE  0x00
+
+/**
+ * Calculate CRC from initial value and single byte
+ *
+ * @param [in] buf  Byte to calculate crc for
+ * @param [in] crc  Initial CRC value
+ *
+ * @return CRC 8 (polynomial 0x07)
+ */
+extern uint8_t CRC8_Add(uint8_t buf, uint8_t crc);
+
+/**
+ * Calculate CRC for buffer
+ *
+ * @param [in] buf  Data to calculate crc for
+ * @param [in] len  Length of data buffer
+ *
+ * @return CRC 8 (polynomial 0x07)
+ */
+extern uint8_t CRC8(const uint8_t *buf, uint16_t len);
 
 #endif
 

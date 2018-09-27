@@ -29,6 +29,7 @@
 
 static void RunAll(void)
 {
+    CRC_RunTests();
     Log_RunTests();
     Eeprom_RunTests();
 }
