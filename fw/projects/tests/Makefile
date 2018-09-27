@@ -12,7 +12,7 @@ OBJDIR		= obj
 UNITY_DIR	= $(EXTERNAL)/Unity
 APP_DIR		= $(SOURCES)/app/pneumatic
 SOURCES_DIRS	= $(UNITY_DIR)/src $(UNITY_DIR)/extras/fixture/src \
-	$(SOURCES)/tests
+	$(SOURCES)/tests/unit
 
 #additional build flags
 OPT		:= -O0
