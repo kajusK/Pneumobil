@@ -30,6 +30,8 @@
 #define __DRIVERS_EEPROM_H
 
 #include <inttypes.h>
+#include <stdlib.h>
+#include <ch.h>
 
 /**
  * Write data to eeprom

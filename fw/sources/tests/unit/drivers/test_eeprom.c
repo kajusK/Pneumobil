@@ -26,6 +26,7 @@
  */
 
 #include <string.h>
+
 #include <main.h>
 #include "drivers/eeprom.c"
 
@@ -34,11 +35,12 @@ static uint8_t bytes_received[10];
 static uint16_t address_written[10];
 static int call_count = 0;
 static int buf_pos = 0;
+
 /* *****************************************************************************
  * Mocks
 ***************************************************************************** */
-bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
-        uint8_t *rxbuf, size_t rxbytes)
+static bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf,
+        size_t txbytes, uint8_t *rxbuf, size_t rxbytes)
 {
     (void) address;
     (void) rxbuf;

@@ -60,6 +60,7 @@ CFLAGS	+= -g
 CFLAGS	+= -Wall -Wextra -pedantic -std=c99 -Wundef -Wshadow
 CFLAGS	+= -Wmissing-prototypes -Wstrict-prototypes
 CFLAGS	+= -fno-common -ffunction-sections -fdata-sections
+CFLAGS	+= -Wno-unused-function
 
 # C++ flags
 CXXFLAGS	+= $(CFLAGS)
@@ -69,16 +70,7 @@ CXXFLAGS	+=  -Weffc++
 ASFLAGS		+= -felf
 
 # Linker flags
-#LDFLAGS		+= --static -nostartfiles
-#LDFLAGS		+= -T $(LDSCRIPT) -L $(OPENCM3_DIR)/lib
-#LDFLAGS		+= $(ARCH_FLAGS)
 LDFLAGS		+= $(BUILD_FLAGS)
-#LDFLAGS		+= -Wl,--gc-sections -Wl,-Map,$(TARGET).map
-
-# Used libraries
-#LDLIBS		+= -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
-#LDLIBS		+= -l$(LIBNAME) -lrdimon -u _printf_float
-
 
 all: $(TARGET) tests
 

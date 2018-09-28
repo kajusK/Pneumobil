@@ -26,10 +26,10 @@
  */
 #include <string.h>
 
-#include <main.h>
 #include <ch.h>
-#include <modules/log.h>
 
+#include <main.h>
+#include "modules/log.h"
 
 /* *****************************************************************************
  * Mocks

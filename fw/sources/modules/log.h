@@ -30,6 +30,7 @@
 
 #include <inttypes.h>
 #include <stdarg.h>
+#include <ch.h> //bool definition
 
 /*
  * Maximum length of a log message
