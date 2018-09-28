@@ -18,24 +18,19 @@
 */
 
 /**
- * @file    main.c
- * @brief   Main file for unit tests
+ * @file    comm.h
+ * @brief   Communication protocol
  *
- * @addtogroup tests
+ * @addtogroup modules-comm
  * @{
  */
 
-#include "main.h"
+#ifndef __MODULES_COMM_H
+#define __MODULES_COMM_H
 
-static void RunAll(void)
-{
-    CRC_RunTests();
-    Log_RunTests();
-    Comm_UartLink_RunTests();
-    Eeprom_RunTests();
-}
+/** Maximum allowed payload length that can be received (up to 0xff) */
+#define COMM_MAX_PAYLOAD_LEN 0xfe
 
-int main(int argc, const char *argv[])
-{
-    UnityMain(argc, argv, RunAll);
-}
+#endif
+
+/** @} */

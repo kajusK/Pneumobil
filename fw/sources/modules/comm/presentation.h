@@ -18,24 +18,24 @@
 */
 
 /**
- * @file    main.c
- * @brief   Main file for unit tests
+ * @file    presentation.h
+ * @brief   Communication protocol, presentation layer
  *
- * @addtogroup tests
+ * @addtogroup modules-comm
  * @{
  */
 
-#include "main.h"
+#ifndef __MODULES_COMM_PRESENTATION_H
+#define __MODULES_COMM_PRESENTATION_H
 
-static void RunAll(void)
-{
-    CRC_RunTests();
-    Log_RunTests();
-    Comm_UartLink_RunTests();
-    Eeprom_RunTests();
-}
+#include <inttypes.h>
+#include <ch.h> //bool definition
 
-int main(int argc, const char *argv[])
-{
-    UnityMain(argc, argv, RunAll);
-}
+typedef bool (*comm_send_cb_t)(const uint8_t *payload, uint8_t len);
+
+extern void Comm_HandlePayload(const uint8_t *payload, uint8_t len,
+        comm_send_cb_t send_frame);
+
+#endif
+
+/** @} */

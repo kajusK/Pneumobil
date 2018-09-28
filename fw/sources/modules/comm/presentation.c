@@ -18,24 +18,22 @@
 */
 
 /**
- * @file    main.c
- * @brief   Main file for unit tests
+ * @file    presentation.c
+ * @brief   Communication protocol, presentation layer
  *
- * @addtogroup tests
+ * @addtogroup modules-comm
  * @{
  */
 
-#include "main.h"
+#include <inttypes.h>
 
-static void RunAll(void)
+#include "modules/comm/comm.h"
+#include "modules/comm/presentation.h"
+
+void Comm_HandlePayload(const uint8_t *payload, uint8_t len,
+        comm_send_cb_t send_frame)
 {
-    CRC_RunTests();
-    Log_RunTests();
-    Comm_UartLink_RunTests();
-    Eeprom_RunTests();
+
 }
 
-int main(int argc, const char *argv[])
-{
-    UnityMain(argc, argv, RunAll);
-}
+/** @} */

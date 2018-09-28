@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,24 +18,41 @@
 */
 
 /**
- * @file    main.c
- * @brief   Main file for unit tests
+ * @file    uart.h
+ * @brief   Uart driver
  *
- * @addtogroup tests
+ * @addtogroup drivers
  * @{
  */
 
-#include "main.h"
+#ifndef __DRIVERS_UART_H
+#define __DRIVERS_UART_H
 
-static void RunAll(void)
-{
-    CRC_RunTests();
-    Log_RunTests();
-    Comm_UartLink_RunTests();
-    Eeprom_RunTests();
-}
+#include <inttypes.h>
 
-int main(int argc, const char *argv[])
-{
-    UnityMain(argc, argv, RunAll);
-}
+typedef void (*uartd_rx_cb_t)(uint8_t c);
+
+/**
+ * Register uart data received callback
+ *
+ * @param [in] cb       Callback for rx data
+ */
+extern void Uartd_RegisterRxCb(uartd_rx_cb_t cb);
+
+/**
+ * Send byte over uart, blocking
+ *
+ * @param [in] byte     Byte to send
+ */
+extern void Uartd_SendByte(uint8_t byte);
+
+/**
+ * Initialize uart driver
+ *
+ * @param [in] baudrate Desired uart baudrate
+ */
+extern void Uartd_Init(uint32_t baudrate);
+
+#endif
+
+/** @} */
