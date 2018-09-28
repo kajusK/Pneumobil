@@ -35,21 +35,29 @@ typedef _Bool bool;
 #define true 1
 #define false 0
 
+typedef uint32_t mutex_t;
+
 #define THD_WORKING_AREA(name, size) void *name
 #define THD_FUNCTION(name, arg) void name(int arg)
 #define MEMORYPOOL_DECL(name, size, align, foo) char name
 #define MAILBOX_DECL(name, point, size) void *name = point
 #define TIME_I2S(data) data
+#define TIME_I2MS(data) data
 #define TIME_MS2I(data) data
 #define TIME_INFINITE -1
 #define TIME_IMMEDIATE 0
 #define NORMALPRIO 100
+#define MUTEX_DECL(name)    mutex_t name
 
 typedef void *msg_t;
+typedef uint32_t systime_t;
 
-uint32_t chVTGetSystemTime(void);
+systime_t chVTGetSystemTime(void);
 void chThdSleep(uint32_t interval);
 uint32_t *chThdCreateStatic(void *wsp, size_t size,
                              uint32_t prio, void (*pf)(int arg), void *arg);
+systime_t chVTTimeElapsedSinceX(systime_t time);
+void chMtxLock(mutex_t *mp);
+void chMtxUnlock(mutex_t *mp);
 
 #endif

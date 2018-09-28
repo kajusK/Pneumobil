@@ -28,10 +28,16 @@
 #include <inttypes.h>
 #include "ch.h"
 
-uint32_t chVTGetSystemTime(void)
+systime_t chVTGetSystemTime(void)
 {
     static uint32_t time = 1;
     return time++;
+}
+
+systime_t chVTTimeElapsedSinceX(systime_t time)
+{
+    (void) time;
+    return 1;
 }
 
 void chThdSleep(uint32_t interval)
@@ -49,4 +55,14 @@ uint32_t *chThdCreateStatic(void *wsp, size_t size,
     (void) arg;
 
     return (uint32_t *) 123;
+}
+
+void chMtxLock(mutex_t *mp)
+{
+    (void) mp;
+}
+
+void chMtxUnlock(mutex_t *mp)
+{
+    (void) mp;
 }

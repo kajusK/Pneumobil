@@ -60,6 +60,8 @@ enum comm_uart_phase_e {
     UART_PHASE_CRC,
 };
 
+MUTEX_DECL(uarti_tx_mutex);
+
 /**
  * Process received byte and call frame handler if whole frame received
  *
@@ -139,6 +141,7 @@ bool Comm_Uart_Send(const uint8_t *payload, uint8_t len)
 
     ASSERT_NOT(payload == NULL);
 
+    chMtxLock(&uarti_tx_mutex);
     Uartd_SendByte(COMM_UART_FRAME_START);
     crc = CRC8_Add(COMM_UART_FRAME_START, CRC8_INITIAL_VALUE);
     Uartd_SendByte(len);
@@ -149,6 +152,7 @@ bool Comm_Uart_Send(const uint8_t *payload, uint8_t len)
         crc = CRC8_Add(payload[i], crc);
     }
     Uartd_SendByte(crc);
+    chMtxUnlock(&uarti_tx_mutex);
 
     return true;
 }
