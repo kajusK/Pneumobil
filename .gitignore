@@ -9,4 +9,5 @@
 *.d
 fw/projects/*/obj/
 fw/projects/tests/run_tests
+fw/sources/app/*/chibios/board/board_gpio.h
 doc/datasheets

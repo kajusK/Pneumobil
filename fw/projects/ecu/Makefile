@@ -41,6 +41,7 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 USRINC = $(CONFDIR) $(SOURCES)
 
 include ../common/chibios.mk
+include ../common/chibios_board.mk
 
 ##############################################################################
 # misc

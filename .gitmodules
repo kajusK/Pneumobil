@@ -10,3 +10,6 @@
 [submodule "fw/sources/external/Unity"]
 	path = fw/sources/external/Unity
 	url = https://github.com/ThrowTheSwitch/Unity.git
+[submodule "fw/sources/external/ChibiOS-Contrib"]
+	path = fw/sources/external/ChibiOS-Contrib
+	url = https://github.com/ChibiOS/ChibiOS-Contrib.git
