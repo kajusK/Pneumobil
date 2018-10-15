@@ -42,6 +42,7 @@ USRINC = $(CONFDIR) $(SOURCES)
 
 include ../common/chibios.mk
 include ../common/chibios_board.mk
+include ../common/chibios_contrib.mk
 
 ##############################################################################
 # misc
