@@ -37,8 +37,16 @@ USE_SMART_BUILD = yes
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
+
 # HAL-OSAL files (optional).
-include $(CHIBIOS)/os/hal/hal.mk
+ifeq ($(CHIBIOS_USE_CONTRIB), TRUE)
+    include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+    include $(CHIBIOS_CONTRIB)/os/hal/ports/$(PORT)/platform.mk
+else
+    include $(CHIBIOS)/os/hal/hal.mk
+    include $(CHIBIOS)/os/hal/ports/$(PORT)/platform.mk
+endif
+
 include $(APP_DIR)/chibios/board/board.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).

@@ -15,6 +15,12 @@ USE_FPU = no
 # Mcu core definition
 MCU = cortex-m0
 
+# Use contrib repo
+CHIBIOS_USE_CONTRIB = TRUE
+
+# ChibiOS Port to use
+PORT = STM32/STM32F0xx
+
 ##############################################################################
 # Project, sources and paths
 
@@ -26,7 +32,7 @@ include ../common/paths.mk
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f0xx.mk
 # Hal mcu specific
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F0xx/platform.mk
+
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 
@@ -42,11 +48,9 @@ USRINC = $(CONFDIR) $(SOURCES)
 
 include ../common/chibios.mk
 include ../common/chibios_board.mk
-include ../common/chibios_contrib.mk
 
 ##############################################################################
 # misc
 
 include ../common/check_tools.mk
 include ../common/flash.mk
-
