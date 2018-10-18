@@ -44,7 +44,7 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(wildcard $(SOURCES)/drivers/*.c) \
 	$(wildcard $(SOURCES)/utils/*.c)
 
-USRINC = $(CONFDIR) $(SOURCES)
+USRINC = $(CONFDIR) $(SOURCES) $(APP_DIR)
 
 include ../common/chibios.mk
 include ../common/chibios_board.mk
