@@ -71,9 +71,9 @@ CXXFLAGS	+=  -Weffc++
 ASFLAGS		+= -felf
 
 # Linker flags
-LDFLAGS		+= $(BUILD_FLAGS)
+LDFLAGS		+= $(BUILD_FLAGS) -lm -fprofile-arcs --coverage
 
-all: $(TARGET) tests
+all: $(TARGET) tests coverage
 
 $(DIRS):
 	mkdir -pv $(DIRS)
@@ -95,8 +95,12 @@ $(TARGET): $(DIRS) $(OBJS)
 tests: $(TARGET)
 	./$< -v
 
+coverage: tests
+	mkdir -p coverage
+	gcovr --html --html-details -o coverage/index.html -s -u -r "." -e ".*/tests/.*" -e ".*/external/.*"
+
 clean:
-	$(RM) -r $(OBJDIR) $(TARGET)
+	$(RM) -r $(OBJDIR) $(TARGET) coverage
 
 .PHONY : clean all
 
