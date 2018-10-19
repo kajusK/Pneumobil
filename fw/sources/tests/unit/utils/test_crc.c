@@ -57,6 +57,10 @@ TEST(CRC, CRC8)
 {
     uint8_t buf[10] = {0x0a, 0x13, 0x15, 0xff, 0x11, 0xa8, 0xfa, 0xac, 0xcd, 0x00};
 
+    assert_should_fail = 1;
+    CRC8(NULL, 0);
+    assert_should_fail = 0;
+
     TEST_ASSERT_EQUAL(0xcf, CRC8(buf, 10));
 }
 

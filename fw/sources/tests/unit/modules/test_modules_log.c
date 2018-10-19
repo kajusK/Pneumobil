@@ -109,6 +109,10 @@ TEST(Log, Subscriptions)
 {
     log_severity_t severities[LOG_SOURCE_COUNT];
 
+    assert_should_fail = true;
+    Log_Subscribe(NULL, NULL);
+    assert_should_fail = false;
+
     TEST_ASSERT_EQUAL(Logi_GetHighestSeverity(), LOG_SEVERITY_NONE);
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
@@ -138,6 +142,10 @@ TEST(Log, SendLog)
     log_msg_t msg;
     log_severity_t severities[LOG_SOURCE_COUNT];
 
+    assert_should_fail = true;
+    Logi_SendLog(NULL);
+    assert_should_fail = false;
+
     msg.time = 123;
     msg.severity = LOG_SEVERITY_WARNING;
     msg.src = LOG_SOURCE_SYSTEM;
@@ -157,7 +165,6 @@ TEST(Log, SendLog)
     severities[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_INFO;
     severities[LOG_SOURCE_CONFIG] = LOG_SEVERITY_WARNING;
     TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities));
-
 
     Logi_SendLog(&msg);
     TEST_ASSERT_FALSE(called1);
@@ -191,6 +198,13 @@ TEST(Log, SendLog)
 
 TEST(Log, AddEntry)
 {
+    assert_should_fail = true;
+    Log_Debug(LOG_SOURCE_SYSTEM, NULL);
+    Log_Warn(LOG_SOURCE_SYSTEM, NULL);
+    Log_Info(LOG_SOURCE_SYSTEM, NULL);
+    Log_Error(LOG_SOURCE_SYSTEM, NULL);
+    assert_should_fail = false;
+
     log_severity_t severities[LOG_SOURCE_COUNT];
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severities[i] = LOG_SEVERITY_NONE;

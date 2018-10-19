@@ -44,7 +44,10 @@ static bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf,
 {
     (void) address;
     (void) rxbuf;
-    TEST_ASSERT_EQUAL(0, rxbytes);
+
+    if (rxbytes != 0) {
+        TEST_ASSERT_EQUAL(2, txbytes);
+    }
 
     /* without address bytes */
     bytes_received[call_count] = txbytes - 2;
@@ -74,11 +77,34 @@ TEST_TEAR_DOWN(Eeprom)
 }
 
 /*
+ * Reading data from eeprom
+ */
+TEST(Eeprom, ReadSingle)
+{
+    uint8_t data[10];
+
+    assert_should_fail = true;
+    Eepromd_Read(0x123, NULL, 0);
+    assert_should_fail = false;
+
+    TEST_ASSERT_TRUE(Eepromd_Read(0x0123, data, 1));
+
+    TEST_ASSERT_EQUAL(1, call_count);
+    TEST_ASSERT_EQUAL(0, bytes_received[0]);
+    TEST_ASSERT_EQUAL_HEX16(0x123, address_written[0]);
+}
+
+/*
  * Writing single byte
  */
 TEST(Eeprom, SendSingle)
 {
     uint8_t data = 0xde;
+
+    assert_should_fail = true;
+    Eepromd_Write(0x123, NULL, 0);
+    assert_should_fail = false;
+
     TEST_ASSERT_TRUE(Eepromd_Write(0x0123, &data, 1));
 
     TEST_ASSERT_EQUAL(1, call_count);
@@ -164,6 +190,7 @@ TEST(Eeprom, SendFewPages)
 
 TEST_GROUP_RUNNER(Eeprom)
 {
+    RUN_TEST_CASE(Eeprom, ReadSingle);
     RUN_TEST_CASE(Eeprom, SendSingle);
     RUN_TEST_CASE(Eeprom, SendSmallNotCrossing);
     RUN_TEST_CASE(Eeprom, SendSmallCrossing);
