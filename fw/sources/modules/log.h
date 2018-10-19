@@ -59,9 +59,10 @@ typedef enum {
  */
 typedef enum {
     LOG_SOURCE_UNKNOWN,
-    LOG_SOURCE_DB,
+    LOG_SOURCE_CONFIG,
     LOG_SOURCE_SYSTEM,
     LOG_SOURCE_COMM,
+    LOG_SOURCE_ECU,
     LOG_SOURCE_COUNT,
 } log_src_t;
 

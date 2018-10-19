@@ -27,12 +27,15 @@
 
 #include "main.h"
 
+uint8_t assert_should_fail = 0;
+
 static void RunAll(void)
 {
     CRC_RunTests();
     Log_RunTests();
     Comm_UartLink_RunTests();
     Eeprom_RunTests();
+    Config_RunTests();
 }
 
 int main(int argc, const char *argv[])

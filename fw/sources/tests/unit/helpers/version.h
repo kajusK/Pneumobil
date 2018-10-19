@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,40 +18,20 @@
 */
 
 /**
- * @file    main.h
- * @brief   Main file for unit tests
+ * @file    version.h
+ * @brief   System tests version file
  *
  * @addtogroup tests
  * @{
  */
 
-#ifndef __MAIN_H_
-#define __MAIN_H_
+#ifndef __TEST_VERSION_H
+#define __TEST_VERSION_H
 
-#include <unity_fixture.h>
-
-extern void Log_RunTests(void);
-extern void Comm_UartLink_RunTests(void);
-extern void Eeprom_RunTests(void);
-extern void CRC_RunTests(void);
-extern void Config_RunTests(void);
-
-extern uint8_t assert_should_fail;
-
-/** assert testing */
-#define ASSERT(exp) \
-    _Pragma("GCC diagnostic push") \
-/*    _Pragma("GCC diagnostic warning \"-w\"") */ \
-    if (assert_should_fail) { \
-        TEST_ASSERT_FALSE(exp); \
-        return; \
-    } else { \
-        TEST_ASSERT_TRUE(exp); \
-    } \
-    _Pragma("GCC diagnostic pop") \
-
-#define ASSERT_NOT(exp) ASSERT(!(exp))
-
-#define extern static
+#define VER_MAJOR 5
+#define VER_MINOR 9
+#define SYS_NAME "TESTS"
 
 #endif
+
+/** @} */

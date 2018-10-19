@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,26 +18,35 @@
 */
 
 /**
- * @file    assert.h
- * @brief   ASSERT macros
+ * @file    config_items.h
+ * @brief   Configuration storage subsystem - configuration items
  *
- * @addtogroup utils
+ * Generated automatically by script, do not modify
+ *
+ * @addtogroup modules
  * @{
  */
 
-#ifndef __UTILS_ASSERT_H
-#define __UTILS_ASSERT_H
+#ifndef __MODULES_CONFIG_ITEMS_H
+#define __MODULES_CONFIG_ITEMS_H
 
-#ifndef ASSERT
-    #define ASSERT(condition) \
-        if (!(condition)) { \
-            while (1); \
-        }
-#endif
+#include <inttypes.h>
 
-#ifndef ASSERT_NOT
-    #define ASSERT_NOT(condition) ASSERT(!(condition))
-#endif
+typedef enum config_item_uint_t {
+    CONFIG_UINT_LD_TURNAROUND_MS,
+    CONFIG_UINT_LD_FILLING_PCT,
+    CONFIG_UINT_ACC_PRE_MS,
+    CONFIG_UINT_COUNT,
+} config_item_uint_t;
+
+typedef enum {
+    CONFIG_BOOL_WTFENABLED,
+    CONFIG_BOOL_COUNT,
+} config_item_bool_t;
+
+extern const uint32_t config_default_uint[CONFIG_UINT_COUNT];
+
+extern const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1];
 
 #endif
 

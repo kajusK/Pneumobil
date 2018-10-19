@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,40 +18,25 @@
 */
 
 /**
- * @file    main.h
- * @brief   Main file for unit tests
+ * @file    config_items.c
+ * @brief   config items for unit testing
  *
  * @addtogroup tests
  * @{
  */
 
-#ifndef __MAIN_H_
-#define __MAIN_H_
+#include "config_items.h"
 
-#include <unity_fixture.h>
+const uint32_t config_default_uint[CONFIG_UINT_COUNT] = {
+    1000,
+    2000,
+    3000,
+    4000,
+};
 
-extern void Log_RunTests(void);
-extern void Comm_UartLink_RunTests(void);
-extern void Eeprom_RunTests(void);
-extern void CRC_RunTests(void);
-extern void Config_RunTests(void);
+const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8 + 1] = {
+    0xf0,
+    0x0a,
+};
 
-extern uint8_t assert_should_fail;
-
-/** assert testing */
-#define ASSERT(exp) \
-    _Pragma("GCC diagnostic push") \
-/*    _Pragma("GCC diagnostic warning \"-w\"") */ \
-    if (assert_should_fail) { \
-        TEST_ASSERT_FALSE(exp); \
-        return; \
-    } else { \
-        TEST_ASSERT_TRUE(exp); \
-    } \
-    _Pragma("GCC diagnostic pop") \
-
-#define ASSERT_NOT(exp) ASSERT(!(exp))
-
-#define extern static
-
-#endif
+/** @} */

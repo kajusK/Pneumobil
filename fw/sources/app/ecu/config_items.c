@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,27 +18,25 @@
 */
 
 /**
- * @file    assert.h
- * @brief   ASSERT macros
+ * @file    config_items.c
+ * @brief   Configuration storage subsystem - configuration items
  *
- * @addtogroup utils
+ * Generated automatically by script, do not modify
+ *
+ * @addtogroup modules
  * @{
  */
 
-#ifndef __UTILS_ASSERT_H
-#define __UTILS_ASSERT_H
+#include "config_items.h"
 
-#ifndef ASSERT
-    #define ASSERT(condition) \
-        if (!(condition)) { \
-            while (1); \
-        }
-#endif
+const uint32_t config_default_uint[CONFIG_UINT_COUNT] = {
+    1000,
+    20,
+    10,
+};
 
-#ifndef ASSERT_NOT
-    #define ASSERT_NOT(condition) ASSERT(!(condition))
-#endif
-
-#endif
+const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1] = {
+    0x00,
+};
 
 /** @} */

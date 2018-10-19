@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil.
+    This file is part of BUT pneumobil ECU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,26 +18,19 @@
 */
 
 /**
- * @file    assert.h
- * @brief   ASSERT macros
+ * @file    version.h
+ * @brief   System version information
  *
- * @addtogroup utils
+ * @addtogroup app
  * @{
  */
 
-#ifndef __UTILS_ASSERT_H
-#define __UTILS_ASSERT_H
+#ifndef __VERSION_H
+#define __VERSION_H
 
-#ifndef ASSERT
-    #define ASSERT(condition) \
-        if (!(condition)) { \
-            while (1); \
-        }
-#endif
-
-#ifndef ASSERT_NOT
-    #define ASSERT_NOT(condition) ASSERT(!(condition))
-#endif
+#define VER_MAJOR 0
+#define VER_MINOR 1
+#define SYS_NAME "ECU"
 
 #endif
 
