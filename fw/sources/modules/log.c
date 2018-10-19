@@ -28,7 +28,6 @@
 #include <ch.h>
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "utils/assert.h"

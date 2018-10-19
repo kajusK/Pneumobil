@@ -28,8 +28,6 @@
  * @{
  */
 
-#include <stdlib.h>
-
 #include "utils/assert.h"
 #include "utils/crc.h"
 

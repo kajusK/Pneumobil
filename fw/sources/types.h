@@ -28,6 +28,7 @@
 #define __TYPES_H
 
 #include <inttypes.h>
+#include <stdlib.h> /* NULL, size_t,... */
 
 #ifndef bool
     #define bool _Bool
