@@ -27,10 +27,14 @@
 #include <hal.h>
 
 #include "drivers/dac.h"
+#define DAC_MAX_VAL 8192 /* 12 bit */
+#define DAC_MAX_OUT_MV 3300
 
-void Dacd_SetOutput(uint16_t out)
+void Dacd_SetOutputMv(uint16_t out_mv)
 {
-    dacPutChannelX(&DACD1, 1, out);
+    uint16_t val;
+    val = ((uint32_t)DAC_MAX_VAL * out_mv) / DAC_MAX_OUT_MV;
+    dacPutChannelX(&DACD1, 1, val);
 }
 
 void Dacd_Init(void)

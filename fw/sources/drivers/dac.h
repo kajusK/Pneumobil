@@ -32,11 +32,11 @@
 #include <types.h>
 
 /**
- * Send DAC value directly to the output
+ * Send DAC output voltage
  *
- * @param [in] out  output value (12 bits)
+ * @param [in] out  output value in mV
  */
-extern void Dacd_SetOutput(uint16_t out);
+extern void Dacd_SetOutputMv(uint16_t out_mv);
 
 /**
  * Initialize DAC module
