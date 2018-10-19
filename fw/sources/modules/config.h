@@ -28,8 +28,7 @@
 #ifndef __MODULES_CONFIG_H
 #define __MODULES_CONFIG_H
 
-#include <ch.h>
-#include <inttypes.h>
+#include <types.h>
 
 #include "config_items.h"
 

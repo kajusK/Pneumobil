@@ -28,6 +28,8 @@
  * @{
  */
 
+#include <stdlib.h>
+
 #include "utils/assert.h"
 #include "utils/crc.h"
 
@@ -65,10 +67,10 @@ uint8_t CRC8_Add(uint8_t buf, uint8_t crc)
     return crc;
 }
 
-uint8_t CRC8(const uint8_t *buf, uint16_t len)
+uint8_t CRC8(const uint8_t *buf, uint32_t len)
 {
     uint8_t crc = CRC8_INITIAL_VALUE;
-    int i;
+    uint32_t i;
 
     ASSERT_NOT(buf == NULL);
 

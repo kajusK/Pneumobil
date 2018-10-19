@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil ECU.
+    This file is part of BUT pneumobil.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,35 +18,22 @@
 */
 
 /**
- * @file    config_items.h
- * @brief   Configuration storage subsystem - configuration items
+ * @file    types.h
+ * @brief   Standard system types
  *
- * Generated automatically by script, do not modify
- *
- * @addtogroup modules
  * @{
  */
 
-#ifndef __MODULES_CONFIG_ITEMS_H
-#define __MODULES_CONFIG_ITEMS_H
+#ifndef __TYPES_H
+#define __TYPES_H
 
-#include <types.h>
+#include <inttypes.h>
 
-typedef enum config_item_uint_t {
-    CONFIG_UINT_LD_TURNAROUND_MS,
-    CONFIG_UINT_LD_FILLING_PCT,
-    CONFIG_UINT_ACC_PRE_MS,
-    CONFIG_UINT_COUNT,
-} config_item_uint_t;
-
-typedef enum {
-    CONFIG_BOOL_WTFENABLED,
-    CONFIG_BOOL_COUNT,
-} config_item_bool_t;
-
-extern const uint32_t config_default_uint[CONFIG_UINT_COUNT];
-
-extern const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1];
+#ifndef bool
+    #define bool _Bool
+    #define true 1
+    #define false 0
+#endif
 
 #endif
 

@@ -28,8 +28,7 @@
 #ifndef __MODULES_COMM_PRESENTATION_H
 #define __MODULES_COMM_PRESENTATION_H
 
-#include <inttypes.h>
-#include <ch.h> //bool definition
+#include <types.h>
 
 typedef bool (*comm_send_cb_t)(const uint8_t *payload, uint8_t len);
 

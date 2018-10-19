@@ -26,7 +26,6 @@
  */
 
 #include <ch.h>
-#include <inttypes.h>
 
 #include "utils/assert.h"
 #include "modules/log.h"

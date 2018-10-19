@@ -28,7 +28,7 @@
 #ifndef __DRIVERS_WDG_H
 #define __DRIVERS_WDG_H
 
-#include <inttypes.h>
+#include <types.h>
 
 /**
  * Initialize watchdog driver

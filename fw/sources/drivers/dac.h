@@ -29,7 +29,7 @@
 #ifndef __DRIVERS_DAC_H
 #define __DRIVERS_DAC_H
 
-#include <inttypes.h>
+#include <types.h>
 
 /**
  * Send DAC value directly to the output

@@ -25,8 +25,8 @@
  * @{
  */
 
-#include <inttypes.h>
 #include "ch.h"
+#include <types.h>
 
 systime_t chVTGetSystemTime(void)
 {

@@ -28,7 +28,7 @@
 #ifndef __DRIVERS_UART_H
 #define __DRIVERS_UART_H
 
-#include <inttypes.h>
+#include <types.h>
 
 typedef void (*uartd_rx_cb_t)(uint8_t c);
 

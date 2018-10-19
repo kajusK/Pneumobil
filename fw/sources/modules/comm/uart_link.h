@@ -31,8 +31,7 @@
 #ifndef __MODULES_COMM_UART_LINK_H
 #define __MODULES_COMM_UART_LINK_H
 
-#include <inttypes.h>
-#include <ch.h> //bool definition
+#include <types.h>
 
 #define COMM_UART_BAUDRATE  115200
 

@@ -28,8 +28,7 @@
 #ifndef __UTILS_CRC_H
 #define __UTILS_CRC_H
 
-#include <inttypes.h>
-#include <stdlib.h>
+#include <types.h>
 
 /** Initial value for CRC8 calculation */
 #define CRC8_INITIAL_VALUE  0x00
@@ -52,7 +51,7 @@ extern uint8_t CRC8_Add(uint8_t buf, uint8_t crc);
  *
  * @return CRC 8 (polynomial 0x07)
  */
-extern uint8_t CRC8(const uint8_t *buf, uint16_t len);
+extern uint8_t CRC8(const uint8_t *buf, uint32_t len);
 
 #endif
 

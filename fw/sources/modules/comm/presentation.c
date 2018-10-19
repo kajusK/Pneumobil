@@ -25,8 +25,6 @@
  * @{
  */
 
-#include <inttypes.h>
-
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
 

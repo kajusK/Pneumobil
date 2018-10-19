@@ -28,9 +28,8 @@
 #ifndef __MODULES_LOG_H
 #define __MODULES_LOG_H
 
-#include <inttypes.h>
+#include <types.h>
 #include <stdarg.h>
-#include <ch.h> //bool definition
 
 /*
  * Maximum length of a log message

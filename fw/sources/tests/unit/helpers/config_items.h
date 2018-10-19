@@ -30,7 +30,7 @@
 #ifndef __TEST_CONFIG_ITEMS_H
 #define __TEST_CONFIG_ITEMS_H
 
-#include <inttypes.h>
+#include <types.h>
 
 typedef enum config_item_uint_t {
     CONFIG_UINT_TEST1,

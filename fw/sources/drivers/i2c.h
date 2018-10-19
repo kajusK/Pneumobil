@@ -28,7 +28,7 @@
 #ifndef __DRIVERS_I2C_H
 #define __DRIVERS_I2C_H
 
-#include <inttypes.h>
+#include <types.h>
 
 /**
  * Send and receive data over i2c
