@@ -29,12 +29,14 @@
 #define __MAIN_H_
 
 #include <unity_fixture.h>
+#include <types.h>
 
 extern void Log_RunTests(void);
 extern void Comm_UartLink_RunTests(void);
 extern void Eeprom_RunTests(void);
 extern void CRC_RunTests(void);
 extern void Config_RunTests(void);
+extern void Buttons_RunTests(void);
 
 extern uint8_t assert_should_fail;
 

@@ -27,11 +27,12 @@
 
 #include "main.h"
 
-uint8_t assert_should_fail = 0;
+uint8_t assert_should_fail = false;
 
 static void RunAll(void)
 {
     CRC_RunTests();
+    Buttons_RunTests();
     Log_RunTests();
     Comm_UartLink_RunTests();
     Eeprom_RunTests();

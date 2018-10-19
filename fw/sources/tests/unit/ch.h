@@ -31,9 +31,11 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
-typedef _Bool bool;
-#define true 1
-#define false 0
+#ifndef bool
+    typedef _Bool bool;
+    #define true 1
+    #define false 0
+#endif
 
 typedef uint32_t mutex_t;
 
