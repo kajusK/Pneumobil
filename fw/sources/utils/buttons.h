@@ -51,8 +51,8 @@ typedef enum {
 /**
  * Debounce signal
  *
- * @param [in] signal Input signal
- * @param [in] debounce Debounce structure for given signal
+ * @param [in] signal       Input signal
+ * @param [in,out] debounce Debounce structure for given signal
  *
  * @return Debounced signal state
  */
@@ -61,8 +61,8 @@ extern bool Bt_Debounce(bool signal, bt_debounce_t *debounce);
 /**
  * Detect edge on signal
  *
- * @param [in] signal Signal input
- * @param [in] prev_state Previous state of the signal
+ * @param [in] signal           Signal input
+ * @param [in,out] prev_state   Previous state of the signal
  *
  * @return BT_EDGE_NONE, BT_EDGE_RISING, BT_EDGE_FALLING
  */

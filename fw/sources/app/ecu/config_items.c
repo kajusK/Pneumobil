@@ -30,9 +30,7 @@
 #include "config_items.h"
 
 const uint32_t config_default_uint[CONFIG_UINT_COUNT] = {
-    1000,
-    20,
-    10,
+    0,
 };
 
 const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1] = {

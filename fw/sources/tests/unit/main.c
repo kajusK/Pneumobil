@@ -37,6 +37,8 @@ static void RunAll(void)
     Comm_UartLink_RunTests();
     Eeprom_RunTests();
     Config_RunTests();
+
+    ECU_RunTests();
 }
 
 int main(int argc, const char *argv[])

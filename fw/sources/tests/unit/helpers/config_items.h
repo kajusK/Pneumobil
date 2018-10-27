@@ -37,6 +37,7 @@ typedef enum config_item_uint_t {
     CONFIG_UINT_TEST2,
     CONFIG_UINT_TEST3,
     CONFIG_UINT_TEST4,
+    CONFIG_UINT_PISTON_LEN,
     CONFIG_UINT_COUNT,
 } config_item_uint_t;
 
@@ -53,6 +54,8 @@ typedef enum {
     CONFIG_BOOL_TEST10,
     CONFIG_BOOL_TEST11,
     CONFIG_BOOL_TEST12,
+    CONFIG_BOOL_ENCODER_INVERT,
+    CONFIG_BOOL_PNEU_NON_BLOCK,
     CONFIG_BOOL_COUNT,
 } config_item_bool_t;
 

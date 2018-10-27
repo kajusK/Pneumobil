@@ -1,3 +1,4 @@
+
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
@@ -18,34 +19,41 @@
 */
 
 /**
- * @file    config_items.h
- * @brief   Configuration storage subsystem - configuration items
+ * @file    encoder.h
+ * @brief   Quadrature encoder driver
  *
- * Generated automatically by script, do not modify
- *
- * @addtogroup modules
+ * @addtogroup drivers
  * @{
  */
 
-#ifndef __MODULES_CONFIG_ITEMS_H
-#define __MODULES_CONFIG_ITEMS_H
+#ifndef __DRIVERS_ENCODER_H
+#define __DRIVERS_ENCODER_H
 
 #include <types.h>
 
-typedef enum config_item_uint_t {
-    CONFIG_UINT_PISTON_LEN,
-    CONFIG_UINT_COUNT,
-} config_item_uint_t;
+/**
+ * Get Current encoder value
+ *
+ * @return Encoder value
+ */
+extern int16_t Encoderd_Get(void);
 
-typedef enum {
-    CONFIG_BOOL_ENCODER_INVERT,
-    CONFIG_BOOL_PNEU_NON_BLOCK,
-    CONFIG_BOOL_COUNT,
-} config_item_bool_t;
+/**
+ * Set encoder counter to given value
+ *
+ * @param [in] value    Encoder value
+ */
+extern void Encoderd_Set(int16_t value);
 
-extern const uint32_t config_default_uint[CONFIG_UINT_COUNT];
+/**
+ * Invert counting direction of the encoder
+ */
+extern void Encoderd_InvertDirection(void);
 
-extern const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1];
+/**
+ * Initialize quadrature encoder driver
+ */
+extern void Encoderd_Init(void);
 
 #endif
 

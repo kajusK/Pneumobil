@@ -56,6 +56,8 @@ typedef uint32_t systime_t;
 
 systime_t chVTGetSystemTime(void);
 void chThdSleep(uint32_t interval);
+void chThdSleepUntil(uint32_t time);
+uint32_t chTimeAddX(uint32_t systime, uint32_t val);
 uint32_t *chThdCreateStatic(void *wsp, size_t size,
                              uint32_t prio, void (*pf)(int arg), void *arg);
 systime_t chVTTimeElapsedSinceX(systime_t time);

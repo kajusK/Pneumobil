@@ -45,6 +45,16 @@ void chThdSleep(uint32_t interval)
     (void) interval;
 }
 
+void chThdSleepUntil(uint32_t time)
+{
+    (void) time;
+}
+
+uint32_t chTimeAddX(uint32_t systime, uint32_t val)
+{
+    return systime + val;
+}
+
 uint32_t *chThdCreateStatic(void *wsp, size_t size,
                              uint32_t prio, void (*pf)(int arg), void *arg)
 {

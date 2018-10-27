@@ -18,34 +18,22 @@
 */
 
 /**
- * @file    config_items.h
- * @brief   Configuration storage subsystem - configuration items
+ * @file    ecu.h
+ * @brief   Engine control block - timing of valves, etc
  *
- * Generated automatically by script, do not modify
- *
- * @addtogroup modules
+ * @addtogroup app-ecu
  * @{
  */
 
-#ifndef __MODULES_CONFIG_ITEMS_H
-#define __MODULES_CONFIG_ITEMS_H
+#ifndef __APP_ECU_H
+#define __APP_ECU_H
 
 #include <types.h>
 
-typedef enum config_item_uint_t {
-    CONFIG_UINT_PISTON_LEN,
-    CONFIG_UINT_COUNT,
-} config_item_uint_t;
-
-typedef enum {
-    CONFIG_BOOL_ENCODER_INVERT,
-    CONFIG_BOOL_PNEU_NON_BLOCK,
-    CONFIG_BOOL_COUNT,
-} config_item_bool_t;
-
-extern const uint32_t config_default_uint[CONFIG_UINT_COUNT];
-
-extern const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1];
+/**
+ * Initialize engine control unit
+ */
+extern void ECU_Init(void);
 
 #endif
 

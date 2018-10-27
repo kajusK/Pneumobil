@@ -22,7 +22,8 @@ INCLUDES	= \
 	-I $(SOURCES)/tests/unit \
 	-I $(SOURCES)/tests/unit/helpers \
 	-I $(UNITY_DIR)/src \
-	-I $(UNITY_DIR)/extras/fixture/src
+	-I $(UNITY_DIR)/extras/fixture/src \
+	-I $(UNITY_DIR)/src/app/ecu
 BUILD_FLAGS	= -fprofile-arcs -ftest-coverage
 DEFS		= -DUNITY_FLOAT_VERBOSE
 
