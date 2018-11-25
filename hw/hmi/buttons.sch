@@ -1,0 +1,363 @@
+EESchema Schematic File Version 4
+LIBS:hmi-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 4
+Title "BUT Pneumobil - HMI Buttons"
+Date "2018-11-13"
+Rev "0.1"
+Comp "Brno University of Technology"
+Comment1 "Jakub Kaderka"
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Switch:SW_Push SW3
+U 1 1 5C69F27B
+P 4350 3300
+F 0 "SW3" H 4350 3585 50  0000 C CNN
+F 1 "BTL2" H 4350 3494 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 3500 50  0001 C CNN
+F 3 "" H 4350 3500 50  0001 C CNN
+	1    4350 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW4
+U 1 1 5C69F282
+P 4350 3700
+F 0 "SW4" H 4350 3985 50  0000 C CNN
+F 1 "BTL3" H 4350 3894 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 3900 50  0001 C CNN
+F 3 "" H 4350 3900 50  0001 C CNN
+	1    4350 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW5
+U 1 1 5C69F289
+P 4350 4100
+F 0 "SW5" H 4350 4385 50  0000 C CNN
+F 1 "BTR1" H 4350 4294 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 4300 50  0001 C CNN
+F 3 "" H 4350 4300 50  0001 C CNN
+	1    4350 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW6
+U 1 1 5C69F290
+P 4350 4500
+F 0 "SW6" H 4350 4785 50  0000 C CNN
+F 1 "BTR2" H 4350 4694 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 4700 50  0001 C CNN
+F 3 "" H 4350 4700 50  0001 C CNN
+	1    4350 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW7
+U 1 1 5C69F297
+P 4350 4900
+F 0 "SW7" H 4350 5185 50  0000 C CNN
+F 1 "BTR3" H 4350 5094 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 5100 50  0001 C CNN
+F 3 "" H 4350 5100 50  0001 C CNN
+	1    4350 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW2
+U 1 1 5C69F29E
+P 4350 2900
+F 0 "SW2" H 4350 3185 50  0000 C CNN
+F 1 "BTL1" H 4350 3094 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_PTS645" H 4350 3100 50  0001 C CNN
+F 3 "" H 4350 3100 50  0001 C CNN
+	1    4350 2900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4150 2900 4050 2900
+Wire Wire Line
+	4050 2900 4050 3300
+Wire Wire Line
+	4050 4900 4150 4900
+$Comp
+L power:GND #PWR0179
+U 1 1 5C69F2A8
+P 4050 5000
+F 0 "#PWR0179" H 4050 4750 50  0001 C CNN
+F 1 "GND" H 4055 4827 50  0000 C CNN
+F 2 "" H 4050 5000 50  0001 C CNN
+F 3 "" H 4050 5000 50  0001 C CNN
+	1    4050 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 5000 4050 4900
+Connection ~ 4050 4900
+Wire Wire Line
+	4150 4500 4050 4500
+Connection ~ 4050 4500
+Wire Wire Line
+	4050 4500 4050 4900
+Wire Wire Line
+	4150 4100 4050 4100
+Connection ~ 4050 4100
+Wire Wire Line
+	4050 4100 4050 4500
+Wire Wire Line
+	4150 3300 4050 3300
+Connection ~ 4050 3300
+Wire Wire Line
+	4050 3300 4050 3700
+Wire Wire Line
+	4150 3700 4050 3700
+Connection ~ 4050 3700
+Wire Wire Line
+	4050 3700 4050 4100
+$Comp
+L Device:R R25
+U 1 1 5C69F2BC
+P 4750 2550
+F 0 "R25" H 4820 2596 50  0000 L CNN
+F 1 "10k" H 4820 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4680 2550 50  0001 C CNN
+F 3 "~" H 4750 2550 50  0001 C CNN
+	1    4750 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R26
+U 1 1 5C69F2C3
+P 5100 2550
+F 0 "R26" H 5170 2596 50  0000 L CNN
+F 1 "10k" H 5170 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5030 2550 50  0001 C CNN
+F 3 "~" H 5100 2550 50  0001 C CNN
+	1    5100 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R27
+U 1 1 5C69F2CA
+P 5450 2550
+F 0 "R27" H 5520 2596 50  0000 L CNN
+F 1 "10k" H 5520 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5380 2550 50  0001 C CNN
+F 3 "~" H 5450 2550 50  0001 C CNN
+	1    5450 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R28
+U 1 1 5C69F2D1
+P 5800 2550
+F 0 "R28" H 5870 2596 50  0000 L CNN
+F 1 "10k" H 5870 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5730 2550 50  0001 C CNN
+F 3 "~" H 5800 2550 50  0001 C CNN
+	1    5800 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R29
+U 1 1 5C69F2D8
+P 6150 2550
+F 0 "R29" H 6220 2596 50  0000 L CNN
+F 1 "10k" H 6220 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6080 2550 50  0001 C CNN
+F 3 "~" H 6150 2550 50  0001 C CNN
+	1    6150 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R30
+U 1 1 5C69F2DF
+P 6450 2550
+F 0 "R30" H 6520 2596 50  0000 L CNN
+F 1 "10k" H 6520 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6380 2550 50  0001 C CNN
+F 3 "~" H 6450 2550 50  0001 C CNN
+	1    6450 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 2900 4750 2900
+Wire Wire Line
+	4750 2900 4750 2700
+Wire Wire Line
+	4550 3300 5100 3300
+Wire Wire Line
+	4750 2900 6750 2900
+Connection ~ 4750 2900
+Wire Wire Line
+	4550 3700 5450 3700
+Wire Wire Line
+	5100 2700 5100 3300
+Connection ~ 5100 3300
+Wire Wire Line
+	5100 3300 6750 3300
+Wire Wire Line
+	5450 2700 5450 3700
+Connection ~ 5450 3700
+Wire Wire Line
+	5450 3700 6750 3700
+Wire Wire Line
+	4550 4100 5800 4100
+Wire Wire Line
+	4550 4500 6150 4500
+Wire Wire Line
+	4550 4900 6450 4900
+Wire Wire Line
+	5800 2700 5800 4100
+Connection ~ 5800 4100
+Wire Wire Line
+	5800 4100 6750 4100
+Wire Wire Line
+	6150 2700 6150 4500
+Connection ~ 6150 4500
+Wire Wire Line
+	6150 4500 6750 4500
+Wire Wire Line
+	6450 2700 6450 4900
+Connection ~ 6450 4900
+Wire Wire Line
+	6450 4900 6750 4900
+$Comp
+L power:+3.3V #PWR0180
+U 1 1 5C69F2FE
+P 5650 2250
+F 0 "#PWR0180" H 5650 2100 50  0001 C CNN
+F 1 "+3.3V" H 5665 2423 50  0000 C CNN
+F 2 "" H 5650 2250 50  0001 C CNN
+F 3 "" H 5650 2250 50  0001 C CNN
+	1    5650 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 2400 4750 2350
+Wire Wire Line
+	6450 2350 6450 2400
+Wire Wire Line
+	5800 2350 5800 2400
+Wire Wire Line
+	4750 2350 5100 2350
+Connection ~ 5800 2350
+Wire Wire Line
+	5800 2350 6150 2350
+Wire Wire Line
+	6150 2400 6150 2350
+Connection ~ 6150 2350
+Wire Wire Line
+	6150 2350 6450 2350
+Wire Wire Line
+	5450 2400 5450 2350
+Connection ~ 5450 2350
+Wire Wire Line
+	5450 2350 5650 2350
+Wire Wire Line
+	5100 2400 5100 2350
+Connection ~ 5100 2350
+Wire Wire Line
+	5100 2350 5450 2350
+Wire Wire Line
+	5650 2250 5650 2350
+Connection ~ 5650 2350
+Wire Wire Line
+	5650 2350 5800 2350
+$Comp
+L Device:R R31
+U 1 1 5C69F316
+P 6900 2900
+F 0 "R31" V 6693 2900 50  0000 C CNN
+F 1 "10k" V 6784 2900 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 2900 50  0001 C CNN
+F 3 "~" H 6900 2900 50  0001 C CNN
+	1    6900 2900
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R32
+U 1 1 5C69F31D
+P 6900 3300
+F 0 "R32" V 6693 3300 50  0000 C CNN
+F 1 "10k" V 6784 3300 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 3300 50  0001 C CNN
+F 3 "~" H 6900 3300 50  0001 C CNN
+	1    6900 3300
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R33
+U 1 1 5C69F324
+P 6900 3700
+F 0 "R33" V 6693 3700 50  0000 C CNN
+F 1 "10k" V 6784 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 3700 50  0001 C CNN
+F 3 "~" H 6900 3700 50  0001 C CNN
+	1    6900 3700
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R34
+U 1 1 5C69F32B
+P 6900 4100
+F 0 "R34" V 6693 4100 50  0000 C CNN
+F 1 "10k" V 6784 4100 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 4100 50  0001 C CNN
+F 3 "~" H 6900 4100 50  0001 C CNN
+	1    6900 4100
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R35
+U 1 1 5C69F332
+P 6900 4500
+F 0 "R35" V 6693 4500 50  0000 C CNN
+F 1 "10k" V 6784 4500 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 4500 50  0001 C CNN
+F 3 "~" H 6900 4500 50  0001 C CNN
+	1    6900 4500
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R36
+U 1 1 5C69F339
+P 6900 4900
+F 0 "R36" V 6693 4900 50  0000 C CNN
+F 1 "10k" V 6784 4900 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6830 4900 50  0001 C CNN
+F 3 "~" H 6900 4900 50  0001 C CNN
+	1    6900 4900
+	0    1    1    0   
+$EndComp
+Text HLabel 7150 2900 2    50   Output ~ 0
+BTL1
+Text HLabel 7150 3300 2    50   Output ~ 0
+BTL2
+Text HLabel 7150 3700 2    50   Output ~ 0
+BTL3
+Text HLabel 7150 4100 2    50   Output ~ 0
+BTR1
+Text HLabel 7150 4500 2    50   Output ~ 0
+BTR2
+Text HLabel 7150 4900 2    50   Output ~ 0
+BTR3
+Wire Wire Line
+	7150 4900 7050 4900
+Wire Wire Line
+	7050 4500 7150 4500
+Wire Wire Line
+	7050 4100 7150 4100
+Wire Wire Line
+	7050 3700 7150 3700
+Wire Wire Line
+	7050 3300 7150 3300
+Wire Wire Line
+	7050 2900 7150 2900
+$EndSCHEMATC

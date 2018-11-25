@@ -1,4 +1,4 @@
-update=Ne 25. listopadu 2018, 10:07:43 CET
+update=Ne 25. listopadu 2018, 10:01:20 CET
 version=1
 last_client=kicad
 [general]
@@ -34,7 +34,7 @@ LibDir=
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
-PlotDirectoryName=../../../../../Dokumenty/skola/vut/ing/diplomka/text/prilohy/
+PlotDirectoryName=/home/kajus/Dokumenty/skola/vut/ing/diplomka/text/prilohy/
 SubpartIdSeparator=0
 SubpartFirstId=65
 NetFmtName=

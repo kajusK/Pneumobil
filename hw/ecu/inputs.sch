@@ -522,8 +522,6 @@ F 3 "" H 5350 900 50  0001 C CNN
 	1    5350 900 
 	0    1    1    0   
 $EndComp
-Text Notes 9000 7400 0    50   ~ 0
-Inputs
 $Comp
 L 4xxx:4050 U?
 U 7 1 5F2F70A1

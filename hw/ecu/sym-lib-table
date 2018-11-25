@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name ecu-rescue)(type Legacy)(uri ${KIPRJMOD}/ecu-rescue.lib)(options "")(descr ""))
+)
