@@ -12,6 +12,7 @@
   (page A4)
   (title_block
     (title "BUT Pneumobil - PSU")
+    (date 2018-11-10)
     (rev 0.1)
     (company "Brno University of Technology")
     (comment 1 "Jakub Kaderka")
@@ -41,7 +42,7 @@
   )
 
   (setup
-    (last_trace_width 0.6)
+    (last_trace_width 0.3)
     (user_trace_width 0.25)
     (user_trace_width 0.4)
     (user_trace_width 0.6)
@@ -4641,7 +4642,7 @@
   (gr_text ECU (at 194.5 117.8) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_text "Pneumobil PSU v 0.1\nJakub Kaderka 2018" (at 144.5 116.2) (layer F.SilkS)
+  (gr_text "Pneumobil PSU v0.1\nJakub Kaderka 2018" (at 144.5 116.2) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_line (start 205.5 59) (end 205.5 119) (layer Edge.Cuts) (width 0.15))

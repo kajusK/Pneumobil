@@ -14,60 +14,34 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Connector:SD_Card J?
-U 1 1 5C0A7AA3
-P 6400 4000
-AR Path="/5C0A7AA3" Ref="J?"  Part="1" 
-AR Path="/5C04B598/5C0A7AA3" Ref="J7"  Part="1" 
-F 0 "J7" H 6400 4665 50  0000 C CNN
-F 1 "SD_Card" H 6400 4574 50  0000 C CNN
-F 2 "Connector_Card:SD_TE_2041021" H 6400 4000 50  0001 C CNN
-F 3 "http://portal.fciconnect.com/Comergent//fci/drawing/10067847.pdf" H 6400 4000 50  0001 C CNN
-	1    6400 4000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	5500 4300 5100 4300
+	5500 4200 5100 4200
 Wire Wire Line
-	5500 4400 5200 4400
-Wire Wire Line
-	5500 3900 5450 3900
-Wire Wire Line
-	5450 3900 5450 4200
-Wire Wire Line
-	5450 4200 5500 4200
-Wire Wire Line
-	5450 4200 5450 4450
-Connection ~ 5450 4200
+	5500 4300 5200 4300
 $Comp
 L power:GND #PWR?
 U 1 1 5C0A7AB1
-P 5450 4450
+P 5450 4650
 AR Path="/5C0A7AB1" Ref="#PWR?"  Part="1" 
 AR Path="/5C04B598/5C0A7AB1" Ref="#PWR0172"  Part="1" 
-F 0 "#PWR0172" H 5450 4200 50  0001 C CNN
-F 1 "GND" H 5455 4277 50  0000 C CNN
-F 2 "" H 5450 4450 50  0001 C CNN
-F 3 "" H 5450 4450 50  0001 C CNN
-	1    5450 4450
+F 0 "#PWR0172" H 5450 4400 50  0001 C CNN
+F 1 "GND" H 5455 4477 50  0000 C CNN
+F 2 "" H 5450 4650 50  0001 C CNN
+F 3 "" H 5450 4650 50  0001 C CNN
+	1    5450 4650
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5500 4000 5400 4000
-Wire Wire Line
-	5400 4000 5400 3500
 $Comp
 L power:+3V3 #PWR?
 U 1 1 5C0A7AB9
-P 5400 3500
+P 5450 3500
 AR Path="/5C0A7AB9" Ref="#PWR?"  Part="1" 
 AR Path="/5C04B598/5C0A7AB9" Ref="#PWR0173"  Part="1" 
-F 0 "#PWR0173" H 5400 3350 50  0001 C CNN
-F 1 "+3V3" H 5415 3673 50  0000 C CNN
-F 2 "" H 5400 3500 50  0001 C CNN
-F 3 "" H 5400 3500 50  0001 C CNN
-	1    5400 3500
+F 0 "#PWR0173" H 5450 3350 50  0001 C CNN
+F 1 "+3V3" H 5465 3673 50  0000 C CNN
+F 2 "" H 5450 3500 50  0001 C CNN
+F 3 "" H 5450 3500 50  0001 C CNN
+	1    5450 3500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -147,10 +121,6 @@ Wire Wire Line
 	4900 3700 5500 3700
 Wire Wire Line
 	5000 3450 5000 3800
-Wire Wire Line
-	5100 3450 5100 4300
-Wire Wire Line
-	5200 3450 5200 4400
 $Comp
 L power:+3V3 #PWR?
 U 1 1 5C0A7AFB
@@ -187,63 +157,32 @@ Wire Wire Line
 Wire Wire Line
 	5200 3000 5200 3150
 Connection ~ 5100 3000
-Wire Wire Line
-	7300 3800 7500 3800
 $Comp
 L Device:R R?
 U 1 1 5C0A7B0F
-P 7500 3550
+P 4000 4150
 AR Path="/5C0A7B0F" Ref="R?"  Part="1" 
 AR Path="/5C04B598/5C0A7B0F" Ref="R24"  Part="1" 
-F 0 "R24" H 7570 3596 50  0000 L CNN
-F 1 "10k" H 7570 3505 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric" V 7430 3550 50  0001 C CNN
-F 3 "~" H 7500 3550 50  0001 C CNN
-	1    7500 3550
+F 0 "R24" H 4070 4196 50  0000 L CNN
+F 1 "10k" H 4070 4105 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 3930 4150 50  0001 C CNN
+F 3 "~" H 4000 4150 50  0001 C CNN
+	1    4000 4150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7500 3700 7500 3800
-Connection ~ 7500 3800
-Wire Wire Line
-	7500 3800 7700 3800
 $Comp
 L power:+3V3 #PWR?
 U 1 1 5C0A7B19
-P 7500 3350
+P 4000 3950
 AR Path="/5C0A7B19" Ref="#PWR?"  Part="1" 
 AR Path="/5C04B598/5C0A7B19" Ref="#PWR0175"  Part="1" 
-F 0 "#PWR0175" H 7500 3200 50  0001 C CNN
-F 1 "+3V3" H 7515 3523 50  0000 C CNN
-F 2 "" H 7500 3350 50  0001 C CNN
-F 3 "" H 7500 3350 50  0001 C CNN
-	1    7500 3350
+F 0 "#PWR0175" H 4000 3800 50  0001 C CNN
+F 1 "+3V3" H 4015 4123 50  0000 C CNN
+F 2 "" H 4000 3950 50  0001 C CNN
+F 3 "" H 4000 3950 50  0001 C CNN
+	1    4000 3950
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7500 3350 7500 3400
-$Comp
-L power:GND #PWR?
-U 1 1 5C0A7B21
-P 7350 4250
-AR Path="/5C0A7B21" Ref="#PWR?"  Part="1" 
-AR Path="/5C04B598/5C0A7B21" Ref="#PWR0176"  Part="1" 
-F 0 "#PWR0176" H 7350 4000 50  0001 C CNN
-F 1 "GND" H 7355 4077 50  0000 C CNN
-F 2 "" H 7350 4250 50  0001 C CNN
-F 3 "" H 7350 4250 50  0001 C CNN
-	1    7350 4250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7350 4250 7350 4200
-Wire Wire Line
-	7350 4100 7300 4100
-Wire Wire Line
-	7300 4200 7350 4200
-Connection ~ 7350 4200
-Wire Wire Line
-	7350 4200 7350 4100
 $Comp
 L Device:C C?
 U 1 1 5C0A7B2C
@@ -318,35 +257,15 @@ Wire Wire Line
 Connection ~ 9100 3750
 Wire Wire Line
 	9100 3750 9300 3750
-NoConn ~ 7300 3900
-$Comp
-L Device:C C?
-U 1 1 5C0A7B53
-P 7500 4000
-AR Path="/5C0A7B53" Ref="C?"  Part="1" 
-AR Path="/5C04B598/5C0A7B53" Ref="C37"  Part="1" 
-F 0 "C37" H 7615 4046 50  0000 L CNN
-F 1 "10n" H 7615 3955 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 7538 3850 50  0001 C CNN
-F 3 "~" H 7500 4000 50  0001 C CNN
-	1    7500 4000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7500 4150 7500 4200
-Wire Wire Line
-	7500 4200 7350 4200
-Wire Wire Line
-	7500 3850 7500 3800
 Text HLabel 4600 3600 0    50   BiDi ~ 0
 D2
 Text HLabel 4600 3700 0    50   BiDi ~ 0
 D3
-Text HLabel 4600 4300 0    50   BiDi ~ 0
+Text HLabel 4600 4200 0    50   BiDi ~ 0
 D0
-Text HLabel 4600 4400 0    50   BiDi ~ 0
+Text HLabel 4600 4300 0    50   BiDi ~ 0
 D1
-Text HLabel 4600 4100 0    50   Input ~ 0
+Text HLabel 4600 4000 0    50   Input ~ 0
 CLK
 Text HLabel 4600 3800 0    50   Input ~ 0
 CMD
@@ -360,13 +279,78 @@ Wire Wire Line
 	4600 3600 4800 3600
 Connection ~ 4800 3600
 Wire Wire Line
-	4600 4100 5500 4100
+	4600 4000 5500 4000
 Wire Wire Line
-	4600 4300 5100 4300
-Connection ~ 5100 4300
+	4600 4200 5100 4200
+Connection ~ 5100 4200
 Wire Wire Line
-	4600 4400 5200 4400
-Connection ~ 5200 4400
-Text HLabel 7700 3800 2    50   Output ~ 0
+	4600 4300 5200 4300
+Connection ~ 5200 4300
+Text HLabel 3450 4400 0    50   Output ~ 0
 SD_DETECT
+Wire Wire Line
+	5500 4100 5450 4100
+Wire Wire Line
+	5100 3450 5100 4200
+Wire Wire Line
+	5200 3450 5200 4300
+$Comp
+L Connector:Micro_SD_Card_Det_Hirose_DM3AT J7
+U 1 1 5C0CB6F8
+P 6400 4000
+F 0 "J7" H 6350 4817 50  0000 C CNN
+F 1 "Micro_SD_Card_Det_Hirose_DM3AT" H 6350 4726 50  0000 C CNN
+F 2 "Connector_Card:microSD_HC_Hirose_DM3AT-SF-PEJM5" H 8450 4700 50  0001 C CNN
+F 3 "https://www.hirose.com/product/en/download_file/key_name/DM3/category/Catalog/doc_file_id/49662/?file_category_id=4&item_id=195&is_series=1" H 6400 4100 50  0001 C CNN
+	1    6400 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5500 4500 5450 4500
+Wire Wire Line
+	5450 4500 5450 4650
+$Comp
+L Device:R R38
+U 1 1 5C0CD5A4
+P 3750 4400
+F 0 "R38" V 3543 4400 50  0000 C CNN
+F 1 "10k" V 3634 4400 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 3680 4400 50  0001 C CNN
+F 3 "~" H 3750 4400 50  0001 C CNN
+	1    3750 4400
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4000 3950 4000 4000
+Wire Wire Line
+	3450 4400 3600 4400
+Wire Wire Line
+	3900 4400 4000 4400
+Wire Wire Line
+	4000 4400 4000 4300
+Wire Wire Line
+	4000 4400 5500 4400
+Connection ~ 4000 4400
+Connection ~ 5450 4500
+Wire Wire Line
+	5450 4100 5450 4500
+Wire Wire Line
+	5500 3900 5450 3900
+Wire Wire Line
+	5450 3900 5450 3500
+$Comp
+L power:GND #PWR02
+U 1 1 5C0D4611
+P 7250 4550
+F 0 "#PWR02" H 7250 4300 50  0001 C CNN
+F 1 "GND" H 7255 4377 50  0000 C CNN
+F 2 "" H 7250 4550 50  0001 C CNN
+F 3 "" H 7250 4550 50  0001 C CNN
+	1    7250 4550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7250 4550 7250 4500
+Wire Wire Line
+	7250 4500 7200 4500
 $EndSCHEMATC

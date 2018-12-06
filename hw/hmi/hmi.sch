@@ -98,19 +98,15 @@ NoConn ~ 7250 800
 $Comp
 L power:+5V #PWR0102
 U 1 1 5BC43D59
-P 7500 1000
-F 0 "#PWR0102" H 7500 850 50  0001 C CNN
-F 1 "+5V" V 7515 1128 50  0000 L CNN
-F 2 "" H 7500 1000 50  0001 C CNN
-F 3 "" H 7500 1000 50  0001 C CNN
-	1    7500 1000
-	0    1    -1   0   
+P 8350 950
+F 0 "#PWR0102" H 8350 800 50  0001 C CNN
+F 1 "+5V" V 8365 1078 50  0000 L CNN
+F 2 "" H 8350 950 50  0001 C CNN
+F 3 "" H 8350 950 50  0001 C CNN
+	1    8350 950 
+	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	7500 1000 7250 1000
-Wire Wire Line
-	7250 1100 7900 1100
-Text Label 8350 1100 2    50   ~ 0
+Text Label 7800 1100 2    50   ~ 0
 LCD_REST
 Wire Wire Line
 	7250 1200 7800 1200
@@ -274,7 +270,7 @@ U 1 1 5BC5D499
 P 5700 7150
 F 0 "J2" H 5800 6650 50  0000 L CNN
 F 1 "INTERFACE" V 5900 6950 50  0000 L CNN
-F 2 "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm" H 5700 7150 50  0001 C CNN
+F 2 "Connector_Dsub:DSUB-9_Female_Vertical_P2.77x2.84mm_MountingHoles" H 5700 7150 50  0001 C CNN
 F 3 " ~" H 5700 7150 50  0001 C CNN
 	1    5700 7150
 	1    0    0    1   
@@ -477,12 +473,12 @@ F 3 "" H 1250 1700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3750 2200 4400 2200
-Text Label 4000 2200 0    50   ~ 0
+	3750 1500 4400 1500
+Text Label 4000 1500 0    50   ~ 0
 DEBUG_RX
 Wire Wire Line
-	3750 2100 4400 2100
-Text Label 4000 2100 0    50   ~ 0
+	3750 1400 4400 1400
+Text Label 4000 1400 0    50   ~ 0
 DEBUG_TX
 Wire Wire Line
 	2650 900  2650 850 
@@ -520,12 +516,12 @@ F 3 "" H 2950 800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3750 1400 4400 1400
-Text Label 4100 1400 0    50   ~ 0
+	3750 2100 4400 2100
+Text Label 4100 2100 0    50   ~ 0
 GPS_TX
 Wire Wire Line
-	3750 1500 4400 1500
-Text Label 4100 1500 0    50   ~ 0
+	3750 2200 4400 2200
+Text Label 4100 2200 0    50   ~ 0
 GPS_RX
 Text Label 4150 2600 0    50   ~ 0
 SWCLK
@@ -687,7 +683,7 @@ U 1 1 5BF195B1
 P 5300 1000
 F 0 "J1" H 5380 1042 50  0000 L CNN
 F 1 "SWD" H 5380 951 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 5300 1000 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 5300 1000 50  0001 C CNN
 F 3 "~" H 5300 1000 50  0001 C CNN
 	1    5300 1000
 	1    0    0    -1  
@@ -1070,7 +1066,7 @@ U 1 1 5C1649CD
 P 8100 4400
 F 0 "J5" H 7871 4391 50  0000 R CNN
 F 1 "USB" H 7871 4300 50  0000 R CNN
-F 2 "Connector_USB:USB_B_TE_5787834_Vertical" H 8250 4350 50  0001 C CNN
+F 2 "Connector_USB:USB_A_Molex_105057_Vertical" H 8250 4350 50  0001 C CNN
 F 3 " ~" H 8250 4350 50  0001 C CNN
 	1    8100 4400
 	-1   0    0    -1  
@@ -1326,49 +1322,20 @@ Connection ~ 6150 1900
 Wire Wire Line
 	6150 1900 6750 1900
 Wire Wire Line
-	3750 3900 4400 3900
-Text Label 4000 3900 0    50   ~ 0
+	3750 5200 4400 5200
+Text Label 4000 5200 0    50   ~ 0
 LCD_SD_CS
 Wire Wire Line
 	1950 5700 1350 5700
 Text Label 1350 5700 0    50   ~ 0
 LCD_F_CS
 $Comp
-L Device:R R9
-U 1 1 5CA6233D
-P 7900 900
-F 0 "R9" H 7970 946 50  0000 L CNN
-F 1 "10k" H 7970 855 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric" V 7830 900 50  0001 C CNN
-F 3 "~" H 7900 900 50  0001 C CNN
-	1    7900 900 
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3V3 #PWR0131
-U 1 1 5CA62430
-P 7900 700
-F 0 "#PWR0131" H 7900 550 50  0001 C CNN
-F 1 "+3V3" H 7915 873 50  0000 C CNN
-F 2 "" H 7900 700 50  0001 C CNN
-F 3 "" H 7900 700 50  0001 C CNN
-	1    7900 700 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7900 700  7900 750 
-Wire Wire Line
-	7900 1050 7900 1100
-Connection ~ 7900 1100
-Wire Wire Line
-	7900 1100 8350 1100
-$Comp
 L Device:CP C20
 U 1 1 5CAB6B7D
 P 6750 3350
 F 0 "C20" H 6868 3396 50  0000 L CNN
-F 1 "50u" H 6868 3305 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_6.3x7.7" H 6788 3200 50  0001 C CNN
+F 1 "10u" H 6868 3305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 6788 3200 50  0001 C CNN
 F 3 "~" H 6750 3350 50  0001 C CNN
 	1    6750 3350
 	1    0    0    -1  
@@ -2146,8 +2113,8 @@ Wire Notes Line
 Text Notes 7700 3800 0    50   ~ 0
 F - SST25VF016\nT - XPT2046\nLCD SSD1963
 Wire Wire Line
-	3750 4500 4400 4500
-Text Label 4100 4500 0    50   ~ 0
+	3750 1300 4400 1300
+Text Label 4100 1300 0    50   ~ 0
 ADC_5V
 Text Notes 10900 5100 0    50   ~ 0
 Buzzer
@@ -2381,8 +2348,8 @@ LCD_RS
 Wire Notes Line
 	8400 3850 8400 500 
 Wire Wire Line
-	3750 1800 4400 1800
-Text Label 4100 1800 0    50   ~ 0
+	3750 3300 4400 3300
+Text Label 4100 3300 0    50   ~ 0
 BUZZER
 Wire Notes Line
 	5550 5150 5550 500 
@@ -2614,13 +2581,13 @@ Wire Wire Line
 	3750 1700 4400 1700
 Text Label 4000 1600 0    50   ~ 0
 LED_USER
-NoConn ~ 3750 5200
+NoConn ~ 3750 3900
 NoConn ~ 3750 4700
 NoConn ~ 3750 4600
 NoConn ~ 3750 3400
-NoConn ~ 3750 3300
+NoConn ~ 3750 1800
 NoConn ~ 3750 2000
-NoConn ~ 3750 1300
+NoConn ~ 3750 4500
 NoConn ~ 3750 1200
 NoConn ~ 1950 4800
 NoConn ~ 1950 5100
@@ -2660,7 +2627,7 @@ U 1 1 5C9DC50C
 P 9500 5450
 F 0 "J6" H 9600 5426 50  0000 L CNN
 F 1 "Antenna" H 9300 5600 50  0000 L CNN
-F 2 "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount" H 9500 5450 50  0001 C CNN
+F 2 "Connector_Coaxial:SMA_Amphenol_132134-11_Vertical" H 9500 5450 50  0001 C CNN
 F 3 " ~" H 9500 5450 50  0001 C CNN
 	1    9500 5450
 	1    0    0    -1  
@@ -2674,4 +2641,23 @@ Wire Wire Line
 	3750 2500 4400 2500
 Text Notes 9650 -300 0    50   ~ 0
 3.3V z lineárního stabilizátoru
+$Comp
+L Jumper:SolderJumper_2_Open JP2
+U 1 1 5C167EE9
+P 8100 1000
+F 0 "JP2" H 8100 1205 50  0000 C CNN
+F 1 "MODEL2" H 8100 1114 50  0000 C CNN
+F 2 "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm" H 8100 1000 50  0001 C CNN
+F 3 "~" H 8100 1000 50  0001 C CNN
+	1    8100 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7950 1000 7250 1000
+Wire Wire Line
+	8350 950  8350 1000
+Wire Wire Line
+	8350 1000 8250 1000
+Wire Wire Line
+	7250 1100 7800 1100
 $EndSCHEMATC
