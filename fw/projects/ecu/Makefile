@@ -20,6 +20,7 @@ CHIBIOS_USE_CONTRIB = TRUE
 
 # ChibiOS Port to use
 PORT = STM32/STM32F0xx
+PORTV = v7m
 
 ##############################################################################
 # Project, sources and paths
