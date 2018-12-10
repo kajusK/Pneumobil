@@ -21,7 +21,7 @@
  * @file    version.h
  * @brief   System version information
  *
- * @addtogroup app
+ * @addtogroup app-ecu
  * @{
  */
 
