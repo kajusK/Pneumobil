@@ -17,7 +17,7 @@ Magnetické senzory krajních poloh pístu
 =======================================
 Typ: Aventics ST6 0830100629
 Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=EN&Variant=internet&file=en/pdf/PDF_509814_p9196_en.pdf
-Napájení: 10-30DC
+Napájení: 10-30DC (10mA?)
 Výstup: Otevřeno = Vcc, Sepnuto = GND
 
 Zapojení:
@@ -30,7 +30,7 @@ Indukcak
 ========
 Typ: LJ12A3-4-Z/BX
 Datasheet: https://arduino-shop.cz/arduino/1140-indukcni-priblizovaci-cidlo-lj12a3-4-z-bx-1449885814.html
-Napájení: 6-36DC (300mA?)
+Napájení: 6-36DC (10mA)
 Výstup: Nesepnutý - Vcc, Sepnutý - nepřipojeno
 
 Zapojení:
@@ -72,7 +72,7 @@ Redukční ventil
 ===============
 Typ: Aventics ED02 R414002411
 Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=EN&file=en%2Fpdf%2FPDF_g38881_en.pdf
-Napájení: 24 V
+Napájení: 24 V (300mA)
 Ovládání: Proudová smyčka 4-20 mA
 
 Zapojení:
