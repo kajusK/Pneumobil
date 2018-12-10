@@ -25,11 +25,30 @@
  * @{
  */
 
-#include "ch.h"
-#include "hal.h"
-#include "chprintf.h"
+#include <ch.h>
+#include <hal.h>
+#include <chprintf.h>
 
-#include "modules/log.h"
+#include <modules/log.h>
+#include <modules/config.h>
+#include "ecu.h"
+
+#define BLINK_THREAD_PRIO (NORMALPRIO - 2)
+THD_WORKING_AREA(blink_thread_area, 32);
+
+static THD_FUNCTION(Blink_Thread, arg)
+{
+    (void) arg;
+
+    while (1) {
+        ECU_ValvesMoveFront(true);
+        palSetLine(LINE_LED_SYS_ACTIVE);
+        chThdSleepMilliseconds(500);
+        palClearLine(LINE_LED_SYS_ACTIVE);
+        ECU_ValvesMoveBack(true);
+        chThdSleepMilliseconds(500);
+    }
+}
 
 /*
  * Application entry point.
@@ -45,11 +64,13 @@ int main(void) {
   halInit();
   chSysInit();
 
+    (void) chThdCreateStatic(blink_thread_area, sizeof(blink_thread_area),
+            BLINK_THREAD_PRIO, Blink_Thread, NULL);
   /*
    * Activates the serial driver 2 using the driver default configuration.
    */
-  sdStart(&SD2, NULL);
-  chprintf((BaseSequentialStream *)&SD2, "SYSCLK=%u\r\n", STM32_SYSCLK);
+  sdStart(&SD1, NULL);
+  chprintf((BaseSequentialStream *)&SD1, "SYSCLK=%u\r\n", STM32_SYSCLK);
 
   /*
   chprintf(cfg->out, "*** Kernel:       %s\r\n", CH_KERNEL_VERSION);
@@ -77,10 +98,13 @@ int main(void) {
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop and check the button state.
    */
+  Config_Reset();
   Log_Init();
-  Log_Error(LOG_SOURCE_SYSTEM, "Foo %d", 12);
+  //ECU_Init();
+
 
   while (true) {
     chThdSleepMilliseconds(500);
+    chprintf((BaseSequentialStream *)&SD1, "SYSCLK=%u\r\n", STM32_SYSCLK);
   }
 }
