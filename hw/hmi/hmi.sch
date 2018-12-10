@@ -161,17 +161,6 @@ Wire Wire Line
 	7250 1500 7800 1500
 Text Label 7800 1500 2    50   ~ 0
 LCD_DB14
-$Comp
-L power:+3.3V #PWR0103
-U 1 1 5BC48095
-P 7400 2600
-F 0 "#PWR0103" H 7400 2450 50  0001 C CNN
-F 1 "+3.3V" V 7415 2728 50  0000 L CNN
-F 2 "" H 7400 2600 50  0001 C CNN
-F 3 "" H 7400 2600 50  0001 C CNN
-	1    7400 2600
-	0    1    -1   0   
-$EndComp
 Wire Wire Line
 	7400 2600 7250 2600
 $Comp
@@ -1282,7 +1271,7 @@ Wire Wire Line
 Text Label 4000 2700 0    50   ~ 0
 SD_DETECT
 Text Notes 5600 750  0    50   ~ 0
-Solder 0R to R8 on lcd board\n5 V 620 mA\n3.3 V 100 mA
+Solder 0R to R8 on lcd board\n5 V 620 mA\n3.3 V 100 mA / 450 mA
 Wire Wire Line
 	5600 1900 6150 1900
 Text Label 5600 1900 0    50   ~ 0
@@ -1406,17 +1395,6 @@ Wire Wire Line
 	5850 3150 6300 3150
 Wire Wire Line
 	6300 3150 6300 3200
-$Comp
-L power:+3V3 #PWR0133
-U 1 1 5CB494FE
-P 6300 3100
-F 0 "#PWR0133" H 6300 2950 50  0001 C CNN
-F 1 "+3V3" H 6315 3273 50  0000 C CNN
-F 2 "" H 6300 3100 50  0001 C CNN
-F 3 "" H 6300 3100 50  0001 C CNN
-	1    6300 3100
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6300 3100 6300 3150
 Connection ~ 6300 3150
@@ -2660,4 +2638,26 @@ Wire Wire Line
 	8350 1000 8250 1000
 Wire Wire Line
 	7250 1100 7800 1100
+$Comp
+L power:+3.3VP #PWR0103
+U 1 1 5C175F16
+P 7400 2600
+F 0 "#PWR0103" H 7550 2550 50  0001 C CNN
+F 1 "+3.3VP" V 7420 2698 50  0000 L CNN
+F 2 "" H 7400 2600 50  0001 C CNN
+F 3 "" H 7400 2600 50  0001 C CNN
+	1    7400 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+3.3VP #PWR?
+U 1 1 5C17B1F4
+P 6300 3100
+F 0 "#PWR?" H 6450 3050 50  0001 C CNN
+F 1 "+3.3VP" H 6320 3243 50  0000 C CNN
+F 2 "" H 6300 3100 50  0001 C CNN
+F 3 "" H 6300 3100 50  0001 C CNN
+	1    6300 3100
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
