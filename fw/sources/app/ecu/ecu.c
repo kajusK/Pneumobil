@@ -57,8 +57,8 @@ typedef enum {
     ECU_DIR_FRONT,
 } ecu_dir_t;
 
+/** Race type for mode selection */
 typedef enum {
-    PNEU_MODE_IDLE,
     PNEU_MODE_ARCADE,
     PNEU_MODE_DRAG,
     PNEU_MODE_LONGD,
@@ -151,6 +151,14 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             control->state = ECU_STATE_IDLE;
             Log_Info(LOG_SOURCE_ECU, "Init done: Piston len: %d", len);
         }
+    }
+
+    /* End initialization if piston len is known, edge will be found during
+     * normal mode (endstop hit fixes the encoder positon) */
+    if (control->state == ECU_STATE_INIT && pistonLen != 0) {
+        Encoderd_Set(pistonLen/2);
+        control->dir = ECU_DIR_BACK;
+        control->state = ECU_STATE_IDLE;
     }
 
     /* Set valves according to current state */

@@ -287,16 +287,24 @@ TEST(ECU, EdgesInitNoConfig)
     TEST_ASSERT_EQUAL(0, encoder_set);
 }
 
-TEST(ECU, EdgesInitWithConfig)
+TEST(ECU, EdgesInitWithConfigFrontHit)
 {
     piston_len = 1024;
 
-    /* Search back endstop */
-    control.inputs.throttle = true;
+    /* front endstop hit */
+    control.inputs.endstop_front = true;
+    encoder_set_called = false;
     ECUi_EdgesInit(&control);
-    TEST_ASSERT_EQUAL(VALVES_MOVE_BACK, valves);
-    TEST_ASSERT_EQUAL(ECU_STATE_INIT, control.state);
-    TEST_ASSERT_EQUAL(ECU_DIR_BACK, control.dir);
+    TEST_ASSERT_EQUAL(VALVES_CLOSED, valves);
+    TEST_ASSERT_EQUAL(ECU_STATE_IDLE, control.state);
+    TEST_ASSERT_EQUAL(ECU_DIR_FRONT, control.dir);
+    TEST_ASSERT_TRUE(encoder_set_called);
+    TEST_ASSERT_EQUAL(1024, encoder_set);
+}
+
+TEST(ECU, EdgesInitWithConfigBackHit)
+{
+    piston_len = 1024;
 
     /* Back endstop hit */
     control.inputs.endstop_back = true;
@@ -306,18 +314,18 @@ TEST(ECU, EdgesInitWithConfig)
     TEST_ASSERT_EQUAL(ECU_DIR_BACK, control.dir);
     TEST_ASSERT_TRUE(encoder_set_called);
     TEST_ASSERT_EQUAL(0, encoder_set);
+}
 
-    /* front endstop hit */
-    control.inputs.endstop_front = true;
-    control.inputs.endstop_back = false;
-    control.state = ECU_STATE_INIT;
-    encoder_set_called = false;
+TEST(ECU, EdgesInitWithConfigNoHit)
+{
+    piston_len = 1024;
+
     ECUi_EdgesInit(&control);
     TEST_ASSERT_EQUAL(VALVES_CLOSED, valves);
     TEST_ASSERT_EQUAL(ECU_STATE_IDLE, control.state);
-    TEST_ASSERT_EQUAL(ECU_DIR_FRONT, control.dir);
+    TEST_ASSERT_EQUAL(ECU_DIR_BACK, control.dir);
     TEST_ASSERT_TRUE(encoder_set_called);
-    TEST_ASSERT_EQUAL(1024, encoder_set);
+    TEST_ASSERT_EQUAL(piston_len/2, encoder_set);
 }
 
 TEST(ECU, GetPistonPos)
@@ -490,7 +498,9 @@ TEST(ECU, RunningNoDeadtime)
 TEST_GROUP_RUNNER(ECU)
 {
     RUN_TEST_CASE(ECU, EdgesInitNoConfig);
-    RUN_TEST_CASE(ECU, EdgesInitWithConfig);
+    RUN_TEST_CASE(ECU, EdgesInitWithConfigFrontHit);
+    RUN_TEST_CASE(ECU, EdgesInitWithConfigBackHit);
+    RUN_TEST_CASE(ECU, EdgesInitWithConfigNoHit);
     RUN_TEST_CASE(ECU, GetPistonPos);
     RUN_TEST_CASE(ECU, RunningNormal);
     RUN_TEST_CASE(ECU, RunningNoDeadtime);
