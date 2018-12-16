@@ -38,6 +38,7 @@ typedef enum config_item_uint_t {
 } config_item_uint_t;
 
 typedef enum {
+    CONFIG_BOOL_CAN_PROMISCUOUS,        /* Receive all messages from can if true */
     CONFIG_BOOL_ENCODER_INVERT,
     CONFIG_BOOL_PNEU_NON_BLOCK,
     CONFIG_BOOL_COUNT,

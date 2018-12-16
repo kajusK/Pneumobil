@@ -28,8 +28,8 @@
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
 
-void Comm_HandlePayload(const uint8_t *payload, uint8_t len,
-        comm_send_cb_t send_frame)
+bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
+        const uint8_t *payload, uint8_t len, comm_send_cb_t send_frame)
 {
 
 }

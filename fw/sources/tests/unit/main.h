@@ -33,6 +33,7 @@
 
 extern void Log_RunTests(void);
 extern void Comm_UartLink_RunTests(void);
+extern void Comm_CanLink_RunTests(void);
 extern void Eeprom_RunTests(void);
 extern void CRC_RunTests(void);
 extern void Config_RunTests(void);

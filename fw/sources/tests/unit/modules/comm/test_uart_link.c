@@ -37,14 +37,16 @@ static bool payload_handled = false;
 /* *****************************************************************************
  * Mocks
 ***************************************************************************** */
-static void Comm_HandlePayload(const uint8_t *payload, uint8_t len,
-        comm_send_cb_t send_frame)
+static bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
+        const uint8_t *payload, uint8_t len, comm_send_cb_t send_frame)
 {
     memcpy(recbuf, payload, len);
     received = len;
     payload_handled = true;
 
-    TEST_ASSERT_EQUAL_PTR(send_frame, Comm_Uart_Send);
+    TEST_ASSERT_EQUAL(COMM_NODE_DEBUG, src);
+    TEST_ASSERT_EQUAL(COMM_MY_ID, dest);
+    TEST_ASSERT_EQUAL_PTR(send_frame, Comm_UartSend);
 }
 
 static void Uartd_RegisterRxCb(uartd_rx_cb_t cb)
@@ -102,24 +104,24 @@ TEST_TEAR_DOWN(Comm_UartLink)
 TEST(Comm_UartLink, ProcessByteValid)
 {
     /* Incorrect bytes */
-    Comm_Uart_ProcessByte(0x12);
+    Commi_UartProcessByte(0x12);
     TEST_ASSERT_FALSE(payload_handled);
-    Comm_Uart_ProcessByte(0x19);
+    Commi_UartProcessByte(0x19);
     TEST_ASSERT_FALSE(payload_handled);
 
     /* Correct payload */
-    Comm_Uart_ProcessByte(0xff);
+    Commi_UartProcessByte(0xff);
     TEST_ASSERT_FALSE(payload_handled);
-    Comm_Uart_ProcessByte(0x12);
+    Commi_UartProcessByte(0x12);
     TEST_ASSERT_FALSE(payload_handled);
 
     for (int i = 0; i < 18; i++) {
-        Comm_Uart_ProcessByte(i);
+        Commi_UartProcessByte(i);
         TEST_ASSERT_FALSE(payload_handled);
     }
 
     /* crc */
-    Comm_Uart_ProcessByte(0xab);
+    Commi_UartProcessByte(0xab);
     TEST_ASSERT_TRUE(payload_handled);
     TEST_ASSERT_EQUAL(18, received);
 
@@ -130,18 +132,18 @@ TEST(Comm_UartLink, ProcessByteValid)
 
 TEST(Comm_UartLink, ProcessByteInvalid)
 {
-    Comm_Uart_ProcessByte(0xff);
+    Commi_UartProcessByte(0xff);
     TEST_ASSERT_FALSE(payload_handled);
-    Comm_Uart_ProcessByte(0x02);
+    Commi_UartProcessByte(0x02);
     TEST_ASSERT_FALSE(payload_handled);
 
-    Comm_Uart_ProcessByte(0xab);
+    Commi_UartProcessByte(0xab);
     TEST_ASSERT_FALSE(payload_handled);
-    Comm_Uart_ProcessByte(0xcd);
+    Commi_UartProcessByte(0xcd);
     TEST_ASSERT_FALSE(payload_handled);
 
     /* invalid crc */
-    Comm_Uart_ProcessByte(0xcd);
+    Commi_UartProcessByte(0xcd);
     TEST_ASSERT_FALSE(payload_handled);
 }
 
@@ -152,7 +154,7 @@ TEST(Comm_UartLink, SendPayload)
         payload[i] = i;
     }
 
-    TEST_ASSERT_TRUE(Comm_Uart_Send(payload, 18));
+    TEST_ASSERT_TRUE(Comm_UartSend(0,0, payload, 18));
     TEST_ASSERT_EQUAL(21, received);
     TEST_ASSERT_EQUAL_HEX8(0xff, recbuf[0]);
     TEST_ASSERT_EQUAL(18, recbuf[1]);

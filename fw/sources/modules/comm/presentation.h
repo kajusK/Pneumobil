@@ -29,11 +29,52 @@
 #define __MODULES_COMM_PRESENTATION_H
 
 #include <types.h>
+#include <version.h>
 
-typedef bool (*comm_send_cb_t)(const uint8_t *payload, uint8_t len);
+/** Communication node ids, used for CAN addressing */
+typedef enum {
+    COMM_NODE_DEBUG = 0x00,
+    COMM_NODE_PSU = 0x01,
+    COMM_NODE_HMI = 0x02,
+    COMM_NODE_ECU = 0x03,
+    COMM_NODE_SDU = 0x04,
+    COMM_NODE_UNKNOWN = 0x05,
+    COMM_NODE_BROADCAST = 0x0f,    /* For transmission only */
+} comm_node_t;
 
-extern void Comm_HandlePayload(const uint8_t *payload, uint8_t len,
-        comm_send_cb_t send_frame);
+/** Communication priority, used by CAN for prioritizing messages */
+typedef enum {
+    COMM_PRIORITY_CRITICAL = 0x00,
+    COMM_PRIORITY_NORMAL = 0x01,
+    COMM_PRIORITY_LOG = 0x02,
+    COMM_PRIORITY_DEBUG = 0x03
+} comm_priority_t;
+
+#define COMM_MY_ID COMM_NODE_ECU
+
+/*
+#ifndef SYS_NAME
+    #error "SYS_NAME must be defined for selecting correct CAN ID"
+#endif
+
+#if SYS_NAME == "ECU"
+    #define COMM_MY_ID COMM_NODE_ECU
+#elif SYS_NAME == "HMI"
+    #define COMM_MY_ID COMM_NODE_HMI
+#elif SYS_NAME == "PSU"
+    #define COMM_MY_ID COMM_NODE_PSU
+#elif SYS_NAME == "SDU"
+    #define COMM_MY_ID COMM_NODE_SDU
+#else
+    #error "Unknown SYS_NAME defined"
+#endif
+*/
+
+typedef bool (*comm_send_cb_t)(comm_node_t dest, comm_priority_t priority,
+        const uint8_t *payload, uint8_t len);
+
+extern bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
+        const uint8_t *payload, uint8_t len, comm_send_cb_t send_frame);
 
 #endif
 

@@ -16,7 +16,7 @@ SOURCES_DIRS	= $(UNITY_DIR)/src $(UNITY_DIR)/extras/fixture/src \
 
 #additional build flags
 OPT		:= -O0
-CSTD		?= -std=c99
+CSTD		= -std=c11
 INCLUDES	= \
 	-I $(SOURCES) \
 	-I $(SOURCES)/tests/unit \
@@ -59,7 +59,7 @@ CFLAGS	+= $(DEFS)
 CFLAGS	+= $(BUILD_FLAGS)
 CFLAGS	+= $(INCLUDES)
 CFLAGS	+= -g
-CFLAGS	+= -Wall -Wextra -pedantic -std=c99 -Wundef -Wshadow
+CFLAGS	+= -Wall -Wextra -pedantic -Wundef -Wshadow
 CFLAGS	+= -Wmissing-prototypes -Wstrict-prototypes
 CFLAGS	+= -fno-common -ffunction-sections -fdata-sections
 CFLAGS	+= -Wno-unused-function

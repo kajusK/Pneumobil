@@ -45,7 +45,7 @@
  * Structure for holding frame being received
  */
 struct frame_s {
-    uint8_t len;
+    uint16_t len;
     uint8_t payload[COMM_MAX_PAYLOAD_LEN];
 };
 
@@ -66,7 +66,7 @@ MUTEX_DECL(uarti_tx_mutex);
  *
  * @param [in] c    Byte received
  */
-static void Comm_Uart_ProcessByte(uint8_t c)
+static void Commi_UartProcessByte(uint8_t c)
 {
     static enum comm_uart_phase_e phase = UART_PHASE_START;
     static struct frame_s frame;
@@ -74,7 +74,7 @@ static void Comm_Uart_ProcessByte(uint8_t c)
     static systime_t lastCalled = 0;
     static uint8_t crc = 0;
 
-    /** Reset reception is delay between characters is too long */
+    /** Reset reception if delay between characters is too long */
     if (TIME_I2MS(chVTTimeElapsedSinceX(lastCalled)) > COMM_UART_MAX_DELAY_MS) {
         if (phase != UART_PHASE_START) {
             Log_Warn(LOG_SOURCE_COMM, "Uart rx timeouted");
@@ -118,8 +118,8 @@ static void Comm_Uart_ProcessByte(uint8_t c)
 
         case UART_PHASE_CRC:
             if (crc == c) {
-                Comm_HandlePayload(frame.payload, frame.len,
-                        Comm_Uart_Send);
+                Comm_HandlePayload(COMM_NODE_DEBUG, COMM_MY_ID, frame.payload,
+                        frame.len, Comm_UartSend);
                 phase = UART_PHASE_START;
                 Log_Debug(LOG_SOURCE_COMM, "Uart: got %d bytes", frame.len);
             } else {
@@ -133,12 +133,15 @@ static void Comm_Uart_ProcessByte(uint8_t c)
     }
 }
 
-bool Comm_Uart_Send(const uint8_t *payload, uint8_t len)
+bool Comm_UartSend(comm_node_t dest, comm_priority_t priority,
+        const uint8_t *payload, uint8_t len)
 {
     int i;
     uint8_t crc;
 
     ASSERT_NOT(payload == NULL);
+    (void) priority;
+    (void) dest;
 
     chMtxLock(&uarti_tx_mutex);
     Uartd_SendByte(COMM_UART_FRAME_START);
@@ -156,10 +159,10 @@ bool Comm_Uart_Send(const uint8_t *payload, uint8_t len)
     return true;
 }
 
-void Comm_Uart_Init(void)
+void Comm_UartInit(void)
 {
     Uartd_Init(COMM_UART_BAUDRATE);
-    Uartd_RegisterRxCb(Comm_Uart_ProcessByte);
+    Uartd_RegisterRxCb(Commi_UartProcessByte);
 }
 
 /** @} */
