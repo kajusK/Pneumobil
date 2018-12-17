@@ -32,6 +32,8 @@
 #define VER_MINOR 9
 #define SYS_NAME "TESTS"
 
+#define BOARD_ECU
+
 #endif
 
 /** @} */

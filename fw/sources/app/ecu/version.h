@@ -32,6 +32,8 @@
 #define VER_MINOR 1
 #define SYS_NAME "ECU"
 
+#define BOARD_ECU
+
 #endif
 
 /** @} */

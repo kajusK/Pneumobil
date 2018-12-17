@@ -50,25 +50,17 @@ typedef enum {
     COMM_PRIORITY_DEBUG = 0x03
 } comm_priority_t;
 
-#define COMM_MY_ID COMM_NODE_ECU
-
-/*
-#ifndef SYS_NAME
-    #error "SYS_NAME must be defined for selecting correct CAN ID"
-#endif
-
-#if SYS_NAME == "ECU"
+#ifdef BOARD_ECU
     #define COMM_MY_ID COMM_NODE_ECU
-#elif SYS_NAME == "HMI"
+#elif defined BOARD_HMI
     #define COMM_MY_ID COMM_NODE_HMI
-#elif SYS_NAME == "PSU"
+#elif defined BOARD_PSU
     #define COMM_MY_ID COMM_NODE_PSU
-#elif SYS_NAME == "SDU"
+#elif defined BOARD_SDU
     #define COMM_MY_ID COMM_NODE_SDU
 #else
-    #error "Unknown SYS_NAME defined"
+    #error "BOARD_NAME must be defined"
 #endif
-*/
 
 typedef bool (*comm_send_cb_t)(comm_node_t dest, comm_priority_t priority,
         const uint8_t *payload, uint8_t len);
