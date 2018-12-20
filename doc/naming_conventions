@@ -22,6 +22,8 @@ Includes:
 all includes required for external functions, defines, etc must be in header
 file only and header must be included into it's source file
 
+important header #include <types.h> - common place for all inttypes, etc
+
 Source code organization
  - GPL notice
  - Doxygen header
