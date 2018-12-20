@@ -74,3 +74,5 @@ void CRC_RunTests(void)
 {
     RUN_TEST_GROUP(CRC);
 }
+
+/** @} */

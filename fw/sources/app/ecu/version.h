@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    version.h
+ * @file    ecu/version.h
  * @brief   System version information
  *
  * @addtogroup app-ecu

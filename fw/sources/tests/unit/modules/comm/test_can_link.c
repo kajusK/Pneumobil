@@ -509,3 +509,5 @@ void Comm_CanLink_RunTests(void)
 {
     RUN_TEST_GROUP(Comm_CANLink);
 }
+
+/** @} */

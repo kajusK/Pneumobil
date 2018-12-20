@@ -46,3 +46,5 @@ int main(int argc, const char *argv[])
 {
     UnityMain(argc, argv, RunAll);
 }
+
+/** @} */

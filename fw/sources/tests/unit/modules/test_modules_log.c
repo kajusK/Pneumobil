@@ -236,3 +236,5 @@ void Log_RunTests(void)
 {
     RUN_TEST_GROUP(Log);
 }
+
+/** @} */

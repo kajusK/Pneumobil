@@ -102,3 +102,5 @@ void Buttons_RunTests(void)
 {
     RUN_TEST_GROUP(Buttons);
 }
+
+/** @} */

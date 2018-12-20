@@ -59,3 +59,5 @@ extern uint8_t assert_should_fail;
 #define extern static
 
 #endif
+
+/** @} */

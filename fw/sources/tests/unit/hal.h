@@ -80,3 +80,5 @@ typedef struct {
 } CANRxFrame;
 
 #endif
+
+/** @} */

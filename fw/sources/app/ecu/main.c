@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    main.c
+ * @file    ecu/main.c
  * @brief   Main file for pneumobil ECU
  *
  * @addtogroup app-ecu
@@ -100,6 +100,7 @@ int main(void) {
    */
   Config_Reset();
   Log_Init();
+  Wdgd_Init();
   //ECU_Init();
 
 
@@ -108,3 +109,5 @@ int main(void) {
     chprintf((BaseSequentialStream *)&SD1, "SYSCLK=%u\r\n", STM32_SYSCLK);
   }
 }
+
+/** @} */

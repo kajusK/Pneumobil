@@ -34,7 +34,7 @@
 /**
  * Send DAC output voltage
  *
- * @param [in] out  output value in mV
+ * @param [in] out_mv  output value in mV
  */
 extern void Dacd_SetOutputMv(uint16_t out_mv);
 

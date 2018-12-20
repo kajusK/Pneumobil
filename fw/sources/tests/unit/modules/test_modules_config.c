@@ -139,3 +139,5 @@ void Config_RunTests(void)
 {
     RUN_TEST_GROUP(Config);
 }
+
+/** @} */

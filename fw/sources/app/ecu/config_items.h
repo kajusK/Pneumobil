@@ -18,12 +18,12 @@
 */
 
 /**
- * @file    config_items.h
+ * @file    ecu/config_items.h
  * @brief   Configuration storage subsystem - configuration items
  *
  * Generated automatically by script, do not modify
  *
- * @addtogroup modules
+ * @addtogroup app-ecu
  * @{
  */
 

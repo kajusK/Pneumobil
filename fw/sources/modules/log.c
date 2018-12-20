@@ -89,7 +89,7 @@ static THD_FUNCTION(Logi_Thread, arg)
  * @param [in] src      source of the message
  * @param [in] severity log message severity
  * @param [in] format   format string specifier, same as for printf
- * @param [in] ad       initialized va_list of variable arguments
+ * @param [in] ap       initialized va_list of variable arguments
  */
 static void Logi_AddEntry(log_src_t src, log_severity_t severity,
         const char *format, va_list ap)

@@ -65,3 +65,5 @@ void chMtxLock(mutex_t *mp);
 void chMtxUnlock(mutex_t *mp);
 
 #endif
+
+/** @} */

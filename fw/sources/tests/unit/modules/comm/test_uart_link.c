@@ -175,3 +175,5 @@ void Comm_UartLink_RunTests(void)
 {
     RUN_TEST_GROUP(Comm_UartLink);
 }
+
+/** @} */

@@ -76,3 +76,5 @@ void chMtxUnlock(mutex_t *mp)
 {
     (void) mp;
 }
+
+/** @} */

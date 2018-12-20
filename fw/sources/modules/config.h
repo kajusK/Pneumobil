@@ -58,7 +58,7 @@ extern uint32_t Config_GetUint(config_item_uint_t item);
  * Set unsigned item to config module
  *
  * @param [in] item ID of item requested
- * @wparam [in] value value to stora
+ * @param [in] value value to stora
  */
 extern void Config_SetUint(config_item_uint_t item, uint32_t value);
 
@@ -79,7 +79,7 @@ extern bool Config_GetBool(config_item_bool_t item);
  * Set bool item to config module
  *
  * @param [in] item ID of item requested
- * @wparam [in] value value to stora
+ * @param [in] value value to stora
  */
 extern void Config_SetBool(config_item_bool_t item, bool value);
 
