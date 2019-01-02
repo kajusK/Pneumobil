@@ -29,6 +29,8 @@
 
 #include "drivers/encoder.h"
 
+#define QEID JOIN(QEID, TIM_ROT_ENC_A)
+
 static void Encoderdi_Start(bool invert)
 {
     QEIConfig config;
@@ -41,24 +43,24 @@ static void Encoderdi_Start(bool invert)
     }
     config.overflow = QEI_OVERFLOW_WRAP;
 
-    qeiStart(&QEID3, &config);
-    qeiEnable(&QEID3);
+    qeiStart(&QEID, &config);
+    qeiEnable(&QEID);
 }
 
 int16_t Encoderd_Get(void)
 {
-    return qeiGetCount(&QEID3);
+    return qeiGetCount(&QEID);
 }
 
 void Encoderd_Set(int16_t value)
 {
-    qeiSetCount(&QEID3, value);
+    qeiSetCount(&QEID, value);
 }
 
 void Encoderd_InvertDirection(void)
 {
-    qeiDisable(&QEID3);
-    qeiStop(&QEID3);
+    qeiDisable(&QEID);
+    qeiStop(&QEID);
     Encoderdi_Start(true);
 }
 
