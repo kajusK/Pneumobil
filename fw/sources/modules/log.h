@@ -58,6 +58,7 @@ typedef enum {
  */
 typedef enum {
     LOG_SOURCE_UNKNOWN,
+    LOG_SOURCE_DRIVER,
     LOG_SOURCE_CONFIG,
     LOG_SOURCE_SYSTEM,
     LOG_SOURCE_COMM,
