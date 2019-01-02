@@ -36,6 +36,16 @@
     #define false 0
 #endif
 
+/**
+ * macros for converting two strings into single name, e.g. for HAL
+ * variables, etc.
+ *
+ * Due to the way the gcc preprocessor works, the macro must be resolved
+ * twice, hence the construction below
+ */
+#define JOIN_(str1, str2) str1 ## str2
+#define JOIN(str1, str2) JOIN_(str1, str2)
+
 #endif
 
 /** @} */
