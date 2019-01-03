@@ -32,8 +32,10 @@
 
 #include <types.h>
 
-typedef enum config_item_uint_t {
+typedef enum {
     CONFIG_UINT_PISTON_LEN,
+    CONFIG_UINT_WHEEL_DIA_MM,
+    CONFIG_UINT_PULSES_PER_WHEEL_ROTATION,
     CONFIG_UINT_COUNT,
 } config_item_uint_t;
 
