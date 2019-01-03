@@ -32,6 +32,9 @@
 
 #define UARTD_THREAD_PRIO   NORMALPRIO
 
+/** Usard serial driver */
+#define SD JOIN(SD, USART_DEBUG_TXD)
+
 /** callback for uart byte received */
 static uartd_rx_cb_t uartdi_rx_cb;
 
@@ -44,7 +47,7 @@ static THD_FUNCTION(Uartd_Thread, arg)
     char c;
 
     while (true) {
-        c = sdGet(&SD2);
+        c = sdGet(&SD);
         if (uartdi_rx_cb != NULL) {
             uartdi_rx_cb(c);
         }
@@ -58,7 +61,7 @@ void Uartd_RegisterRxCb(uartd_rx_cb_t cb)
 
 void Uartd_SendByte(uint8_t byte)
 {
-    sdPut(&SD2, byte);
+    sdPut(&SD, byte);
 }
 
 void Uartd_Init(uint32_t baudrate)
@@ -70,7 +73,7 @@ void Uartd_Init(uint32_t baudrate)
     sdConfig.cr2 = USART_CR2_STOP1_BITS;
     sdConfig.cr3 = 0;
 
-    sdStart(&SD2, &sdConfig);
+    sdStart(&SD, &sdConfig);
 
     (void) chThdCreateStatic(uartdi_thread_area, sizeof(uartdi_thread_area),
                     UARTD_THREAD_PRIO, Uartd_Thread, NULL);
