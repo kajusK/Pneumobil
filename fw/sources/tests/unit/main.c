@@ -34,8 +34,8 @@ static void RunAll(void)
     CRC_RunTests();
     Buttons_RunTests();
     Log_RunTests();
-    Comm_UartLink_RunTests();
-    Comm_CanLink_RunTests();
+    Comm_UartTransport_RunTests();
+    Comm_CanTransport_RunTests();
     Eeprom_RunTests();
     Config_RunTests();
 

@@ -18,39 +18,42 @@
 */
 
 /**
- * @file    can_link.h
- * @brief   Communication protocol, link layer of can interface
+ * @file    uart_transport.h
+ * @brief   Communication protocol, transport layer of uart interface
+ *
+ * @details Reading and sending frames in format [0xff len data1 ... datan crc8]
+ *          For incorrect crc [0xff 0x00 crc] is returned
  *
  * @addtogroup modules-comm
  * @{
  */
 
-#ifndef __MODULES_COMM_CAN_LINK_H
-#define __MODULES_COMM_CAN_LINK_H
+#ifndef __MODULES_COMM_UART_TRANSPORT_H
+#define __MODULES_COMM_UART_TRANSPORT_H
 
 #include <types.h>
 #include "modules/comm/presentation.h"
 
-/** Amount of slots for multipart messages beying received simultaneously */
-#define COMM_CAN_MBOX_SLOTS 2
-
-/** Can baudrate to be used */
-#define COMM_CAN_BAUDRATE 1000000
+#define COMM_UART_BAUDRATE  115200
 
 /**
- * Send message over CAN
+ * Create frame from payload and send to computer
  *
- * @param [in] dest         Destination node
+ * @param [in] dest         Destination node ID
  * @param [in] priority     Message priority
- * @param [in] payload      Data buffer
- * @param [in] len          Length of the buffer
+ * @param [in] payload      Payload to be send
+ * @param [in] len          Length of the payload
  *
- * @return True if suceeded
+ * @return  Successfulness of the operation
  */
-extern bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
+extern bool Comm_UartSend(comm_node_t dest, comm_priority_t priority,
         const uint8_t *payload, uint8_t len);
 
-extern void Comm_CanInit(void);
+/**
+ * Initialize uart link layer and it's dependencies
+ */
+extern void Comm_UartInit(void);
 
 #endif
+
 /** @} */

@@ -18,8 +18,8 @@
 */
 
 /**
- * @file    test_uart_link.c
- * @brief   Unit test for communication module, uart link layer
+ * @file    test_uart_transport.c
+ * @brief   Unit test for communication module, uart transport layer
  *
  * @addtogroup tests
  * @{
@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include <main.h>
-#include "modules/comm/uart_link.c"
+#include "modules/comm/uart_transport.c"
 
 static uint8_t recbuf[30];
 static uint8_t received = 0;
@@ -47,6 +47,7 @@ static bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
     TEST_ASSERT_EQUAL(COMM_NODE_DEBUG, src);
     TEST_ASSERT_EQUAL(COMM_MY_ID, dest);
     TEST_ASSERT_EQUAL_PTR(send_frame, Comm_UartSend);
+    return true;
 }
 
 static void Uartd_RegisterRxCb(uartd_rx_cb_t cb)
@@ -87,21 +88,21 @@ static uint8_t CRC8_Add(uint8_t buf, uint8_t crc)
 /* *****************************************************************************
  * Tests
 ***************************************************************************** */
-TEST_GROUP(Comm_UartLink);
+TEST_GROUP(Comm_UartTransport);
 
-TEST_SETUP(Comm_UartLink)
+TEST_SETUP(Comm_UartTransport)
 {
     received = 0;
     payload_handled = false;
     memset(recbuf, 0x00, 1024);
 }
 
-TEST_TEAR_DOWN(Comm_UartLink)
+TEST_TEAR_DOWN(Comm_UartTransport)
 {
 
 }
 
-TEST(Comm_UartLink, ProcessByteValid)
+TEST(Comm_UartTransport, ProcessByteValid)
 {
     /* Incorrect bytes */
     Commi_UartProcessByte(0x12);
@@ -130,7 +131,7 @@ TEST(Comm_UartLink, ProcessByteValid)
     }
 }
 
-TEST(Comm_UartLink, ProcessByteInvalid)
+TEST(Comm_UartTransport, ProcessByteInvalid)
 {
     Commi_UartProcessByte(0xff);
     TEST_ASSERT_FALSE(payload_handled);
@@ -147,7 +148,7 @@ TEST(Comm_UartLink, ProcessByteInvalid)
     TEST_ASSERT_FALSE(payload_handled);
 }
 
-TEST(Comm_UartLink, SendPayload)
+TEST(Comm_UartTransport, SendPayload)
 {
     uint8_t payload[18];
     for (int i = 0; i < 18; i++) {
@@ -164,16 +165,16 @@ TEST(Comm_UartLink, SendPayload)
     TEST_ASSERT_EQUAL(0xab, recbuf[20]);
 }
 
-TEST_GROUP_RUNNER(Comm_UartLink)
+TEST_GROUP_RUNNER(Comm_UartTransport)
 {
-    RUN_TEST_CASE(Comm_UartLink, ProcessByteValid);
-    RUN_TEST_CASE(Comm_UartLink, ProcessByteInvalid);
-    RUN_TEST_CASE(Comm_UartLink, SendPayload);
+    RUN_TEST_CASE(Comm_UartTransport, ProcessByteValid);
+    RUN_TEST_CASE(Comm_UartTransport, ProcessByteInvalid);
+    RUN_TEST_CASE(Comm_UartTransport, SendPayload);
 }
 
-void Comm_UartLink_RunTests(void)
+void Comm_UartTransport_RunTests(void)
 {
-    RUN_TEST_GROUP(Comm_UartLink);
+    RUN_TEST_GROUP(Comm_UartTransport);
 }
 
 /** @} */

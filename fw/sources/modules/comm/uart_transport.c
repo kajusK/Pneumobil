@@ -18,8 +18,8 @@
 */
 
 /**
- * @file    uart_link.c
- * @brief   Communication protocol, link layer of uart interface
+ * @file    uart_transport.c
+ * @brief   Communication protocol, transport layer of uart interface
  *
  * @addtogroup modules-comm
  * @{
@@ -33,7 +33,7 @@
 #include "drivers/uart.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
-#include "modules/comm/uart_link.h"
+#include "modules/comm/uart_transport.h"
 
 /** Byte value defining start of the frame */
 #define COMM_UART_FRAME_START 0xff

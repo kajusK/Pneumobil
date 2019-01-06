@@ -18,8 +18,8 @@
 */
 
 /**
- * @file    can_link.c
- * @brief   Communication protocol, link layer of can interface
+ * @file    can_transport.c
+ * @brief   Communication protocol, transport layer of can interface
  *
  * @addtogroup modules-comm
  * @{
@@ -34,7 +34,7 @@
 #include "drivers/can.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
-#include "modules/comm/can_link.h"
+#include "modules/comm/can_transport.h"
 
 /** Max length of the can data frame in bytes */
 #define CAN_DATA_LEN 8

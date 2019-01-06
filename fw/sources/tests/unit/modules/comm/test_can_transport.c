@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include <main.h>
-#include "modules/comm/can_link.c"
+#include "modules/comm/can_transport.c"
 
 static uint8_t recbuf[256];
 static uint8_t bytes_received = 0;
@@ -146,9 +146,9 @@ static void setSrc(uint8_t src)
 /* *****************************************************************************
  * Tests
 ***************************************************************************** */
-TEST_GROUP(Comm_CANLink);
+TEST_GROUP(Comm_CANTransport);
 
-TEST_SETUP(Comm_CANLink)
+TEST_SETUP(Comm_CANTransport)
 {
     comm_can_id_t id;
 
@@ -175,11 +175,11 @@ TEST_SETUP(Comm_CANLink)
     memset(cani_rx_mbox, 0x00, sizeof(cani_rx_mbox));
 }
 
-TEST_TEAR_DOWN(Comm_CANLink)
+TEST_TEAR_DOWN(Comm_CANTransport)
 {
 }
 
-TEST(Comm_CANLink, ProcessFrameInvalid)
+TEST(Comm_CANTransport, ProcessFrameInvalid)
 {
     assert_should_fail = true;
     Commi_CanProcessFrame(NULL);
@@ -195,7 +195,7 @@ TEST(Comm_CANLink, ProcessFrameInvalid)
     TEST_ASSERT_FALSE(Commi_CanProcessFrame(&can_frame));
 }
 
-TEST(Comm_CANLink, ProcessFrameSingleShort)
+TEST(Comm_CANTransport, ProcessFrameSingleShort)
 {
     can_frame.DLC = 1;
     can_frame.data8[0] = 0xcd;
@@ -208,7 +208,7 @@ TEST(Comm_CANLink, ProcessFrameSingleShort)
     TEST_ASSERT_EQUAL_HEX8(COMM_MY_ID, node_dest);
 }
 
-TEST(Comm_CANLink, ProcessFrameSingleLong)
+TEST(Comm_CANTransport, ProcessFrameSingleLong)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12, 0x34, 0x56, 0x89, 0xff};
 
@@ -222,7 +222,7 @@ TEST(Comm_CANLink, ProcessFrameSingleLong)
     TEST_ASSERT_EQUAL_HEX8_ARRAY(data, recbuf, 8);
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartCRCValid)
+TEST(Comm_CANTransport, ProcessFrameMultipartCRCValid)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12, 0x34, 0x56, 0x78, 0x9a,
     0xaa, 0xbb, 0xcc, 0xee, 0xff, 0x1a, 0x2b};
@@ -253,7 +253,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartCRCValid)
     TEST_ASSERT_EQUAL_HEX8(COMM_MY_ID, node_dest);
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartCRCSeparated)
+TEST(Comm_CANTransport, ProcessFrameMultipartCRCSeparated)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12};
     setMultipart();
@@ -283,7 +283,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartCRCSeparated)
     TEST_ASSERT_EQUAL_HEX8_ARRAY(data, recbuf, 4);
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartCRCInvalid)
+TEST(Comm_CANTransport, ProcessFrameMultipartCRCInvalid)
 {
     setMultipart();
 
@@ -304,7 +304,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartCRCInvalid)
     TEST_ASSERT_FALSE(payload_handled);
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartZeroLength)
+TEST(Comm_CANTransport, ProcessFrameMultipartZeroLength)
 {
     setMultipart();
 
@@ -318,7 +318,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartZeroLength)
 }
 
 /** Replace previous transmission */
-TEST(Comm_CANLink, ProcessFrameMultipartRestart)
+TEST(Comm_CANTransport, ProcessFrameMultipartRestart)
 {
     setMultipart();
 
@@ -339,7 +339,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartRestart)
     TEST_ASSERT_TRUE(payload_handled);
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartWrongOrder)
+TEST(Comm_CANTransport, ProcessFrameMultipartWrongOrder)
 {
     setMultipart();
 
@@ -365,7 +365,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartWrongOrder)
     TEST_ASSERT_FALSE(Commi_CanProcessFrame(&can_frame));
 }
 
-TEST(Comm_CANLink, ProcessFrameMultipartFrameTooLong)
+TEST(Comm_CANTransport, ProcessFrameMultipartFrameTooLong)
 {
     setMultipart();
 
@@ -388,7 +388,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartFrameTooLong)
 }
 
 /** Replace previous transmission */
-TEST(Comm_CANLink, ProcessFrameMultipartFull)
+TEST(Comm_CANTransport, ProcessFrameMultipartFull)
 {
     setMultipart();
 
@@ -432,7 +432,7 @@ TEST(Comm_CANLink, ProcessFrameMultipartFull)
 }
 
 
-TEST(Comm_CANLink, SendInvalid)
+TEST(Comm_CANTransport, SendInvalid)
 {
     uint8_t buf[2];
 
@@ -443,7 +443,7 @@ TEST(Comm_CANLink, SendInvalid)
     TEST_ASSERT_FALSE(Comm_CanSend(0, 0, buf, 0));
 }
 
-TEST(Comm_CANLink, SendShort)
+TEST(Comm_CANTransport, SendShort)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12, 0x34, 0x56, 0x78, 0x9a};
     TEST_ASSERT_TRUE(Comm_CanSend(COMM_MY_ID, COMM_NODE_BROADCAST, data, 8));
@@ -452,7 +452,7 @@ TEST(Comm_CANLink, SendShort)
     TEST_ASSERT_EQUAL_HEX8_ARRAY(data, txbuf, 8);
 }
 
-TEST(Comm_CANLink, SendLong)
+TEST(Comm_CANTransport, SendLong)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12, 0x34, 0x56, 0x78, 0x9a,
     0xaa, 0xbb, 0xcc, 0xee, 0xff, 0x1a, 0x1b};
@@ -469,7 +469,7 @@ TEST(Comm_CANLink, SendLong)
     TEST_ASSERT_EQUAL_HEX8(0xab, txbuf[19]);
 }
 
-TEST(Comm_CANLink, SendLongCrcSeparated)
+TEST(Comm_CANTransport, SendLongCrcSeparated)
 {
     uint8_t data[] = {0xab, 0xcd, 0xef, 0x12, 0x34, 0x56, 0x78, 0x9a,
     0xaa, 0xbb, 0xcc, 0xee, 0xff};
@@ -485,29 +485,29 @@ TEST(Comm_CANLink, SendLongCrcSeparated)
     TEST_ASSERT_EQUAL_HEX8(0xab, txbuf[17]);
 }
 
-TEST_GROUP_RUNNER(Comm_CANLink)
+TEST_GROUP_RUNNER(Comm_CANTransport)
 {
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameInvalid);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameSingleShort);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameSingleLong);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartCRCValid);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartCRCSeparated);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartCRCInvalid);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartZeroLength);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartRestart);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartWrongOrder);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartFrameTooLong);
-    RUN_TEST_CASE(Comm_CANLink, ProcessFrameMultipartFull);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameInvalid);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameSingleShort);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameSingleLong);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartCRCValid);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartCRCSeparated);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartCRCInvalid);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartZeroLength);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartRestart);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartWrongOrder);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartFrameTooLong);
+    RUN_TEST_CASE(Comm_CANTransport, ProcessFrameMultipartFull);
 
-    RUN_TEST_CASE(Comm_CANLink, SendInvalid);
-    RUN_TEST_CASE(Comm_CANLink, SendShort);
-    RUN_TEST_CASE(Comm_CANLink, SendLong);
-    RUN_TEST_CASE(Comm_CANLink, SendLongCrcSeparated);
+    RUN_TEST_CASE(Comm_CANTransport, SendInvalid);
+    RUN_TEST_CASE(Comm_CANTransport, SendShort);
+    RUN_TEST_CASE(Comm_CANTransport, SendLong);
+    RUN_TEST_CASE(Comm_CANTransport, SendLongCrcSeparated);
 }
 
-void Comm_CanLink_RunTests(void)
+void Comm_CanTransport_RunTests(void)
 {
-    RUN_TEST_GROUP(Comm_CANLink);
+    RUN_TEST_GROUP(Comm_CANTransport);
 }
 
 /** @} */
