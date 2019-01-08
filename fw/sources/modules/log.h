@@ -110,6 +110,16 @@ extern bool Log_UpdateSubscription(log_callback_t cb,
         const log_severity_t severity[]);
 
 /**
+ * Get subscribed severities
+ *
+ * @param [in] cb       Callback for which severities will be returned
+ * @param [out] severity Memory LOG_SOURCE_COUNT long for storage of severities
+ *
+ * @return  true if succeeded
+ */
+extern bool Log_GetSubscription(log_callback_t cb, log_severity_t *severity);
+
+/**
  * Log debug message
  *
  * @param [in] src      source of the message

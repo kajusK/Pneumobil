@@ -198,6 +198,8 @@ TEST(Log, SendLog)
 
 TEST(Log, AddEntry)
 {
+    log_severity_t severities[LOG_SOURCE_COUNT];
+
     assert_should_fail = true;
     Log_Debug(LOG_SOURCE_SYSTEM, NULL);
     Log_Warn(LOG_SOURCE_SYSTEM, NULL);
@@ -205,7 +207,6 @@ TEST(Log, AddEntry)
     Log_Error(LOG_SOURCE_SYSTEM, NULL);
     assert_should_fail = false;
 
-    log_severity_t severities[LOG_SOURCE_COUNT];
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severities[i] = LOG_SEVERITY_NONE;
     }
@@ -225,11 +226,33 @@ TEST(Log, AddEntry)
     TEST_ASSERT_EQUAL_STRING("Hello World 123", msg_send.msg);
 }
 
+TEST(Log, GetSubscription)
+{
+    log_severity_t severities[LOG_SOURCE_COUNT];
+    log_severity_t results[LOG_SOURCE_COUNT];
+
+    assert_should_fail = true;
+    Log_GetSubscription(NULL, NULL);
+    assert_should_fail = false;
+
+    for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
+        severities[i] = i % LOG_SEVERITY_COUNT;
+    }
+
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities));
+    memset(results, 0xff, LOG_SEVERITY_COUNT);
+    TEST_ASSERT_TRUE(Log_GetSubscription(subscr1, results));
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(severities, results, LOG_SOURCE_COUNT);
+
+    TEST_ASSERT_FALSE(Log_GetSubscription(subscr2, results));
+}
+
 TEST_GROUP_RUNNER(Log)
 {
     RUN_TEST_CASE(Log, Subscriptions);
     RUN_TEST_CASE(Log, SendLog);
     RUN_TEST_CASE(Log, AddEntry);
+    RUN_TEST_CASE(Log, GetSubscription);
 }
 
 void Log_RunTests(void)

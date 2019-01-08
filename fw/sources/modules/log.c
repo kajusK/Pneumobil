@@ -193,6 +193,21 @@ bool Log_UpdateSubscription(log_callback_t cb, const log_severity_t severity[])
     return false;
 }
 
+bool Log_GetSubscription(log_callback_t cb, log_severity_t *severity)
+{
+    int i;
+    ASSERT_NOT(severity == NULL);
+
+    for (i = 0; i < LOG_CALLBACKS_NUM; i++) {
+        if (logi_subscriptions[i].cb == cb) {
+            memcpy(severity, logi_subscriptions[i].sources,
+                    LOG_SOURCE_COUNT*sizeof(severity[0]));
+            return true;
+        }
+    }
+    return false;
+}
+
 void Log_Debug(log_src_t src, const char *format, ...)
 {
     va_list ap;
