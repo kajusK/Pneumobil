@@ -28,45 +28,80 @@
 #ifndef __MODULES_COMM_PRESENTATION_H
 #define __MODULES_COMM_PRESENTATION_H
 
-#include <types.h>
-#include <version.h>
+#include "modules/log.h"
+#include "modules/comm/comm.h"
+#include "modules/comm/session.h"
 
-/** Communication node ids, used for CAN addressing */
-typedef enum {
-    COMM_NODE_DEBUG = 0x00,
-    COMM_NODE_PSU = 0x01,
-    COMM_NODE_HMI = 0x02,
-    COMM_NODE_ECU = 0x03,
-    COMM_NODE_SDU = 0x04,
-    COMM_NODE_UNKNOWN = 0x05,
-    COMM_NODE_BROADCAST = 0x0f,    /* For transmission only */
-} comm_node_t;
+enum {
+    COMM_CONFIG_TYPE_BOOL = 0x00,
+    COMM_CONFIG_TYPE_UINT = 0x01,
+};
 
-/** Communication priority, used by CAN for prioritizing messages */
-typedef enum {
-    COMM_PRIORITY_CRITICAL = 0x00,
-    COMM_PRIORITY_NORMAL = 0x01,
-    COMM_PRIORITY_LOG = 0x02,
-    COMM_PRIORITY_DEBUG = 0x03
-} comm_priority_t;
+typedef struct {
+    uint8_t device_id;
+    uint8_t state;
+    uint16_t uptime_s;
+    uint8_t core_temp_c;
+    uint16_t core_voltage_mv;
+} __attribute__((packed)) comm_system_status_t;
 
-#ifdef BOARD_ECU
-    #define COMM_MY_ID COMM_NODE_ECU
-#elif defined BOARD_HMI
-    #define COMM_MY_ID COMM_NODE_HMI
-#elif defined BOARD_PSU
-    #define COMM_MY_ID COMM_NODE_PSU
-#elif defined BOARD_SDU
-    #define COMM_MY_ID COMM_NODE_SDU
-#else
-    #error "BOARD_NAME must be defined"
-#endif
+typedef struct {
+    uint8_t interface;
+    uint8_t severity[LOG_SOURCE_COUNT];
+} __attribute__((packed)) comm_log_mask_t;
 
-typedef bool (*comm_send_cb_t)(comm_node_t dest, comm_priority_t priority,
-        const uint8_t *payload, uint8_t len);
+typedef struct {
+    uint8_t id;
+    uint8_t type;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+    };
+} __attribute__((packed)) comm_config_item_t;
 
-extern bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
-        const uint8_t *payload, uint8_t len, comm_send_cb_t send_frame);
+typedef struct {
+    uint8_t source;
+    uint8_t severity;
+    uint8_t message[LOG_MSG_LEN];
+} __attribute__((packed)) comm_log_msg_t;
+
+typedef struct {
+    uint8_t mode;
+    uint8_t inputs;
+    uint16_t speed_dms;
+    uint16_t distance_m;
+} __attribute__((packed)) comm_car_state;
+
+typedef struct {
+    uint16_t bat1_mv;
+    uint16_t bat2_mv;
+    uint16_t current_ma;
+    uint8_t charge_pct;
+} __attribute__((packed)) comm_battery_state;
+
+typedef struct {
+    uint16_t current5v_ma;
+    uint16_t current12v_ma;
+    uint16_t current24v_ma;
+} __attribute__((packed)) comm_psu_current;
+
+typedef struct {
+    uint16_t voltage5v_ma;
+    uint16_t voltage12v_ma;
+    uint16_t voltage24v_ma;
+} __attribute__((packed)) comm_psu_voltage;
+
+/**
+ * Process the received packet (requests only)
+ *
+ * @param [in] packet Packet to be processed
+ * @param [in] send_iface   Callback to send response over
+ *
+ * @return true if suceeded
+ */
+extern bool Comm_HandlePacket(const comm_packet_t *packet,
+        comm_send_cb_t send_iface);
 
 #endif
 

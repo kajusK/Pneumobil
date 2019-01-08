@@ -32,8 +32,7 @@
 #include "modules/log.h"
 #include "utils/crc.h"
 #include "drivers/can.h"
-#include "modules/comm/comm.h"
-#include "modules/comm/presentation.h"
+#include "modules/comm/session.h"
 #include "modules/comm/can_transport.h"
 
 /** Max length of the can data frame in bytes */

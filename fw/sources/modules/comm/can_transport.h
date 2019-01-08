@@ -29,7 +29,7 @@
 #define __MODULES_COMM_CAN_TRANSPORT_H
 
 #include <types.h>
-#include "modules/comm/presentation.h"
+#include "modules/comm/comm.h"
 
 /** Amount of slots for multipart messages beying received simultaneously */
 #define COMM_CAN_MBOX_SLOTS 2

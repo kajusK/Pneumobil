@@ -32,7 +32,7 @@
 #define __MODULES_COMM_UART_TRANSPORT_H
 
 #include <types.h>
-#include "modules/comm/presentation.h"
+#include "modules/comm/comm.h"
 
 #define COMM_UART_BAUDRATE  115200
 

@@ -31,8 +31,7 @@
 #include "modules/log.h"
 #include "utils/crc.h"
 #include "drivers/uart.h"
-#include "modules/comm/comm.h"
-#include "modules/comm/presentation.h"
+#include "modules/comm/session.h"
 #include "modules/comm/uart_transport.h"
 
 /** Byte value defining start of the frame */

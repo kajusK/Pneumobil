@@ -27,14 +27,14 @@ import re
 from pyexcel_odsr import get_data
 
 SOURCE = "../../doc/specs/protocols.ods"
-TARGET = "../../fw/sources/modules/comm/presentation.h"
+TARGET = "../../fw/sources/modules/comm/comm.h"
 SHEET = "Commands"
-REGEX = '\/\*.*$\ntypedef enum {[ \t\w\d\/\*,_=\n\r]*} comm_cmd_t;'
+REGEX = '\/\*.*$\ntypedef enum {[ \t\w\d\/\*,_=\n\r]*} comm_cmd_id_t;'
 COL_ID = 0
 COL_NAME = 1
 COL_DESC = 2
 
-desc = "Generate comm_cmd_t table from %s to %s" % (SOURCE, TARGET)
+desc = "Generate comm_cmd_id_t table from %s to %s" % (SOURCE, TARGET)
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('-d, --dry-run', dest="dry", action='store_true',
         help="Don't modify the file, just print to console")
@@ -67,7 +67,7 @@ for line in data[SHEET]:
         enum += "    /* "+line[COL_DESC]+" */\n"
     else:
         enum += "\n"
-enum += '} comm_cmd_t;'
+enum += '} comm_cmd_id_t;'
 
 with open(TARGET) as f:
     data = f.read()
