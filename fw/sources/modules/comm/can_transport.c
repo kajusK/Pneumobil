@@ -300,7 +300,8 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
 void Comm_CanInit(void)
 {
     cand_filter_t filters;
-    comm_can_id_t id, mask;
+    comm_can_id_t id = {0};
+    comm_can_id_t mask = {0};
 
     id.dest = COMM_MY_ID;
     mask.dest = COMM_NODE_BROADCAST;
@@ -308,7 +309,7 @@ void Comm_CanInit(void)
     filters.mask = mask.intval;
 
     if (Config_GetBool(CONFIG_BOOL_CAN_PROMISCUOUS)) {
-        Log_Info(LOG_SOURCE_COMM, "Running CAN inpromiscuous mode");
+        Log_Info(LOG_SOURCE_COMM, "Running CAN in promiscuous mode");
         mask.intval = 0;
     }
 
