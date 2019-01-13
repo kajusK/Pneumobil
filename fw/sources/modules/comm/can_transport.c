@@ -299,21 +299,20 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
 
 void Comm_CanInit(void)
 {
-    cand_filter_t filters;
+    cand_filter_t filters[2];
     comm_can_id_t id = {0};
     comm_can_id_t mask = {0};
 
     id.dest = COMM_MY_ID;
     mask.dest = COMM_NODE_BROADCAST;
-    filters.id = id.intval;
-    filters.mask = mask.intval;
+    filters[0].id = id.intval;
+    filters[0].mask = mask.intval;
 
-    if (Config_GetBool(CONFIG_BOOL_CAN_PROMISCUOUS)) {
-        Log_Info(LOG_SOURCE_COMM, "Running CAN in promiscuous mode");
-        mask.intval = 0;
-    }
+    id.dest = COMM_NODE_BROADCAST;
+    filters[1].id = id.intval;
+    filters[1].mask = mask.intval;
 
-    Cand_Init(COMM_CAN_BAUDRATE, &filters, 1);
+    Cand_Init(COMM_CAN_BAUDRATE, filters, sizeof(filters)/sizeof(filters[0]));
     Cand_RegisterRxCb(Commi_CanProcessFrame);
 }
 
