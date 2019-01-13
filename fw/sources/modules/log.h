@@ -77,7 +77,7 @@ typedef struct {
 } log_msg_t;
 
 /** Callback type for log sending */
-typedef void (*log_callback_t)(log_msg_t *msg);
+typedef void (*log_callback_t)(const log_msg_t *msg);
 
 /**
  * Subscribe to logs

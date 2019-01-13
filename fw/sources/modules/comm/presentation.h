@@ -93,6 +93,14 @@ typedef struct {
 } __attribute__((packed)) comm_psu_voltage;
 
 /**
+ * Send log message over specified interface
+ *
+ * @param [in] msg      Log message
+ * @param [in] iface    Interface to send message over
+ */
+extern bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface);
+
+/**
  * Process the received packet (requests only)
  *
  * @param [in] dest         Destination node (should be our id or broadcast

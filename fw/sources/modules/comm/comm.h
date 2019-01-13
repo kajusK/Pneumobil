@@ -115,7 +115,9 @@ typedef enum {
     #error "BOARD_NAME must be defined"
 #endif
 
-
+/**
+ * Initialize communication module and its submodules
+ */
 extern void Comm_Init(void);
 
 #endif

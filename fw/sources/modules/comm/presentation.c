@@ -25,12 +25,27 @@
  * @{
  */
 
+#include <string.h>
 #include "utils/assert.h"
 #include "modules/log.h"
 #include "modules/config.h"
 
 #include "modules/comm/application.h"
 #include "modules/comm/presentation.h"
+
+static comm_error_t Commi_GetSysStatus(comm_sys_status_t *status)
+{
+    ASSERT_NOT(status == NULL);
+
+    //TODO
+    status->device_id = COMM_MY_ID;
+    status->state = 0;
+    status->uptime_s = 0;
+    status->core_temp_c = 0;
+    status->core_voltage_mv = 0;
+
+    return COMM_OK;
+}
 
 static comm_error_t Commi_SetLogMask(const comm_log_mask_t *payload)
 {
@@ -130,8 +145,34 @@ static comm_error_t Commi_ResetConfig(void)
 static comm_error_t Commi_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload)
 {
-    //TODO
+#ifndef BOARD_HMI
+    (void) len;
+    (void) node;
+    (void) payload;
+#endif
     return COMM_OK;
+}
+
+bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface)
+{
+    comm_packet_t packet;
+    comm_priority_t priority = COMM_PRIORITY_LOG;
+    comm_log_msg_t *log = (comm_log_msg_t *) &packet.payload;
+
+    if (msg->severity == LOG_SEVERITY_DEBUG || msg->severity == LOG_SEVERITY_INFO) {
+        priority = COMM_PRIORITY_DEBUG;
+    }
+
+    packet.node = COMM_NODE_BROADCAST;
+    packet.priority = priority;
+    packet.cmd.intval = 0;
+    packet.cmd.id = COMM_CMD_LOG_MESSAGE;
+    packet.len = strlen(msg->msg) + 3;
+    log->severity = msg->severity;
+    log->source = msg->src;
+    strncpy((char *)log->message, msg->msg, LOG_MSG_LEN);
+
+    return Comm_SendPayload(&packet, NULL, iface);
 }
 
 bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
@@ -153,9 +194,11 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
     switch (packet->cmd.id) {
         /* Generic commands*/
         case COMM_CMD_SYSTEM_STATUS:
-            if (packet->len == sizeof(comm_system_status_t)) {
+            if (packet->len == 0) {
+                retval = Commi_GetSysStatus((comm_sys_status_t *) response.payload);
+                response.len = sizeof(comm_sys_status_t);
             }
-        break;
+            break;
         case COMM_CMD_SET_LOG_MASK:
             if (packet->len == sizeof(comm_log_mask_t)) {
                 retval = Commi_SetLogMask((comm_log_mask_t *) packet->payload);
@@ -243,10 +286,10 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
     }
 
     if (replyRequired) {
-        response.len = 1;
-        if (response.len == 0) {
+        response.cmd.response = 1;
+        if (response.len == 0 || retval != COMM_OK) {
+            response.len = 1;
             response.payload[0] = retval;
-            response.cmd.response = 1;
             if (retval != COMM_OK) {
                 response.cmd.error = true;
             }
