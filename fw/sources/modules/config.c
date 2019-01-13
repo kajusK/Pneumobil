@@ -29,13 +29,13 @@
 
 #include "version.h"
 #include "utils/assert.h"
-#include "modules/config.h"
 #include "modules/log.h"
+#include "modules/storage.h"
 
 #include "modules/config.h"
 
-static uint32_t config_item_uint[CONFIG_UINT_COUNT];
-static uint8_t config_item_bool[CONFIG_BOOL_COUNT];
+uint32_t config_item_uint[CONFIG_UINT_COUNT];
+uint8_t config_item_bool[CONFIG_BOOL_COUNT];
 
 system_info_t *Config_GetSystem(void)
 {
@@ -61,6 +61,7 @@ void Config_SetUint(config_item_uint_t item, uint32_t value)
 
     Log_Debug(LOG_SOURCE_CONFIG, "Unsigned item %d set to %u", item, value);
     config_item_uint[item] = value;
+    Storage_Update(STORAGE_UPDATE_UINT);
 }
 
 void Config_ResetUint(void)
@@ -71,6 +72,7 @@ void Config_ResetUint(void)
     for (i = 0; i < CONFIG_UINT_COUNT; i++) {
         config_item_uint[i] = config_default_uint[i];
     }
+    Storage_Update(STORAGE_UPDATE_UINT);
 }
 
 bool Config_GetBool(config_item_bool_t item)
@@ -80,7 +82,6 @@ bool Config_GetBool(config_item_bool_t item)
 
     mask = 1 << (item % 8);
     return config_item_bool[item / 8] & mask;
-
 }
 
 void Config_SetBool(config_item_bool_t item, bool value)
@@ -95,6 +96,7 @@ void Config_SetBool(config_item_bool_t item, bool value)
     } else {
         config_item_bool[item / 8] &= ~mask;
     }
+    Storage_Update(STORAGE_UPDATE_BOOL);
 }
 
 void Config_ResetBool(void)
@@ -105,6 +107,7 @@ void Config_ResetBool(void)
     for (i = 0; i < CONFIG_BOOL_COUNT/8 + 1; i++) {
         config_item_bool[i] = config_default_bool[i];
     }
+    Storage_Update(STORAGE_UPDATE_BOOL);
 }
 
 void Config_Reset(void)

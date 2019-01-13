@@ -28,6 +28,10 @@
 
 #include <main.h>
 #include "modules/log.h"
+#include "modules/config.c"
+
+static bool update_called;
+static storage_update_t st_update;
 
 /* *****************************************************************************
  * Mocks
@@ -38,16 +42,21 @@ static void Log_Debug(log_src_t src, const char *format, ...)
     (void) format;
 }
 
+static void Storage_Update(storage_update_t update)
+{
+    update_called = true;
+    st_update = update;
+}
+
 /* *****************************************************************************
  * Tests
 ***************************************************************************** */
-#include "modules/config.c"
-
 TEST_GROUP(Config);
 
 TEST_SETUP(Config)
 {
     Config_Reset();
+    update_called = false;
 }
 
 TEST_TEAR_DOWN(Config)
@@ -66,6 +75,8 @@ TEST(Config, SetGetUint)
 
     Config_SetUint(CONFIG_UINT_TEST1, 123);
     TEST_ASSERT_EQUAL(123, Config_GetUint(CONFIG_UINT_TEST1));
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_UINT, st_update);
 
     Config_SetUint(CONFIG_UINT_TEST2, 321);
     TEST_ASSERT_EQUAL(321, Config_GetUint(CONFIG_UINT_TEST2));
@@ -88,6 +99,9 @@ TEST(Config, SetGetBool)
         Config_SetBool(i, i % 2);
         TEST_ASSERT_EQUAL(i % 2, Config_GetBool(i));
     }
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_BOOL, st_update);
+
     /* Verify no data were changed */
     for (int i = 0; i < CONFIG_BOOL_COUNT; i++) {
         TEST_ASSERT_EQUAL(i % 2, Config_GetBool(i));
@@ -97,6 +111,9 @@ TEST(Config, SetGetBool)
 TEST(Config, ResetUint)
 {
     Config_ResetUint();
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_UINT, st_update);
+
     TEST_ASSERT_EQUAL(1000, Config_GetUint(CONFIG_UINT_TEST1));
     TEST_ASSERT_EQUAL(2000, Config_GetUint(CONFIG_UINT_TEST2));
     TEST_ASSERT_EQUAL(3000, Config_GetUint(CONFIG_UINT_TEST3));
@@ -106,6 +123,9 @@ TEST(Config, ResetUint)
 TEST(Config, ResetBool)
 {
     Config_ResetBool();
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_BOOL, st_update);
+
     TEST_ASSERT_EQUAL(false, Config_GetBool(CONFIG_BOOL_TEST1));
     TEST_ASSERT_EQUAL(true, Config_GetBool(CONFIG_BOOL_TEST5));
 

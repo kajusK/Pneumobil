@@ -19,7 +19,7 @@
 
 /**
  * @file    config.h
- * @brief   Configuration storage subsystem
+ * @brief   System configuration subsystem
  *
  * @addtogroup modules
  * @{
