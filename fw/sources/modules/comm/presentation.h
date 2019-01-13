@@ -43,7 +43,7 @@ typedef struct {
     uint16_t uptime_s;
     uint8_t core_temp_c;
     uint16_t core_voltage_mv;
-} __attribute__((packed)) comm_system_status_t;
+} __attribute__((packed)) comm_sys_status_t;
 
 typedef struct {
     uint8_t interface;
@@ -95,12 +95,13 @@ typedef struct {
 /**
  * Process the received packet (requests only)
  *
- * @param [in] packet Packet to be processed
+ * @param [in] dest         Destination node (should be our id or broadcast
+ * @param [in] packet       Packet to be processed
  * @param [in] send_iface   Callback to send response over
  *
  * @return true if suceeded
  */
-extern bool Comm_HandlePacket(const comm_packet_t *packet,
+extern bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         comm_send_cb_t send_iface);
 
 #endif

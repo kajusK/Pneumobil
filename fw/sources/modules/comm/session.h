@@ -51,6 +51,7 @@ typedef struct {
     comm_node_t node;               /** other node address */
     comm_priority_t priority;       /** Priority of the message */
     uint8_t len;                    /** Length of the payload */
+    /* Must be in this order, address of cmd must be followed by payload */
     comm_cmd_t cmd;                 /** Command data */
     uint8_t payload[COMM_MAX_PAYLOAD_LEN-1];   /** Payload of the packet */
 } comm_packet_t;

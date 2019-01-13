@@ -103,7 +103,7 @@ bool Comm_HandlePayload(comm_node_t src, comm_node_t dest,
         packet.len = len - 1;
         packet.node = src;
         packet.priority = COMM_PRIORITY_NORMAL;
-        return Comm_HandlePacket(&packet, send_iface);
+        return Comm_HandlePacket(dest, &packet, send_iface);
     }
 
     if (src != commi_session.dest) {

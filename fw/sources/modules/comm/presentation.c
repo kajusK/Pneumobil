@@ -134,13 +134,20 @@ static comm_error_t Commi_LogMessage(uint16_t len, comm_node_t node,
     return COMM_OK;
 }
 
-bool Comm_HandlePacket(const comm_packet_t *packet, comm_send_cb_t send_iface)
+bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
+        comm_send_cb_t send_iface)
 {
     comm_error_t retval = COMM_ERR_INCORRECT_LEN;
     bool replyRequired = true;
     static comm_packet_t response;
 
     ASSERT_NOT(packet == NULL || send_iface == NULL);
+
+    if (dest != COMM_MY_ID || dest != COMM_NODE_BROADCAST) {
+        Log_Warn(LOG_SOURCE_COMM, "Received message for node %x, ignoring",
+                dest);
+        return false;
+    }
 
     response.len = 0;
     switch (packet->cmd.id) {
