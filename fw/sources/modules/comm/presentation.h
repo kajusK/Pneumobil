@@ -37,6 +37,11 @@ enum {
     COMM_CONFIG_TYPE_UINT = 0x01,
 };
 
+enum {
+    COMM_LOG_IFACE_CAN = 0x00,
+    COMM_LOG_IFACE_UART = 0x01,
+};
+
 typedef struct {
     uint8_t device_id;
     uint8_t state;

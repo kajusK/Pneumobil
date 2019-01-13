@@ -74,17 +74,17 @@ comm_error_t Comm_SetLogMask(const comm_log_mask_t *payload)
 {
     ASSERT_NOT(payload == NULL);
 
-    /*
     switch (payload->interface) {
-        case LOG_INTERFACE_CAN:
-            Log_UpdateSubscription(Commi_LogCan, log_severity_t payload->severity);
+        case COMM_LOG_IFACE_CAN:
+            Log_UpdateSubscription(Commi_SendLogCan, payload->severity);
             break;
-
+        case COMM_LOG_IFACE_UART:
+            Log_UpdateSubscription(Commi_SendLogUart, payload->severity);
+            break;
         default:
             return COMM_ERR_INCORRECT_PARAM;
             break;
     }
-    */
     return COMM_OK;
 }
 
@@ -92,17 +92,17 @@ comm_error_t Comm_GetLogMask(uint8_t interface, comm_log_mask_t *response)
 {
     ASSERT_NOT(response == NULL);
 
-    /*
     switch (interface) {
-        case LOG_INTERFACE_CAN:
-            Log_GetSubscription(Commi_LogCan, response->severity);
+        case COMM_LOG_IFACE_CAN:
+            Log_GetSubscription(Commi_SendLogCan, response->severity);
             break;
-
+        case COMM_LOG_IFACE_UART:
+            Log_GetSubscription(Commi_SendLogUart, response->severity);
+            break;
         default:
             return COMM_ERR_INCORRECT_PARAM;
             break;
     }
-    */
     return COMM_OK;
 }
 
