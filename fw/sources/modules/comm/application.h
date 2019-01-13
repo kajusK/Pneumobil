@@ -29,6 +29,19 @@
 #define __MODULES_COMM_APPLICATION_H
 
 #include <types.h>
+#include "modules/comm/comm.h"
+#include "modules/comm/presentation.h"
+
+extern comm_error_t Comm_GetSysStatus(comm_sys_status_t *status);
+extern comm_error_t Comm_SetLogMask(const comm_log_mask_t *payload);
+extern comm_error_t Comm_GetLogMask(uint8_t interface,
+    comm_log_mask_t *response);
+extern comm_error_t Comm_SetConfig(const comm_config_item_t *payload);
+extern comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
+        comm_config_item_t *response);
+extern comm_error_t Comm_ResetConfig(void);
+extern comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
+        const comm_log_msg_t *payload);
 
 
 #endif

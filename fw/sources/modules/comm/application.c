@@ -30,10 +30,10 @@
 #include "utils/assert.h"
 
 #include "modules/log.h"
+#include "modules/config.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/can_transport.h"
 #include "modules/comm/uart_transport.h"
-#include "modules/comm/presentation.h"
 #include "modules/comm/session.h"
 
 #include "modules/comm/application.h"
@@ -53,6 +53,131 @@ static void Commi_SendLogUart(const log_msg_t *log)
     Comm_SendLog(log, UART_IFACE);
 }
 
+/* ***************************************************************************
+ * Application layer module local functions
+ *************************************************************************** */
+comm_error_t Comm_GetSysStatus(comm_sys_status_t *status)
+{
+    ASSERT_NOT(status == NULL);
+
+    //TODO
+    status->device_id = COMM_MY_ID;
+    status->state = 0;
+    status->uptime_s = 0;
+    status->core_temp_c = 0;
+    status->core_voltage_mv = 0;
+
+    return COMM_OK;
+}
+
+comm_error_t Comm_SetLogMask(const comm_log_mask_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    /*
+    switch (payload->interface) {
+        case LOG_INTERFACE_CAN:
+            Log_UpdateSubscription(Commi_LogCan, log_severity_t payload->severity);
+            break;
+
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    */
+    return COMM_OK;
+}
+
+comm_error_t Comm_GetLogMask(uint8_t interface, comm_log_mask_t *response)
+{
+    ASSERT_NOT(response == NULL);
+
+    /*
+    switch (interface) {
+        case LOG_INTERFACE_CAN:
+            Log_GetSubscription(Commi_LogCan, response->severity);
+            break;
+
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    */
+    return COMM_OK;
+}
+
+comm_error_t Comm_SetConfig(const comm_config_item_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+    switch (payload->type) {
+        case COMM_CONFIG_TYPE_BOOL:
+            if (payload->id >= CONFIG_BOOL_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            Config_SetBool(payload->id, (bool) payload->u32);
+            break;
+        case COMM_CONFIG_TYPE_UINT:
+            if (payload->id >= CONFIG_UINT_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            Config_SetUint(payload->id, (bool) payload->u32);
+            break;
+
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    return COMM_OK;
+}
+
+comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
+        comm_config_item_t *response)
+{
+    ASSERT_NOT(response == NULL);
+    response->id = id;
+    response->type = type;
+
+    switch (type) {
+        case COMM_CONFIG_TYPE_BOOL:
+            if (id >= CONFIG_BOOL_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            response->u32 = Config_GetBool(id);
+            break;
+        case COMM_CONFIG_TYPE_UINT:
+            if (id >= CONFIG_UINT_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            response->u32 = Config_GetUint(id);
+            break;
+
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    return COMM_OK;
+}
+
+comm_error_t Comm_ResetConfig(void)
+{
+    Config_Reset();
+    return COMM_OK;
+}
+
+comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
+        const comm_log_msg_t *payload)
+{
+#ifndef BOARD_HMI
+    (void) len;
+    (void) node;
+    (void) payload;
+#endif
+    return COMM_OK;
+}
+
+/* ***************************************************************************
+ * Application layer module global functions
+ *************************************************************************** */
 void Comm_Init(void)
 {
     log_severity_t severity[LOG_SOURCE_COUNT];

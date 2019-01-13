@@ -28,130 +28,9 @@
 #include <string.h>
 #include "utils/assert.h"
 #include "modules/log.h"
-#include "modules/config.h"
 
 #include "modules/comm/application.h"
 #include "modules/comm/presentation.h"
-
-static comm_error_t Commi_GetSysStatus(comm_sys_status_t *status)
-{
-    ASSERT_NOT(status == NULL);
-
-    //TODO
-    status->device_id = COMM_MY_ID;
-    status->state = 0;
-    status->uptime_s = 0;
-    status->core_temp_c = 0;
-    status->core_voltage_mv = 0;
-
-    return COMM_OK;
-}
-
-static comm_error_t Commi_SetLogMask(const comm_log_mask_t *payload)
-{
-    ASSERT_NOT(payload == NULL);
-
-    /*
-    switch (payload->interface) {
-        case LOG_INTERFACE_CAN:
-            Log_UpdateSubscription(Commi_LogCan, log_severity_t payload->severity);
-            break;
-
-        default:
-            return COMM_ERR_INCORRECT_PARAM;
-            break;
-    }
-    */
-    return COMM_OK;
-}
-
-static comm_error_t Commi_GetLogMask(uint8_t interface,
-        comm_log_mask_t *response)
-{
-    ASSERT_NOT(response == NULL);
-
-    /*
-    switch (interface) {
-        case LOG_INTERFACE_CAN:
-            Log_GetSubscription(Commi_LogCan, response->severity);
-            break;
-
-        default:
-            return COMM_ERR_INCORRECT_PARAM;
-            break;
-    }
-    */
-    return COMM_OK;
-}
-
-static comm_error_t Commi_SetConfig(const comm_config_item_t *payload)
-{
-    ASSERT_NOT(payload == NULL);
-    switch (payload->type) {
-        case COMM_CONFIG_TYPE_BOOL:
-            if (payload->id >= CONFIG_BOOL_COUNT) {
-                return COMM_ERR_INCORRECT_PARAM;
-            }
-            Config_SetBool(payload->id, (bool) payload->u32);
-            break;
-        case COMM_CONFIG_TYPE_UINT:
-            if (payload->id >= CONFIG_UINT_COUNT) {
-                return COMM_ERR_INCORRECT_PARAM;
-            }
-            Config_SetUint(payload->id, (bool) payload->u32);
-            break;
-
-        default:
-            return COMM_ERR_INCORRECT_PARAM;
-            break;
-    }
-    return COMM_OK;
-}
-
-static comm_error_t Commi_GetConfig(uint8_t id, uint8_t type,
-        comm_config_item_t *response)
-{
-    ASSERT_NOT(response == NULL);
-    response->id = id;
-    response->type = type;
-
-    switch (type) {
-        case COMM_CONFIG_TYPE_BOOL:
-            if (id >= CONFIG_BOOL_COUNT) {
-                return COMM_ERR_INCORRECT_PARAM;
-            }
-            response->u32 = Config_GetBool(id);
-            break;
-        case COMM_CONFIG_TYPE_UINT:
-            if (id >= CONFIG_UINT_COUNT) {
-                return COMM_ERR_INCORRECT_PARAM;
-            }
-            response->u32 = Config_GetUint(id);
-            break;
-
-        default:
-            return COMM_ERR_INCORRECT_PARAM;
-            break;
-    }
-    return COMM_OK;
-}
-
-static comm_error_t Commi_ResetConfig(void)
-{
-    Config_Reset();
-    return COMM_OK;
-}
-
-static comm_error_t Commi_LogMessage(uint16_t len, comm_node_t node,
-        const comm_log_msg_t *payload)
-{
-#ifndef BOARD_HMI
-    (void) len;
-    (void) node;
-    (void) payload;
-#endif
-    return COMM_OK;
-}
 
 bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface)
 {
@@ -195,30 +74,30 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         /* Generic commands*/
         case COMM_CMD_SYSTEM_STATUS:
             if (packet->len == 0) {
-                retval = Commi_GetSysStatus((comm_sys_status_t *) response.payload);
+                retval = Comm_GetSysStatus((comm_sys_status_t *) response.payload);
                 response.len = sizeof(comm_sys_status_t);
             }
             break;
         case COMM_CMD_SET_LOG_MASK:
             if (packet->len == sizeof(comm_log_mask_t)) {
-                retval = Commi_SetLogMask((comm_log_mask_t *) packet->payload);
+                retval = Comm_SetLogMask((comm_log_mask_t *) packet->payload);
             }
             break;
         case COMM_CMD_GET_LOG_MASK:
             if (packet->len == 1) {
-                retval = Commi_GetLogMask(packet->payload[0],
+                retval = Comm_GetLogMask(packet->payload[0],
                         (comm_log_mask_t *) response.payload);
                 response.len = sizeof(comm_log_mask_t);
             }
             break;
         case COMM_CMD_SET_CONFIG:
             if (packet->len == sizeof(comm_config_item_t)) {
-                retval = Commi_SetConfig((comm_config_item_t *) packet->payload);
+                retval = Comm_SetConfig((comm_config_item_t *) packet->payload);
             }
             break;
         case COMM_CMD_GET_CONFIG:
             if (packet->len == 2) {
-                retval = Commi_GetConfig(packet->payload[0], packet->payload[1],
+                retval = Comm_GetConfig(packet->payload[0], packet->payload[1],
                         (comm_config_item_t *) response.payload);
                 response.len = sizeof(comm_config_item_t);
             }
@@ -226,7 +105,7 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         case COMM_CMD_RESET_CONFIG:
             if (packet->len == 4) {
                 if (*((uint32_t *)packet->payload) == 0xdeadbeef) {
-                    retval = Commi_ResetConfig();
+                    retval = Comm_ResetConfig();
                 } else {
                     retval = COMM_ERR_INCORRECT_PARAM;
                 }
@@ -238,7 +117,7 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         */
         case COMM_CMD_LOG_MESSAGE:
             if (packet->len >= 3) {
-                retval = Commi_LogMessage(packet->len - 2, packet->node,
+                retval = Comm_LogMessage(packet->len - 2, packet->node,
                         (comm_log_msg_t *) packet->payload);
                 replyRequired = false;
             }
