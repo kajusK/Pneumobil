@@ -33,6 +33,10 @@
 #include "drivers/can.h"
 
 #define CAND_THREAD_PRIO   NORMALPRIO
+/* Define system clock for mcus with more domains */
+#ifndef STM32_PCLK
+    #define STM32_PCLK STM32_PCLK1
+#endif
 
 /** The can device to be used */
 #define CAND JOIN(CAND, CAN_CAN_RX)

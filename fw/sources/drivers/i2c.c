@@ -33,6 +33,7 @@
 /** Timeout for i2c transmit command */
 #define I2CD_TIMEOUT_MS 100
 
+#ifndef STM32F4XX
 static uint32_t I2Cdi_CalcTiming(bool full_speed)
 {
     uint32_t retval;
@@ -56,6 +57,7 @@ static uint32_t I2Cdi_CalcTiming(bool full_speed)
 
     return retval;
 }
+#endif
 
 bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
         uint8_t *rxbuf, size_t rxbytes)
@@ -84,9 +86,15 @@ void I2Cd_Init(bool full_speed)
 {
     I2CConfig config;
 
+#ifdef STM32F4XX
+    config.op_mode = OPMODE_I2C;
+    config.clock_speed = full_speed ? 400000 : 100000;
+    config.duty_cycle = STD_DUTY_CYCLE;
+#else
     config.cr1 = 0;
     config.cr2 = 0;
     config.timingr = I2Cdi_CalcTiming(full_speed);
+#endif
 
     i2cStart(&I2CD1, &config);
 }
