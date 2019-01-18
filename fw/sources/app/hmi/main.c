@@ -1,0 +1,60 @@
+/*
+    BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
+
+    This file is part of BUT pneumobil.
+
+    BUT pneumobil is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    BUT pneumobil is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/**
+ * @file    hmi/main.c
+ * @brief   Main file for pneumobil HMI
+ *
+ * @addtogroup app-hmi
+ * @{
+ */
+
+#include <ch.h>
+#include <hal.h>
+
+#include <drivers/wdg.h>
+#include <modules/log.h>
+#include <modules/config.h>
+#include <modules/storage.h>
+#include <modules/comm/comm.h>
+
+#include "version.h"
+
+int main(void) {
+    halInit();
+    /** Kernel becomes thread, rtos is activated */
+    chSysInit();
+
+    Comm_Init();
+    Log_Init();
+    Log_Info(LOG_SOURCE_SYSTEM, "HMI is booting...");
+    Log_Debug(LOG_SOURCE_SYSTEM, "SYSCLK=%u", STM32_SYSCLK);
+    Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
+    Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
+
+    Wdgd_Init();
+    Storage_LoadAll();
+
+    while (1) {
+        palToggleLine(LINE_LED_SYS_ACTIVE);
+        chThdSleepMilliseconds(500);
+    }
+}
+
+/** @} */
