@@ -42,7 +42,15 @@ LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(wildcard $(SOURCES)/modules/*.c) \
 	$(wildcard $(SOURCES)/modules/*/*.c) \
-	$(wildcard $(SOURCES)/drivers/*.c) \
+	$(SOURCES)/drivers/can.c \
+	$(SOURCES)/drivers/uart.c \
+	$(SOURCES)/drivers/wdg.c \
+	$(SOURCES)/drivers/eeprom.c \
+	$(SOURCES)/drivers/i2c.c \
+	$(SOURCES)/drivers/adc.c \
+	$(SOURCES)/drivers/dac.c \
+	$(SOURCES)/drivers/encoder.c \
+	$(SOURCES)/drivers/speed.c \
 	$(wildcard $(SOURCES)/utils/*.c)
 
 USRINC = $(CONFDIR) $(SOURCES) $(APP_DIR)

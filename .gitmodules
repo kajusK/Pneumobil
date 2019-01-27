@@ -13,3 +13,6 @@
 [submodule "fw/sources/external/ChibiOS-Contrib"]
 	path = fw/sources/external/ChibiOS-Contrib
 	url = https://github.com/ChibiOS/ChibiOS-Contrib.git
+[submodule "fw/sources/external/fatfs"]
+	path = fw/sources/external/fatfs
+	url = https://github.com/abbrev/fatfs.git

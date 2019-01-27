@@ -51,6 +51,7 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 
 USRINC = $(CONFDIR) $(SOURCES) $(APP_DIR)
 
+include ../common/fatfs.mk
 include ../common/chibios.mk
 include ../common/chibios_board.mk
 
