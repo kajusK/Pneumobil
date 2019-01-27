@@ -27,9 +27,9 @@
 
 #include <ch.h>
 #include <hal.h>
-#include <chprintf.h>
 
 #include <drivers/wdg.h>
+#include <drivers/i2c.h>
 #include <modules/log.h>
 #include <modules/config.h>
 #include <modules/storage.h>
@@ -52,6 +52,7 @@ int main(void) {
     Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
 
     Wdgd_Init();
+    I2Cd_Init(true);
     Storage_LoadAll();
     ECU_Init();
     Car_Init();
