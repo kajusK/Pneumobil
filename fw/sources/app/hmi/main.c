@@ -29,6 +29,7 @@
 #include <hal.h>
 
 #include <drivers/wdg.h>
+#include <drivers/fatfs/sdc.h>
 #include <modules/log.h>
 #include <modules/config.h>
 #include <modules/storage.h>
@@ -50,6 +51,7 @@ int main(void) {
 
     Wdgd_Init();
     Storage_LoadAll();
+    SDCd_Init();
 
     while (1) {
         palToggleLine(LINE_LED_SYS_ACTIVE);
