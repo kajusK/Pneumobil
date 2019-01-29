@@ -111,7 +111,7 @@ static void Logi_AddEntry(log_src_t src, log_severity_t severity,
     vsnprintf(msg->msg, LOG_MSG_LEN, format, ap);
     msg->src = src;
     msg->severity = severity;
-    msg->time = TIME_I2S(chVTGetSystemTime());
+    msg->time = chTimeI2S(chVTGetSystemTime());
 
     /** no need to check the return value, if it fails, it fails, log is lost */
     chMBPostTimeout(&logi_mailbox, (msg_t) msg, TIME_IMMEDIATE);
