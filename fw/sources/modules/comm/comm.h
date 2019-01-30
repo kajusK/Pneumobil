@@ -119,6 +119,26 @@ typedef enum {
     #error "BOARD_NAME must be defined"
 #endif
 
+#ifdef BOARD_ECU
+    #include "ecu_io.h"
+    #include "ecu.h"
+extern void Comm_SendCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
+        uint16_t distance_m, ecu_race_mode_t race_mode);
+extern void Comm_SendCarIO(const ecu_inputs_t *inputs,
+        const ecu_valves_t *valves, uint8_t gear);
+extern void Comm_SendPneuState(uint16_t press1_kpa, uint16_t press2_kpa,
+        uint16_t press3_kpa, uint8_t piston_pct);
+#endif
+
+#ifdef BOARD_PSU
+extern void Comm_SendBatteryState(uint16_t b1_mv, uint16_t b2_mv,
+        uint16_t cur_ma, uint8_t charge_pct);
+extern void Comm_SendPSUCurrent(uint16_t v5_ma, uint16_t v12_ma,
+        uint16_t v24_ma);
+extern void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv,
+        uint16_t v24_mv);
+#endif
+
 /**
  * Initialize communication module and its submodules
  */

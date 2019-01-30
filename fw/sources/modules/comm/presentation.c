@@ -32,8 +32,9 @@
 #include "modules/comm/application.h"
 #include "modules/comm/presentation.h"
 
-bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface)
+bool Comm_SendLog(comm_send_cb_t iface, const log_msg_t *msg)
 {
+    comm_error_t res;
     comm_packet_t packet;
     comm_priority_t priority = COMM_PRIORITY_LOG;
     comm_log_msg_t *log = (comm_log_msg_t *) &packet.payload;
@@ -46,12 +47,37 @@ bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface)
     packet.priority = priority;
     packet.cmd.intval = 0;
     packet.cmd.id = COMM_CMD_LOG_MESSAGE;
-    packet.len = strlen(msg->msg) + 3;
+    packet.len = strlen(msg->msg) + 2;
     log->severity = msg->severity;
     log->source = msg->src;
     strncpy((char *)log->message, msg->msg, LOG_MSG_LEN);
 
-    return Comm_SendPayload(&packet, NULL, iface);
+    res = Comm_SendPayload(&packet, NULL, iface);
+    if (res == COMM_OK) {
+        return true;
+    }
+    return false;
+}
+
+bool Comm_SendPacket(comm_cmd_id_t cmd, const uint8_t *data, uint8_t len)
+{
+    comm_error_t res;
+    comm_packet_t packet;
+
+    ASSERT_NOT(data == NULL || len == 0);
+
+    packet.node = COMM_NODE_BROADCAST;
+    packet.priority = COMM_PRIORITY_NORMAL;
+    packet.cmd.intval = 0;
+    packet.cmd.id = cmd;
+    packet.len = len;
+    memcpy(packet.payload, data, len);
+
+    res = Comm_SendPayload(&packet, NULL, IFACE_CAN);
+    if (res == COMM_OK) {
+        return true;
+    }
+    return false;
 }
 
 bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
@@ -111,10 +137,6 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 }
             }
             break;
-        /*
-        case COMM_CMD_GET_ALL_CONFIG:
-            break;
-        */
         case COMM_CMD_LOG_MESSAGE:
             if (packet->len >= 3) {
                 retval = Comm_LogMessage(packet->len - 2, packet->node,
@@ -159,11 +181,6 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 replyRequired = false;
             }
             break;
-        case COMM_CMD_GPS_POSITION:
-        break;
-        case COMM_CMD_TEMPS:
-        break;
-
         /* PSU commands*/
         case COMM_CMD_BATTERY_STATE:
             if (packet->len == sizeof(comm_battery_state_t)) {
@@ -183,6 +200,17 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 replyRequired = false;
             }
             break;
+#else
+        case COMM_CMD_CAR_STATE:
+        case COMM_CMD_CAR_IO:
+        case COMM_CMD_PNEU_STATE:
+        case COMM_CMD_GPS_POSITION:
+        case COMM_CMD_TEMPS:
+        case COMM_CMD_BATTERY_STATE:
+        case COMM_CMD_PSU_CURRENT:
+        case COMM_CMD_PSU_VOLTAGE:
+            replyRequired = false;
+            break;
 #endif
 
 #ifdef BOARD_ECU
@@ -191,8 +219,13 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
 
         case COMM_CMD_START_RACE:
         break;
+#else
+        case COMM_CMD_SET_RACE_MODE:
+        case COMM_CMD_START_RACE:
+            replyRequired = false;
+            break;
 #endif
-        //TODO defined but not used values here - ignore if reply not needed
+
         default:
             retval = COMM_ERR_UNSUPPORTED_CMD;
             break;

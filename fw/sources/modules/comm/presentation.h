@@ -31,6 +31,12 @@
 #include "modules/log.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/session.h"
+#include "modules/comm/can_transport.h"
+#include "modules/comm/uart_transport.h"
+
+/** Interfaces to send data over */
+#define IFACE_CAN Comm_CanSend
+#define IFACE_UART Comm_UartSend
 
 enum {
     COMM_CONFIG_TYPE_BOOL = 0x00,
@@ -108,9 +114,9 @@ typedef struct {
 } __attribute__((packed)) comm_psu_current_t;
 
 typedef struct {
-    uint16_t voltage5v_ma;
-    uint16_t voltage12v_ma;
-    uint16_t voltage24v_ma;
+    uint16_t voltage5v_mv;
+    uint16_t voltage12v_mv;
+    uint16_t voltage24v_mv;
 } __attribute__((packed)) comm_psu_voltage_t;
 
 /**
@@ -119,7 +125,18 @@ typedef struct {
  * @param [in] msg      Log message
  * @param [in] iface    Interface to send message over
  */
-extern bool Comm_SendLog(const log_msg_t *msg, comm_send_cb_t iface);
+extern bool Comm_SendLog(comm_send_cb_t iface, const log_msg_t *msg);
+
+/**
+ * Send packet over default interface
+ *
+ * @param [in] cmd      Command to send
+ * @param [in] data     Pointer to data buffer
+ * @param [in] len      Lenght of the data buffer
+ *
+ * @return True if suceeded
+ */
+extern bool Comm_SendPacket(comm_cmd_id_t cmd, const uint8_t *data, uint8_t len);
 
 /**
  * Process the received packet (requests only)

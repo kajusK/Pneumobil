@@ -38,6 +38,7 @@
 #include "version.h"
 #include "ecu.h"
 #include "car.h"
+#include "sender.h"
 
 int main(void) {
     halInit();
@@ -56,6 +57,7 @@ int main(void) {
     Storage_LoadAll();
     ECU_Init();
     Car_Init();
+    Sender_Init();
 
     while (1) {
         palToggleLine(LINE_LED_SYS_ACTIVE);

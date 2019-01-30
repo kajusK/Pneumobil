@@ -35,26 +35,22 @@
 #include "modules/comm/can_transport.h"
 #include "modules/comm/uart_transport.h"
 #include "modules/comm/session.h"
+#include "modules/comm/application.h"
 
 #ifdef BOARD_HMI
     #include "state.h"
 #endif
 
-#include "modules/comm/application.h"
-
-#define CAN_IFACE Comm_CanSend
-#define UART_IFACE Comm_UartSend
-
 static void Commi_SendLogCan(const log_msg_t *log)
 {
     ASSERT_NOT(log == NULL);
-    Comm_SendLog(log, CAN_IFACE);
+    Comm_SendLog(IFACE_CAN, log);
 }
 
 static void Commi_SendLogUart(const log_msg_t *log)
 {
     ASSERT_NOT(log == NULL);
-    Comm_SendLog(log, UART_IFACE);
+    Comm_SendLog(IFACE_UART, log);
 }
 
 /* ***************************************************************************
@@ -237,14 +233,102 @@ void Comm_PSUVoltage(const comm_psu_voltage_t *payload)
 {
     ASSERT_NOT(payload == NULL);
 
-    State_UpdatePSUVoltage(payload->voltage5v_ma, payload->voltage12v_ma,
-            payload->voltage24v_ma);
+    State_UpdatePSUVoltage(payload->voltage5v_mv, payload->voltage12v_mv,
+            payload->voltage24v_mv);
 }
 #endif // BOARD_HMI
 
 /* ***************************************************************************
  * Application layer module global functions
  *************************************************************************** */
+#ifdef BOARD_ECU
+void Comm_SendCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
+        uint16_t distance_m, ecu_race_mode_t race_mode)
+{
+    comm_car_state_t state;
+
+    state.speed_dms = speed_dms;
+    state.speed_avg_dms = speed_avg_dms;
+    state.distance_m = distance_m;
+    state.mode = race_mode;
+
+    Comm_SendPacket(COMM_CMD_CAR_STATE, (uint8_t *)&state, sizeof(state));
+}
+
+void Comm_SendCarIO(const ecu_inputs_t *inputs, const ecu_valves_t *valves,
+        uint8_t gear)
+{
+    comm_car_io_t io;
+    ASSERT_NOT(valves == NULL || inputs == NULL);
+
+    io.valves = (valves->front1 & 0x03) << 6;
+    io.valves |= (valves->front2 & 0x03) << 4;
+    io.valves |= (valves->back1 & 0x03) << 2;
+    io.valves |= valves->back2 & 0x03;
+
+    io.endstops = (inputs->endstop_front & 0x01) << 1;
+    io.endstops |= inputs->endstop_back & 0x01;
+    io.inputs = (inputs->shifting & 0x01) << 3;
+    io.inputs |= (inputs->horn & 0x01) << 2;
+    io.inputs |= (inputs->brake & 0x01) << 1;
+    io.inputs |= inputs->throttle & 0x01;
+
+    io.gear = gear;
+
+    Comm_SendPacket(COMM_CMD_CAR_IO, (uint8_t *)&io, sizeof(io));
+}
+
+void Comm_SendPneuState(uint16_t press1_kpa, uint16_t press2_kpa,
+        uint16_t press3_kpa, uint8_t piston_pct)
+{
+    comm_pneu_state_t state;
+
+    state.press1_kpa = press1_kpa;
+    state.press2_kpa = press2_kpa;
+    state.press3_kpa = press3_kpa;
+    state.piston_pct = piston_pct;
+
+    Comm_SendPacket(COMM_CMD_PNEU_STATE, (uint8_t *)&state, sizeof(state));
+}
+#endif
+
+#ifdef BOARD_PSU
+void Comm_SendBatteryState(uint16_t b1_mv, uint16_t b2_mv, uint16_t cur_ma,
+        uint8_t charge_pct)
+{
+    comm_battery_state_t state;
+
+    state.bat1_mv = bat1_mv;
+    state.bat2_mv = bat2_mv;
+    state.current_ma = current_ma;
+    state.charge_pct = charge_pct;
+
+    Comm_SendPacket(COMM_CMD_BATTERY_STATE, (uint8_t *)&state, sizeof(state));
+}
+
+void Comm_SendPSUCurrent(uint16_t v5_ma, uint16_t v12_ma, uint16_t v24_ma)
+{
+    comm_psu_current_t cur;
+
+    cur.current5v_ma = v5_ma;
+    cur.current12v_ma = v12_ma;
+    cur.current24v_ma = v24_ma;
+
+    Comm_SendPacket(COMM_CMD_PSU_CURRENT, (uint8_t *)&cur, sizeof(cur));
+}
+
+void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv, uint16_t v24_mv)
+{
+    comm_psu_voltage_t volt;
+
+    volt.voltage5v_mv = v5_mv;
+    volt.voltage12v_mv = v12_mv;
+    volt.voltage24v_mv = v24_mv;
+
+    Comm_SendPacket(COMM_CMD_PSU_voltage, (uint8_t *)&volt, sizeof(cur));
+}
+#endif
+
 void Comm_Init(void)
 {
     log_severity_t severity[LOG_SOURCE_COUNT];
