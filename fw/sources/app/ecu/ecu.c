@@ -43,6 +43,9 @@
 /** Stack and stuff for thread */
 THD_WORKING_AREA(ecui_thread_area, 128);
 
+/** Current race mode */
+static ecu_race_mode_t ecui_race_mode = RACE_MODE_ARCADE;
+
 /** Current ECU state */
 typedef enum {
     ECU_STATE_INIT,         /** ECU needs to be initialized */
@@ -56,14 +59,6 @@ typedef enum {
     ECU_DIR_BACK,
     ECU_DIR_FRONT,
 } ecu_dir_t;
-
-/** Race type for mode selection */
-typedef enum {
-    PNEU_MODE_ARCADE,
-    PNEU_MODE_DRAG,
-    PNEU_MODE_LONGD,
-    PNEU_MODE_DEBUG
-} ecu_mode_t;
 
 /** Structure for holding all ECU control data */
 typedef struct {
@@ -373,6 +368,29 @@ static THD_FUNCTION(ECU_Thread, arg)
         }
         chThdSleepUntil(time);
     }
+}
+
+ecu_race_mode_t ECU_GetMode(void)
+{
+    return ecui_race_mode;
+}
+
+uint8_t ECU_GetRawPistonPosPct(void)
+{
+    uint16_t len = Config_GetUint(CONFIG_UINT_PISTON_LEN);
+    int16_t encoder = Encoderd_Get();
+    uint16_t posPct;
+
+    if (encoder < 0) {
+        encoder = 0;
+    }
+
+    posPct = ((int32_t) encoder*100)/len;
+    if (posPct > 100) {
+        posPct = 100;
+    }
+
+    return posPct;
 }
 
 void ECU_Init(void)
