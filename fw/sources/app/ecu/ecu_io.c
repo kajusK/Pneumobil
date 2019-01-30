@@ -216,11 +216,27 @@ void ECU_GetRawInputs(ecu_inputs_t *inputs)
     inputs->throttle = !palReadLine(LINE_THROTTLE);
     inputs->brake = !palReadLine(LINE_BRAKE);
     inputs->shifting = palReadLine(LINE_BT_SHIFTING);
+    inputs->horn = !palReadLine(LINE_BT_HORN);
+}
+
+uint8_t ECU_GetGear(void)
+{
+    bool gear1 = !palReadLine(LINE_GEARBOX_1);
+    bool gear2 = !palReadLine(LINE_GEARBOX_2);
+
+    if (!gear1 && !gear2) {
+        return 0;
+    }
+
+    if (gear1) {
+        return 1;
+    }
+    return 2;
 }
 
 void ECU_GetInputs(ecu_inputs_t *inputs)
 {
-    static bt_debounce_t deb[5] = { 0 };
+    static bt_debounce_t deb[6] = { 0 };
     static bool prev[2] = { 0 };
     ASSERT_NOT(inputs == NULL);
 
@@ -233,6 +249,7 @@ void ECU_GetInputs(ecu_inputs_t *inputs)
     inputs->throttle = Bt_Debounce(inputs->throttle, &deb[2]) | ECUi_GetBtThrottle();
     inputs->brake = Bt_Debounce(inputs->brake, &deb[3]);
     inputs->shifting = Bt_Debounce(inputs->shifting, &deb[4]);
+    inputs->horn = Bt_Debounce(inputs->horn, &deb[5]);
 
     if (inputs->endstop_back == true && inputs->endstop_front == true) {
         Log_Error(LOG_SOURCE_ECU, "Both endstops are on");

@@ -40,6 +40,7 @@ typedef struct {
     bool throttle;
     bool brake;
     bool shifting;
+    bool horn;
 } ecu_inputs_t;
 
 typedef enum {
@@ -139,7 +140,14 @@ extern void ECU_SetRegulatorPressure(uint32_t pressure_hpa);
  *
  * @param [out] inputs Input states
  */
-void ECU_GetRawInputs(ecu_inputs_t *inputs);
+extern void ECU_GetRawInputs(ecu_inputs_t *inputs);
+
+/**
+ * Get currently shifted gear
+ *
+ * @return 0 for neutral, 1 and 2 for shifted gears
+ */
+extern uint8_t ECU_GetGear(void);
 
 /**
  * Read inputs to ECU, reading serves as debouncing cycle
