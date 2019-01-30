@@ -32,7 +32,7 @@
 #include "modules/comm/comm.h"
 
 /** Amount of slots for multipart messages beying received simultaneously */
-#define COMM_CAN_MBOX_SLOTS 2
+#define COMM_CAN_MBOX_SLOTS 4
 
 /** Can baudrate to be used */
 #define COMM_CAN_BAUDRATE 1000000
