@@ -142,23 +142,57 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
 #ifdef BOARD_HMI
         /* ECU commands*/
         case COMM_CMD_CAR_STATE:
-        break;
+            if (packet->len == sizeof(comm_car_state_t)) {
+                Comm_CarState((comm_car_state_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
+        case COMM_CMD_CAR_IO:
+            if (packet->len == sizeof(comm_car_io_t)) {
+                Comm_CarIO((comm_car_io_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
         case COMM_CMD_PNEU_STATE:
-        break;
+            if (packet->len == sizeof(comm_pneu_state_t)) {
+                Comm_PneuState((comm_pneu_state_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
         case COMM_CMD_GPS_POSITION:
         break;
         case COMM_CMD_TEMPS:
         break;
-        case COMM_CMD_SET_MODE:
-        break;
 
         /* PSU commands*/
-        case COMM_CMD_BATTERY:
-        break;
-        case COMM_CMD_CURRENTS:
-        break;
+        case COMM_CMD_BATTERY_STATE:
+            if (packet->len == sizeof(comm_battery_state_t)) {
+                Comm_BatteryState((comm_battery_state_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
+        case COMM_CMD_PSU_CURRENT:
+            if (packet->len == sizeof(comm_psu_current_t)) {
+                Comm_PSUCurrent((comm_psu_current_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
+        case COMM_CMD_PSU_VOLTAGE:
+            if (packet->len == sizeof(comm_psu_voltage_t)) {
+                Comm_PSUVoltage((comm_psu_voltage_t *) packet->payload);
+                replyRequired = false;
+            }
+            break;
 #endif
 
+#ifdef BOARD_ECU
+        case COMM_CMD_SET_RACE_MODE:
+        break;
+
+        case COMM_CMD_START_RACE:
+        break;
+#endif
+        //TODO defined but not used values here - ignore if reply not needed
         default:
             retval = COMM_ERR_UNSUPPORTED_CMD;
             break;

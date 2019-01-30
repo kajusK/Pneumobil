@@ -90,15 +90,19 @@ typedef enum {
 
 /* ECU commands*/
     COMM_CMD_CAR_STATE = 0x20,    /* Current state of the car */
-    COMM_CMD_PNEU_STATE = 0x21,    /* Current state of the pneumatic circuit */
-    COMM_CMD_GPS_POSITION = 0x22,    /* Car gps position */
-    COMM_CMD_TEMPS = 0x23,
-    COMM_CMD_SET_MODE = 0x24,    /* Set pneumatic mode */
+    COMM_CMD_CAR_IO = 0x21,    /* Inputs and outputs of the ecu */
+    COMM_CMD_PNEU_STATE = 0x22,    /* Current state of the pneumatic circuit */
+    COMM_CMD_GPS_POSITION = 0x23,    /* Car gps position */
+    COMM_CMD_TEMPS = 0x24,    /* Temperatures in pneumatic circuit */
+    COMM_CMD_SET_RACE_MODE = 0x25,    /* Set pneumatic mode */
+    COMM_CMD_START_RACE = 0x26,    /* Clear race time counter, start race */
+    COMM_CMD_DEBUG_ECU = 0x27,    /* Debug mode command */
+    COMM_CMD_OUTPUTS = 0x28,    /* Set user controllable outputs */
 
 /* PSU commands*/
-    COMM_CMD_BATTERY = 0x30,    /* Current battery state */
-    COMM_CMD_CURRENTS = 0x31,    /* Currents to branches */
-    COMM_CMD_VOLTAGES = 0x32,    /* Voltages of all branches */
+    COMM_CMD_BATTERY_STATE = 0x30,    /* Current battery state */
+    COMM_CMD_PSU_CURRENT = 0x31,    /* Currents to branches */
+    COMM_CMD_PSU_VOLTAGE = 0x32,    /* Voltages of all branches */
 
 /* HMI commands*/
 } comm_cmd_id_t;

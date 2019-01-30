@@ -43,6 +43,14 @@ extern comm_error_t Comm_ResetConfig(void);
 extern comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload);
 
+#ifdef BOARD_HMI
+extern void Comm_CarState(const comm_car_state_t *payload);
+extern void Comm_CarIO(const comm_car_io_t *payload);
+extern void Comm_PneuState(const comm_pneu_state_t *payload);
+extern void Comm_BatteryState(const comm_battery_state_t *payload);
+extern void Comm_PSUCurrent(const comm_psu_current_t *payload);
+extern void Comm_PSUVoltage(const comm_psu_voltage_t *payload);
+#endif //BOARD_HMI
 
 #endif
 

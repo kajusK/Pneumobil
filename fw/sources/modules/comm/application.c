@@ -36,6 +36,10 @@
 #include "modules/comm/uart_transport.h"
 #include "modules/comm/session.h"
 
+#ifdef BOARD_HMI
+    #include "state.h"
+#endif
+
 #include "modules/comm/application.h"
 
 #define CAN_IFACE Comm_CanSend
@@ -174,6 +178,69 @@ comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
 #endif
     return COMM_OK;
 }
+
+/* ***************************************************************************
+ * HMI specific commands
+ *************************************************************************** */
+#ifdef BOARD_HMI
+void Comm_CarState(const comm_car_state_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    State_UpdateCarState(payload->speed_dms, payload->speed_avg_dms,
+            payload->distance_m, payload->mode);
+}
+
+void Comm_CarIO(const comm_car_io_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    //TODO make sure valves are set correctly
+    State_UpdateCarIoState((payload->valves >> 6) & 0x03, /* valve front 1 */
+                (payload->valves >> 4) & 0x03,      /* valve front 2 */
+                (payload->valves >> 2) & 0x03,      /* valve back 1 */
+                payload->valves & 0x03,             /* valve back 2 */
+                (payload->endstops >> 1) & 0x01,    /* endstop front */
+                payload->endstops & 0x01,           /* endstop back */
+                payload->inputs & 0x01,             /* throttle */
+                (payload->inputs << 1) & 0x01,      /* brake */
+                (payload->inputs << 2) & 0x01,      /* horn */
+                (payload->inputs << 3) & 0x01,      /* shifting */
+                payload->gear);
+}
+
+void Comm_PneuState(const comm_pneu_state_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    State_UpdatePneuState(payload->press1_kpa, payload->press2_kpa,
+            payload->press3_kpa, payload->piston_pct);
+}
+
+void Comm_BatteryState(const comm_battery_state_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    State_UpdateBattery(payload->bat1_mv, payload->bat2_mv, payload->current_ma,
+            payload->charge_pct);
+}
+
+void Comm_PSUCurrent(const comm_psu_current_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    State_UpdatePSUCurrent(payload->current5v_ma, payload->current12v_ma,
+            payload->current24v_ma);
+}
+
+void Comm_PSUVoltage(const comm_psu_voltage_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    State_UpdatePSUVoltage(payload->voltage5v_ma, payload->voltage12v_ma,
+            payload->voltage24v_ma);
+}
+#endif // BOARD_HMI
 
 /* ***************************************************************************
  * Application layer module global functions

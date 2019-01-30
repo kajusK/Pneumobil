@@ -42,6 +42,8 @@ enum {
     COMM_LOG_IFACE_UART = 0x01,
 };
 
+/** Below are the packet formats, more in doc/specs/protocols.ods sheet commands */
+
 typedef struct {
     uint8_t device_id;
     uint8_t state;
@@ -72,30 +74,44 @@ typedef struct {
 } __attribute__((packed)) comm_log_msg_t;
 
 typedef struct {
-    uint8_t mode;
-    uint8_t inputs;
     uint16_t speed_dms;
+    uint16_t speed_avg_dms;
     uint16_t distance_m;
-} __attribute__((packed)) comm_car_state;
+    uint8_t mode;
+} __attribute__((packed)) comm_car_state_t;
+
+typedef struct {
+    uint8_t valves;
+    uint8_t endstops;
+    uint8_t inputs;
+    uint8_t gear;
+} __attribute__((packed)) comm_car_io_t;
+
+typedef struct {
+    uint16_t press1_kpa;
+    uint16_t press2_kpa;
+    uint16_t press3_kpa;
+    uint8_t piston_pct;
+} __attribute__((packed)) comm_pneu_state_t;
 
 typedef struct {
     uint16_t bat1_mv;
     uint16_t bat2_mv;
     uint16_t current_ma;
     uint8_t charge_pct;
-} __attribute__((packed)) comm_battery_state;
+} __attribute__((packed)) comm_battery_state_t;
 
 typedef struct {
     uint16_t current5v_ma;
     uint16_t current12v_ma;
     uint16_t current24v_ma;
-} __attribute__((packed)) comm_psu_current;
+} __attribute__((packed)) comm_psu_current_t;
 
 typedef struct {
     uint16_t voltage5v_ma;
     uint16_t voltage12v_ma;
     uint16_t voltage24v_ma;
-} __attribute__((packed)) comm_psu_voltage;
+} __attribute__((packed)) comm_psu_voltage_t;
 
 /**
  * Send log message over specified interface
