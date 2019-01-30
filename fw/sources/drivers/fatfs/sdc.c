@@ -50,6 +50,9 @@ static unsigned sdcdi_debounce_cnt;
 static event_source_t sdcdi_inserted_event;
 static event_source_t sdcdi_removed_event;
 
+/** External callback that will be called on card insertion */
+static sdcd_cb_t sdcdi_insert_cb = NULL;
+
 static FATFS SDC_FS;
 
 /**
@@ -106,6 +109,9 @@ static void SDCdi_InsertHandler(eventid_t id)
         return;
     }
     sdcdi_ready = TRUE;
+    if (sdcdi_insert_cb != NULL) {
+        sdcdi_insert_cb();
+    }
 }
 
 /*
@@ -139,6 +145,14 @@ static THD_FUNCTION(SDCd_Thread, arg)
     }
 }
 
+bool SDCd_AddInsertCallback(sdcd_cb_t cb)
+{
+    if (sdcdi_insert_cb == NULL) {
+        return false;
+    }
+    sdcdi_insert_cb = cb;
+    return true;
+}
 
 bool SDCd_IsReady(void)
 {

@@ -2,7 +2,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil ECU.
+    This file is part of BUT pneumobil.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,39 +19,24 @@
 */
 
 /**
- * @file    adc.c
- * @brief   ADC driver
+ * @file    time.h
+ * @brief   Common time measurements (abstraction over chibios)
  *
- * @addtogroup drivers
+ * @addtogroup utils
  * @{
  */
 
-#ifndef __DRIVERS_SDC_H
-#define __DRIVERS_SDC_H
+#ifndef __UTILS_TIME_H
+#define __UTILS_TIME_H
 
 #include <types.h>
 
-typedef void (*sdcd_cb_t)(void);
-
 /**
- * Add callbac to be called on card insertion
+ * Get time since boot in milliseconds
  *
- * @param [in] cb       Callback
- * @return True if ok, false if all possible callback are occupied
+ * @return time in milliseconds
  */
-extern bool SDCd_AddInsertCallback(sdcd_cb_t cb);
-
-/**
- * Check if the sd card is mounted and ready to be written
- *
- * @return True if ready
- */
-extern bool SDCd_IsReady(void);
-
-/**
- * Initialize SDC driver and related fatfs
- */
-extern void SDCd_Init(void);
+extern uint32_t millis(void);
 
 #endif
 

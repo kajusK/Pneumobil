@@ -1,4 +1,3 @@
-
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
@@ -19,39 +18,36 @@
 */
 
 /**
- * @file    adc.c
- * @brief   ADC driver
+ * @file    hmi/logger.c
+ * @brief   Logging to the SD card
  *
- * @addtogroup drivers
- * @{
+ * Handles logging the syslog (log module output) to sdcard and generating
+ * a race log
+ *
+ * @addtogroup app-hmi
  */
 
-#ifndef __DRIVERS_SDC_H
-#define __DRIVERS_SDC_H
+#ifndef __MODULES_LOGGER_H
+#define __MODULES_LOGGER_H
 
 #include <types.h>
 
-typedef void (*sdcd_cb_t)(void);
+/**
+ * Create new race log file
+ */
+extern bool Logger_NewRaceLogFile(void);
 
 /**
- * Add callbac to be called on card insertion
+ * Generates a new row to the race log
  *
- * @param [in] cb       Callback
- * @return True if ok, false if all possible callback are occupied
+ * Required data are fetched from other modules
  */
-extern bool SDCd_AddInsertCallback(sdcd_cb_t cb);
+extern void Logger_AddRaceLogEntry(void);
 
 /**
- * Check if the sd card is mounted and ready to be written
- *
- * @return True if ready
+ * Initialize logger module
  */
-extern bool SDCd_IsReady(void);
-
-/**
- * Initialize SDC driver and related fatfs
- */
-extern void SDCd_Init(void);
+extern void Logger_Init(void);
 
 #endif
 
