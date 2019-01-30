@@ -45,15 +45,24 @@ typedef struct {
 /** Command-response session storage */
 static comm_session_t commi_session;
 
+/** Mutex for locking sending for commands with response required */
+MUTEX_DECL(commi_session_mutex);
+
 comm_error_t Comm_SendPayload(const comm_packet_t *packet,
         comm_packet_t *response, comm_send_cb_t link_iface)
 {
     msg_t msg;
+    uint8_t isError, len, errorCode;
 
     ASSERT_NOT(link_iface == NULL || packet == NULL);
 
+    /* If response is required, sending must be locked using mutex */
+    if (response != NULL) {
+        chMtxLock(&commi_session_mutex);
+    }
+
     if (link_iface(packet->node, packet->priority, (uint8_t *) &packet->cmd,
-                packet->len) != true) {
+                packet->len + 1) != true) {
         return COMM_ERR_LINK;
     }
 
@@ -66,17 +75,24 @@ comm_error_t Comm_SendPayload(const comm_packet_t *packet,
     commi_session.response = response;
     chBSemReset(&commi_session.bsem, true);
     msg = chBSemWaitTimeout(&commi_session.bsem, TIME_MS2I(COMM_SESSION_TIMEOUT_MS));
+
+    /* Store session content and return mutex */
+    isError = commi_session.cmd.error;
+    len = commi_session.response->len;
+    errorCode = commi_session.response->payload[0];
+    chMtxUnlock(&commi_session_mutex);
+
     if (msg != MSG_OK) {
         Log_Warn(LOG_SOURCE_COMM, "Response receive timeouted");
         return COMM_ERR_TIMEOUT;
     }
 
-    if (commi_session.cmd.error) {
-        if (commi_session.response->len != 1) {
+    if (isError) {
+        if (len != 1) {
             Log_Warn(LOG_SOURCE_COMM, "Incorrect error payload length");
             return COMM_ERR_FORMAT;
         }
-        return commi_session.response->payload[0];
+        return errorCode;
     }
 
     return COMM_OK;
