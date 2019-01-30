@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    car.c
+ * @file    ecu/car.c
  * @brief   Car data acquisition
  *
  * @addtogroup app-ecu
