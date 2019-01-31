@@ -256,6 +256,37 @@ void ECU_GetInputs(ecu_inputs_t *inputs)
     }
 }
 
+void ECU_SetHorn(bool on)
+{
+    if (on) {
+        palSetLineMode(LINE_BT_HORN, PAL_MODE_OUTPUT_PUSHPULL);
+        palSetLine(LINE_BT_HORN);
+    } else {
+        palSetLineMode(LINE_BT_HORN, PAL_MODE_INPUT);
+    }
+}
+
+void ECU_SetBrakeLight(bool on)
+{
+    if (on) {
+        palSetLineMode(LINE_BRAKE, PAL_MODE_OUTPUT_PUSHPULL);
+        palSetLine(LINE_BRAKE);
+    } else {
+        palSetLineMode(LINE_BRAKE, PAL_MODE_INPUT);
+    }
+
+}
+
+void ECU_SetOut1(bool on)
+{
+    palWriteLine(LINE_OUT1, (uint8_t)on);
+}
+
+void ECU_SetOut2(bool on)
+{
+    palWriteLine(LINE_OUT1, (uint8_t)on);
+}
+
 void ECU_IOInit(void)
 {
     Dacd_Init();

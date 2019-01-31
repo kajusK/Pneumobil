@@ -157,6 +157,31 @@ extern uint8_t ECU_GetGear(void);
 extern void ECU_GetInputs(ecu_inputs_t *inputs);
 
 /**
+ * Sound horn
+ *
+ * @param [in] on   If true, will force set the horn, if false, state depends
+ *                  on button
+ */
+extern void ECU_SetHorn(bool on);
+/**
+ * Turn on the brake light
+ *
+ * @param [in] on   If true, will force set the light, if false, state depends
+ *                  on peddal
+ */
+extern void ECU_SetBrakeLight(bool on);
+
+/**
+ * Control output 1
+ */
+extern void ECU_SetOut1(bool on);
+
+/**
+ * Control output 2
+ */
+extern void ECU_SetOut2(bool on);
+
+/**
  * Initialize ECU IO module
  */
 extern void ECU_IOInit(void);
