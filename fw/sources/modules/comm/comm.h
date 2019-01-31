@@ -94,10 +94,9 @@ typedef enum {
     COMM_CMD_PNEU_STATE = 0x22,    /* Current state of the pneumatic circuit */
     COMM_CMD_GPS_POSITION = 0x23,    /* Car gps position */
     COMM_CMD_TEMPS = 0x24,    /* Temperatures in pneumatic circuit */
-    COMM_CMD_SET_RACE_MODE = 0x25,    /* Set pneumatic mode */
-    COMM_CMD_START_RACE = 0x26,    /* Clear race time counter, start race */
-    COMM_CMD_DEBUG_ECU = 0x27,    /* Debug mode command */
-    COMM_CMD_OUTPUTS = 0x28,    /* Set user controllable outputs */
+    COMM_CMD_START_RACE = 0x25,    /* Set pneumatic mode and start race */
+    COMM_CMD_ECU_DEBUG = 0x26,    /* Debug mode IO control */
+    COMM_CMD_ECU_USER_IO = 0x27,    /* Set user controllable outputs */
 
 /* PSU commands*/
     COMM_CMD_BATTERY_STATE = 0x30,    /* Current battery state */
@@ -119,11 +118,21 @@ typedef enum {
     #error "BOARD_NAME must be defined"
 #endif
 
+#ifdef BOARD_HMI
+    #include "state.h"
+extern bool Comm_SendEcuStartRace(state_race_mode_t mode);
+extern bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
+        state_valve_t back1, state_valve_t back2, bool horn, bool brake,
+        bool out1, bool out2);
+extern bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2);
+#endif
+
 #ifdef BOARD_ECU
     #include "ecu_io.h"
     #include "ecu.h"
+    #include "race.h"
 extern void Comm_SendCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
-        uint16_t distance_m, ecu_race_mode_t race_mode);
+        uint16_t distance_m, race_mode_t race_mode);
 extern void Comm_SendCarIO(const ecu_inputs_t *inputs,
         const ecu_valves_t *valves, uint8_t gear);
 extern void Comm_SendPneuState(uint16_t press1_kpa, uint16_t press2_kpa,

@@ -80,6 +80,42 @@ bool Comm_SendPacket(comm_cmd_id_t cmd, const uint8_t *data, uint8_t len)
     return false;
 }
 
+bool Comm_SendPacketCmd(comm_node_t target, comm_cmd_id_t cmd,
+        const uint8_t *data, uint8_t len, uint8_t *response, uint8_t rsp_len)
+{
+    comm_error_t res;
+    comm_packet_t packet;
+    comm_packet_t responsePacket;
+
+    packet.node = target;
+    packet.priority = COMM_PRIORITY_CRITICAL;
+    packet.cmd.intval = 0;
+    packet.cmd.id = cmd;
+    packet.len = len;
+    memcpy(packet.payload, data, len);
+
+    responsePacket.len = 0;
+
+    res = Comm_SendPayload(&packet, &responsePacket, IFACE_CAN);
+    if (res != COMM_OK) {
+        return false;
+    }
+
+    if (response == NULL || rsp_len == 0) {
+        return true;
+    }
+
+    if (responsePacket.len != rsp_len) {
+        Log_Warn(LOG_SOURCE_COMM,
+                "Received incorrect len response, wanted %d, got %d", rsp_len,
+                responsePacket.len);
+        return false;
+    }
+
+    memcpy(response, responsePacket.payload, rsp_len);
+    return true;
+}
+
 bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         comm_send_cb_t send_iface)
 {
@@ -214,15 +250,20 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
 #endif
 
 #ifdef BOARD_ECU
-        case COMM_CMD_SET_RACE_MODE:
-        break;
-
         case COMM_CMD_START_RACE:
-        break;
-#else
-        case COMM_CMD_SET_RACE_MODE:
-        case COMM_CMD_START_RACE:
-            replyRequired = false;
+            if (packet->len == 1) {
+                retval = Comm_StartRace(packet->payload[0]);
+            }
+            break;
+        case COMM_CMD_ECU_DEBUG:
+            if (packet->len == sizeof(comm_ecu_debug_t)) {
+                retval = Comm_EcuDebug((comm_ecu_debug_t *) packet->payload);
+            }
+            break;
+        case COMM_CMD_ECU_USER_IO:
+            if (packet->len == sizeof(comm_ecu_user_io_t)) {
+                retval = Comm_EcuUserIo((comm_ecu_user_io_t *) packet->payload);
+            }
             break;
 #endif
 

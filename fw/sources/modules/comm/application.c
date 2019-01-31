@@ -37,10 +37,6 @@
 #include "modules/comm/session.h"
 #include "modules/comm/application.h"
 
-#ifdef BOARD_HMI
-    #include "state.h"
-#endif
-
 static void Commi_SendLogCan(const log_msg_t *log)
 {
     ASSERT_NOT(log == NULL);
@@ -239,11 +235,93 @@ void Comm_PSUVoltage(const comm_psu_voltage_t *payload)
 #endif // BOARD_HMI
 
 /* ***************************************************************************
- * Application layer module global functions
+ * ECU specific commands
  *************************************************************************** */
 #ifdef BOARD_ECU
+comm_error_t Comm_StartRace(uint8_t mode)
+{
+    if (Race_Start(mode)) {
+        return COMM_OK;
+    }
+    return COMM_ERR_INCORRECT_PARAM;
+}
+
+comm_error_t Comm_EcuDebug(const comm_ecu_debug_t *payload)
+{
+    ecu_valves_t valves;
+
+    if (Race_GetMode() != RACE_MODE_DEBUG) {
+        return COMM_ERR_INCORRECT_PARAM;
+    }
+
+    valves.front1 = (payload->valves >> 6) & 0x03;
+    valves.front2 = (payload->valves >> 4) & 0x03;
+    valves.back1 = (payload->valves >> 2) & 0x03;
+    valves.back2 = payload->valves & 0x03;
+    ECU_ValvesSet(&valves);
+
+    ECU_SetHorn(payload->outputs & 0x01);
+    ECU_SetBrakeLight(payload->outputs & 0x02);
+    ECU_SetOut1(payload->outputs & 0x04);
+    ECU_SetOut1(payload->outputs & 0x08);
+
+    return COMM_OK;
+}
+
+comm_error_t Comm_EcuUserIo(const comm_ecu_user_io_t *payload)
+{
+    ECU_SetHorn(payload->horn);
+    ECU_SetBrakeLight(payload->brake);
+    ECU_SetOut1(payload->out1);
+    ECU_SetOut2(payload->out2);
+
+    return COMM_OK;
+}
+#endif
+
+/* ***************************************************************************
+ * Application layer module global functions
+ *************************************************************************** */
+#ifdef BOARD_HMI
+bool Comm_SendEcuStartRace(state_race_mode_t mode)
+{
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_START_RACE,
+            (uint8_t *) &mode, 1, NULL, 0);
+}
+
+bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
+        state_valve_t back1, state_valve_t back2, bool horn, bool brake,
+        bool out1, bool out2)
+{
+    comm_ecu_debug_t debug;
+
+    debug.outputs = horn | (brake << 1) | (out1 << 2) | (out2 << 3);
+    debug.valves = (front1 & 0x03) << 6;
+    debug.valves |= (front2 & 0x03) << 4;
+    debug.valves |= (back1 & 0x03) << 2;
+    debug.valves |= (back2 & 0x03);
+
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_ECU_DEBUG,
+            (uint8_t *) &debug, sizeof(debug), NULL, 0);
+}
+
+bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2)
+{
+    comm_ecu_user_io_t io;
+
+    io.brake = brake;
+    io.horn = horn;
+    io.out1 = out1;
+    io.out2 = out2;
+
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_ECU_USER_IO,
+            (uint8_t *) &io, sizeof(io), NULL, 0);
+}
+#endif
+
+#ifdef BOARD_ECU
 void Comm_SendCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
-        uint16_t distance_m, ecu_race_mode_t race_mode)
+        uint16_t distance_m, race_mode_t race_mode)
 {
     comm_car_state_t state;
 

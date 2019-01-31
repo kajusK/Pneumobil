@@ -101,6 +101,18 @@ typedef struct {
 } __attribute__((packed)) comm_pneu_state_t;
 
 typedef struct {
+    uint8_t valves;
+    uint8_t outputs;
+} __attribute__((packed)) comm_ecu_debug_t;
+
+typedef struct {
+    uint8_t horn;
+    uint8_t brake;
+    uint8_t out1;
+    uint8_t out2;
+} __attribute__((packed)) comm_ecu_user_io_t;
+
+typedef struct {
     uint16_t bat1_mv;
     uint16_t bat2_mv;
     uint16_t current_ma;
@@ -128,7 +140,7 @@ typedef struct {
 extern bool Comm_SendLog(comm_send_cb_t iface, const log_msg_t *msg);
 
 /**
- * Send packet over default interface
+ * Send broadcast packet over default interface, don't expect response
  *
  * @param [in] cmd      Command to send
  * @param [in] data     Pointer to data buffer
@@ -137,6 +149,23 @@ extern bool Comm_SendLog(comm_send_cb_t iface, const log_msg_t *msg);
  * @return True if suceeded
  */
 extern bool Comm_SendPacket(comm_cmd_id_t cmd, const uint8_t *data, uint8_t len);
+
+/**
+ * Send unicast packet over default interface, wait for the response
+ *
+ * @param [in] target   Destination node
+ * @param [in] cmd      Command to send
+ * @param [in] data     Pointer to data buffer, or NULL for empty packet
+ * @param [in] len      Lenght of the data buffer (must be 0 for NULL data)
+ * @param [out] response    Buffer to copy response to or NULL if only erorr
+ *                      returned should be checked
+ * @param [in] rsp_len  Length of the response buffer, if message is of
+ *                      different size, false is returned
+ *
+ * @return True if suceeded (node responded with OK or message)
+ */
+extern bool Comm_SendPacketCmd(comm_node_t target, comm_cmd_id_t cmd,
+        const uint8_t *data, uint8_t len, uint8_t *response, uint8_t rsp_len);
 
 /**
  * Process the received packet (requests only)
