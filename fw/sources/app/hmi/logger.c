@@ -181,6 +181,12 @@ void Logger_AddRaceLogEntry(void)
     f_sync(&loggeri_race_file);
 }
 
+void Logger_AddSyslogExternal(log_src_t src, log_severity_t severity,
+        const char *msg, uint8_t len)
+{
+    //TODO
+}
+
 /** Should be called on card insertion */
 void Logger_Init(void)
 {

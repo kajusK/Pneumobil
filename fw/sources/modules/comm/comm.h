@@ -122,6 +122,7 @@ typedef enum {
 
 #ifdef BOARD_HMI
     #include "state.h"
+    #include "logger.h"
 extern bool Comm_SendEcuStartRace(state_race_mode_t mode);
 extern bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
         state_valve_t back1, state_valve_t back2, bool horn, bool brake,

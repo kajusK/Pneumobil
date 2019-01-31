@@ -163,10 +163,13 @@ comm_error_t Comm_ResetConfig(void)
 comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload)
 {
+    (void) node;
 #ifndef BOARD_HMI
     (void) len;
-    (void) node;
     (void) payload;
+#else
+    Logger_AddSyslogExternal(payload->source, payload->severity,
+            (char *) payload->message, len);
 #endif
     return COMM_OK;
 }

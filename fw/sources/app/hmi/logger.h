@@ -31,6 +31,7 @@
 #define __MODULES_LOGGER_H
 
 #include <types.h>
+#include <modules/log.h>
 
 /**
  * Create new race log file
@@ -43,6 +44,17 @@ extern bool Logger_NewRaceLogFile(void);
  * Required data are fetched from other modules
  */
 extern void Logger_AddRaceLogEntry(void);
+
+/**
+ * Add log from external source (received over can,...) to syslog
+ *
+ * @param [in] src      Source mode of the log message
+ * @param [in] severity Severity of the message
+ * @param [in] msg      Message to be logged
+ * @param [in] len      Message len
+ */
+extern void Logger_AddSyslogExternal(log_src_t src, log_severity_t severity,
+        const char *msg, uint8_t len);
 
 /**
  * Initialize logger module
