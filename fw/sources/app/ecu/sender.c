@@ -33,6 +33,7 @@
 #include "car.h"
 #include "ecu.h"
 #include "ecu_io.h"
+#include "race.h"
 
 #include "sender.h"
 
@@ -47,15 +48,13 @@ static void Senderi_SendState(void)
     car_data_t state;
     ecu_inputs_t inputs;
     ecu_valves_t valves;
-    //TODO fill with correct value
-    uint16_t speed_avg_dms = 0;
 
     Car_GetState(&state);
     ECU_GetRawInputs(&inputs);
     ECU_ValvesGet(&valves);
 
-    Comm_SendCarState(state.speed_dms, speed_avg_dms, state.distance_m,
-            ECU_GetMode());
+    Comm_SendCarState(state.speed_dms, state.speed_avg_dms, state.distance_m,
+            Race_GetMode());
     Comm_SendCarIO(&inputs, &valves, ECU_GetGear());
     Comm_SendPneuState(state.pressure_kpa[0], state.pressure_kpa[1],
             state.pressure_kpa[2], ECU_GetRawPistonPosPct());

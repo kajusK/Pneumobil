@@ -38,7 +38,8 @@ typedef struct {
     int16_t sys_temp_deg;    /** System temperature in degrees */
 
     int32_t speed_dms;       /** Current car speed in dm/s */
-    uint32_t distance_m;    /** Distance traveled in meters */
+    int32_t speed_avg_dms;   /** Average car speed since race start in dm/s */
+    uint32_t distance_m;     /** Distance traveled in meters */
     uint16_t pressure_kpa[6]; /** Pressures in kPa */
 } car_data_t;
 

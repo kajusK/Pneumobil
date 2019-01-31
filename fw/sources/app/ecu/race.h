@@ -18,29 +18,47 @@
 */
 
 /**
- * @file    ecu.h
- * @brief   Engine control block - timing of valves, etc
+ * @file    ecu/race.c
+ * @brief   Handling race modes, parameters changing,...
  *
  * @addtogroup app-ecu
  * @{
  */
 
-#ifndef __APP_ECU_H
-#define __APP_ECU_H
+#ifndef __APP_ECU_RACE_H
+#define __APP_ECU_RACE_H
 
 #include <types.h>
 
-/**
- * Get piston position without any corrections
- *
- * @return Position in percents
- */
-extern uint8_t ECU_GetRawPistonPosPct(void);
+/** Race mode selection */
+typedef enum {
+    RACE_MODE_ARCADE,
+    RACE_MODE_ACCELERATION,
+    RACE_MODE_LONG_DISTANCE,
+    RACE_MODE_DEBUG,            /** ECU logic is paused in DEBUG mode */
+} race_mode_t;
 
 /**
- * Initialize engine control unit
+ * Get current ECU mode
+ *
+ * @return ECU mode
  */
-extern void ECU_Init(void);
+extern race_mode_t Race_GetMode(void);
+
+/**
+ * Get time since race start
+ *
+ * @return Time since start in ms
+ */
+extern uint32_t Race_GetDurationMs(void);
+
+/**
+ * (Re)Start race
+ *
+ * @param [in] mode     Mode to use for this race or debug
+ * @return False if nonexistent mode selected
+ */
+extern bool Race_Start(race_mode_t mode);
 
 #endif
 

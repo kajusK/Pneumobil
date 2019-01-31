@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil ECU.
+    This file is part of BUT pneumobil.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,30 +18,60 @@
 */
 
 /**
- * @file    ecu.h
- * @brief   Engine control block - timing of valves, etc
+ * @file    ecu/race.c
+ * @brief   Handling race modes, parameters changing,...
  *
  * @addtogroup app-ecu
  * @{
  */
 
-#ifndef __APP_ECU_H
-#define __APP_ECU_H
+#include <utils/assert.h>
+#include <modules/config.h>
+#include <utils/time.h>
 
-#include <types.h>
+#include "race.h"
 
-/**
- * Get piston position without any corrections
- *
- * @return Position in percents
- */
-extern uint8_t ECU_GetRawPistonPosPct(void);
+/** Current race mode */
+static race_mode_t racei_mode = RACE_MODE_ARCADE;
+static uint32_t racei_start_timestamp;
 
-/**
- * Initialize engine control unit
- */
-extern void ECU_Init(void);
+static void Race_StartArcade(void)
+{
 
-#endif
+}
+
+static void Race_StartAcceleration(void)
+{
+
+}
+
+static void Race_StartLongDistance(void)
+{
+
+}
+
+static void Race_StartDebug(void)
+{
+
+}
+
+race_mode_t Race_GetMode(void)
+{
+    return racei_mode;
+}
+
+uint32_t Race_GetDurationMs(void)
+{
+    return millis() - racei_start_timestamp;
+}
+
+bool Race_Start(race_mode_t mode)
+{
+    racei_start_timestamp = millis();
+    racei_mode = mode;
+
+    return true;
+}
+
 
 /** @} */

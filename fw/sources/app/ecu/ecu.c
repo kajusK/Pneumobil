@@ -43,9 +43,6 @@
 /** Stack and stuff for thread */
 THD_WORKING_AREA(ecui_thread_area, 128);
 
-/** Current race mode */
-static ecu_race_mode_t ecui_race_mode = RACE_MODE_ARCADE;
-
 /** Current ECU state */
 typedef enum {
     ECU_STATE_INIT,         /** ECU needs to be initialized */
@@ -66,8 +63,8 @@ typedef struct {
     ecu_state_t state;      /** Current ecu state */
     ecu_dir_t dir;          /** Direction of the movement */
     uint8_t filling_pct;    /** Amount of piston length percent to fill */
-    uint8_t deadtime_ms;  /** Delay between two pneumatic cycles */
-    systime_t timeout;       /** Time when deadpoint delay should end */
+    uint8_t deadtime_ms;    /** Delay between two pneumatic cycles */
+    systime_t timeout;      /** Time when deadpoint delay should end */
     uint8_t piston_start_pct; /** Position in moment of direction change */
     bool dual;              /** Use dual valves mode */
 } ecu_control_t;
@@ -368,11 +365,6 @@ static THD_FUNCTION(ECU_Thread, arg)
         }
         chThdSleepUntil(time);
     }
-}
-
-ecu_race_mode_t ECU_GetMode(void)
-{
-    return ecui_race_mode;
 }
 
 uint8_t ECU_GetRawPistonPosPct(void)
