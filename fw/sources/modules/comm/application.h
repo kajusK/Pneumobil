@@ -56,6 +56,8 @@ extern void Comm_PSUVoltage(const comm_psu_voltage_t *payload);
 extern comm_error_t Comm_StartRace(uint8_t mode);
 extern comm_error_t Comm_EcuDebug(const comm_ecu_debug_t *payload);
 extern comm_error_t Comm_EcuUserIo(const comm_ecu_user_io_t *payload);
+comm_error_t Comm_EcuSetPneuParams(const comm_ecu_pneu_params_t *payload);
+comm_error_t Comm_EcuGetPneuParams(uint8_t mode, comm_ecu_pneu_params_t *response);
 #endif
 
 #endif

@@ -113,6 +113,12 @@ typedef struct {
 } __attribute__((packed)) comm_ecu_user_io_t;
 
 typedef struct {
+    uint8_t mode;
+    uint8_t filling_pct;
+    uint16_t deadtime_ms;
+} __attribute__((packed)) comm_ecu_pneu_params_t;
+
+typedef struct {
     uint16_t bat1_mv;
     uint16_t bat2_mv;
     uint16_t current_ma;

@@ -249,6 +249,7 @@ comm_error_t Comm_StartRace(uint8_t mode)
 comm_error_t Comm_EcuDebug(const comm_ecu_debug_t *payload)
 {
     ecu_valves_t valves;
+    ASSERT_NOT(payload == NULL);
 
     if (Race_GetMode() != RACE_MODE_DEBUG) {
         return COMM_ERR_INCORRECT_PARAM;
@@ -270,12 +271,64 @@ comm_error_t Comm_EcuDebug(const comm_ecu_debug_t *payload)
 
 comm_error_t Comm_EcuUserIo(const comm_ecu_user_io_t *payload)
 {
+    ASSERT_NOT(payload == NULL);
+
     ECU_SetHorn(payload->horn);
     ECU_SetBrakeLight(payload->brake);
     ECU_SetOut1(payload->out1);
     ECU_SetOut2(payload->out2);
 
     return COMM_OK;
+}
+
+comm_error_t Comm_EcuSetPneuParams(const comm_ecu_pneu_params_t *payload)
+{
+    ASSERT_NOT(payload == NULL);
+
+    switch ((race_mode_t) payload->mode) {
+        case RACE_MODE_ARCADE:
+            Config_SetUint(CONFIG_UINT_DEADTIME_MS_ARCADE, payload->deadtime_ms);
+            Config_SetUint(CONFIG_UINT_FILLING_PCT_ARCADE, payload->filling_pct);
+            break;
+        case RACE_MODE_ACCELERATION:
+            Config_SetUint(CONFIG_UINT_DEADTIME_MS_ACCELERATION, payload->deadtime_ms);
+            Config_SetUint(CONFIG_UINT_FILLING_PCT_ACCELERATION, payload->filling_pct);
+            break;
+        case RACE_MODE_LONG_DISTANCE:
+            Config_SetUint(CONFIG_UINT_DEADTIME_MS_LONG_DIST, payload->deadtime_ms);
+            Config_SetUint(CONFIG_UINT_FILLING_PCT_LONG_DIST, payload->filling_pct);
+            break;
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    return COMM_OK;
+}
+
+comm_error_t Comm_EcuGetPneuParams(uint8_t mode, comm_ecu_pneu_params_t *response)
+{
+    ASSERT_NOT(response == NULL);
+
+    response->mode = mode;
+    switch ((race_mode_t) mode) {
+        case RACE_MODE_ARCADE:
+            response->deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_ARCADE);
+            response->filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_ARCADE);
+            break;
+        case RACE_MODE_ACCELERATION:
+            response->deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_ACCELERATION);
+            response->filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_ACCELERATION);
+            break;
+        case RACE_MODE_LONG_DISTANCE:
+            response->deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_LONG_DIST);
+            response->filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_LONG_DIST);
+            break;
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+    return COMM_OK;
+
 }
 #endif
 
@@ -285,8 +338,9 @@ comm_error_t Comm_EcuUserIo(const comm_ecu_user_io_t *payload)
 #ifdef BOARD_HMI
 bool Comm_SendEcuStartRace(state_race_mode_t mode)
 {
+    uint8_t dummy;
     return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_START_RACE,
-            (uint8_t *) &mode, 1, NULL, 0);
+            (uint8_t *) &mode, 1, &dummy, 1);
 }
 
 bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
@@ -294,6 +348,7 @@ bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
         bool out1, bool out2)
 {
     comm_ecu_debug_t debug;
+    uint8_t dummy;
 
     debug.outputs = horn | (brake << 1) | (out1 << 2) | (out2 << 3);
     debug.valves = (front1 & 0x03) << 6;
@@ -302,11 +357,12 @@ bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
     debug.valves |= (back2 & 0x03);
 
     return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_ECU_DEBUG,
-            (uint8_t *) &debug, sizeof(debug), NULL, 0);
+            (uint8_t *) &debug, sizeof(debug), &dummy, 1);
 }
 
 bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2)
 {
+    uint8_t dummy;
     comm_ecu_user_io_t io;
 
     io.brake = brake;
@@ -315,7 +371,40 @@ bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2)
     io.out2 = out2;
 
     return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_ECU_USER_IO,
-            (uint8_t *) &io, sizeof(io), NULL, 0);
+            (uint8_t *) &io, sizeof(io), &dummy, 1);
+}
+
+bool Comm_SendPneuParams(state_race_mode_t mode, uint8_t filling_pct,
+        uint16_t deadtime_ms)
+{
+    uint8_t dummy;
+    comm_ecu_pneu_params_t pneu;
+
+    pneu.mode = mode;
+    pneu.filling_pct = filling_pct;
+    pneu.deadtime_ms = deadtime_ms;
+
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_SET_PNEU_PARAMS,
+            (uint8_t *) &pneu, sizeof(pneu), &dummy, 1);
+}
+
+bool Comm_ReadPneuParams(state_race_mode_t mode, uint8_t *filling_pct,
+        uint16_t *deadtime_ms)
+{
+    comm_ecu_pneu_params_t pneu;
+    bool ret;
+
+    ASSERT_NOT(filling_pct == NULL || deadtime_ms == NULL)
+
+    ret = Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_GET_PNEU_PARAMS,
+            (uint8_t *) &mode, 1, (uint8_t *) &pneu, sizeof(pneu));
+    if (!ret) {
+        return false;
+    }
+
+    *filling_pct = pneu.filling_pct;
+    *deadtime_ms = pneu.deadtime_ms;
+    return true;
 }
 #endif
 

@@ -97,6 +97,8 @@ typedef enum {
     COMM_CMD_START_RACE = 0x25,    /* Set pneumatic mode and start race */
     COMM_CMD_ECU_DEBUG = 0x26,    /* Debug mode IO control */
     COMM_CMD_ECU_USER_IO = 0x27,    /* Set user controllable outputs */
+    COMM_CMD_SET_PNEU_PARAMS = 0x28,    /* Setup filling and turnaround time */
+    COMM_CMD_GET_PNEU_PARAMS = 0x29,    /* Read filling and turnaround time */
 
 /* PSU commands*/
     COMM_CMD_BATTERY_STATE = 0x30,    /* Current battery state */
@@ -125,6 +127,10 @@ extern bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
         state_valve_t back1, state_valve_t back2, bool horn, bool brake,
         bool out1, bool out2);
 extern bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2);
+extern bool Comm_SendPneuParams(state_race_mode_t mode, uint8_t filling_pct,
+        uint16_t deadtime_ms);
+extern bool Comm_ReadPneuParams(state_race_mode_t mode, uint8_t *filling_pct,
+        uint16_t *deadtime_ms);
 #endif
 
 #ifdef BOARD_ECU

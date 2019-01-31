@@ -265,6 +265,18 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 retval = Comm_EcuUserIo((comm_ecu_user_io_t *) packet->payload);
             }
             break;
+        case COMM_CMD_SET_PNEU_PARAMS:
+            if (packet->len == sizeof(comm_ecu_pneu_params_t)) {
+                retval = Comm_EcuSetPneuParams((comm_ecu_pneu_params_t *) packet->payload);
+            }
+            break;
+        case COMM_CMD_GET_PNEU_PARAMS:
+            if (packet->len == 1) {
+                retval = Comm_EcuGetPneuParams(packet->payload[0],
+                        (comm_ecu_pneu_params_t *) response.payload);
+                response.len = sizeof(comm_ecu_pneu_params_t);
+            }
+            break;
 #endif
 
         default:
