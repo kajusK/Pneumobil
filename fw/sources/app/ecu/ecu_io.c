@@ -35,6 +35,7 @@
 #include <utils/buttons.h>
 #include <drivers/dac.h>
 
+#include "race.h"
 #include "ecu_io.h"
 
 static bool ECUi_GetBtThrottle(void)
@@ -260,6 +261,10 @@ void ECU_GetInputs(ecu_inputs_t *inputs)
 
     if (inputs->endstop_back == true && inputs->endstop_front == true) {
         Log_Error(LOG_SOURCE_ECU, "Both endstops are on");
+    }
+
+    if (ECUi_GetBtMode()) {
+        Race_NextMode();
     }
 }
 

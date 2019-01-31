@@ -63,6 +63,11 @@ extern race_mode_t Race_GetMode(void);
 extern uint32_t Race_GetDurationMs(void);
 
 /**
+ * Move to next race mode (e.g. after button press)
+ */
+extern void Race_NextMode(void);
+
+/**
  * (Re)Start race
  *
  * @param [in] mode     Mode to use for this race or debug

@@ -65,6 +65,11 @@ uint32_t Race_GetDurationMs(void)
     return millis() - racei_start_timestamp;
 }
 
+void Race_NextMode(void)
+{
+    Race_Start((racei_mode + 1)%RACE_MODE_DEBUG);
+}
+
 bool Race_Start(race_mode_t mode)
 {
     racei_start_timestamp = millis();
