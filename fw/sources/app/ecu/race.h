@@ -39,6 +39,16 @@ typedef enum {
 } race_mode_t;
 
 /**
+ * Get currently set filling percentage
+ */
+extern uint8_t  Race_GetFillingPct(void);
+
+/**
+ * Get currently set deadpoint time
+ */
+extern uint16_t Race_GetDeadpointMs(void);
+
+/**
  * Get current ECU mode
  *
  * @return ECU mode

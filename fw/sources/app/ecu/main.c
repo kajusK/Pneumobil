@@ -47,19 +47,23 @@ int main(void) {
 
     Comm_Init();
     Log_Init();
-    Log_Info(LOG_SOURCE_SYSTEM, "ECU is booting...");
-    Log_Debug(LOG_SOURCE_SYSTEM, "SYSCLK=%u", STM32_SYSCLK);
-    Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
-    Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
+    Log_Info(LOG_SOURCE_ECU, "ECU is booting...");
+    Log_Debug(LOG_SOURCE_ECU, "SYSCLK=%u", STM32_SYSCLK);
+    Log_Info(LOG_SOURCE_ECU, "Version %d.%d", VER_MAJOR, VER_MINOR);
+    Log_Info(LOG_SOURCE_ECU, "Compiled: %s", __DATE__ "-" __TIME__);
 
     Wdgd_Init();
     I2Cd_Init(true);
     Storage_LoadAll();
     ECU_Init();
     Car_Init();
+    Race_Start(Config_GetUint(CONFIG_UINT_DEFAULT_MODE));
     Sender_Init();
 
+    Log_Info(LOG_SOURCE_ECU, "Init done");
+
     while (1) {
+        //TODO process the state and update let accordingly
         palToggleLine(LINE_LED_SYS_ACTIVE);
         chThdSleepMilliseconds(500);
     }

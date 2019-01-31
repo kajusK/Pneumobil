@@ -32,6 +32,7 @@
 #include <modules/config.h>
 #include <drivers/encoder.h>
 #include "ecu_io.h"
+#include "race.h"
 #include "ecu.h"
 
 /** Run control thread every x ms */
@@ -357,7 +358,12 @@ static THD_FUNCTION(ECU_Thread, arg)
     while (1) {
         time = chTimeAddX(chVTGetSystemTime(), TIME_MS2I(ECU_LOOP_CYCLE_MS));
         ECU_GetInputs(&control.inputs);
-        if (control.state == ECU_STATE_INIT) {
+        control.filling_pct = Race_GetFillingPct();
+        control.deadtime_ms = Race_GetDeadpointMs();
+
+        if (control.filling_pct == 0) {
+            /* Debug mode, do nothing */
+        } else if (control.state == ECU_STATE_INIT) {
             ECUi_EdgesInit(&control);
             control.piston_start_pct = ECUi_GetPistonPosPct(&control.inputs);
         } else {

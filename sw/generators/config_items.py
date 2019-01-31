@@ -118,8 +118,8 @@ def gen_gcc(items, module):
     enum_bool += "} config_item_bool_t;"
     defbool += "};"
 
-    regex1 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*,_\n\r]*} config_item_uint_t;'
-    regex2 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*,_\n\r]*} config_item_bool_t;'
+    regex1 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*\(\),_\n\r]*} config_item_uint_t;'
+    regex2 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*\(\),_\n\r]*} config_item_bool_t;'
     update_file(module, [regex1, regex2], [enum_uint, enum_bool])
 
     regex1 = '(\/\*.*$\n)*const .* config_default_uint\[.* {[ \t\w\d\/\*,_\n\r]*};'
