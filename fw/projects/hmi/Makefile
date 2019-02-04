@@ -48,11 +48,14 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(SOURCES)/drivers/uart.c \
 	$(SOURCES)/drivers/wdg.c \
 	$(SOURCES)/drivers/rtc.c \
+	$(SOURCES)/drivers/spi.c \
+	$(wildcard $(SOURCES)/drivers/ugfx/*.c) \
 	$(wildcard $(SOURCES)/utils/*.c)
 
 USRINC = $(CONFDIR) $(SOURCES) $(APP_DIR)
 
 include ../common/fatfs.mk
+include ../common/ugfx.mk
 include ../common/chibios.mk
 include ../common/chibios_board.mk
 

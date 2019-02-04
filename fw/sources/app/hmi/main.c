@@ -25,16 +25,21 @@
  * @{
  */
 
+#include <gfx.h>
 #include <ch.h>
 #include <hal.h>
 
 #include <drivers/wdg.h>
+#include <drivers/i2c.h>
+#include <drivers/spi.h>
 #include <drivers/fatfs/sdc.h>
 #include <modules/log.h>
 #include <modules/config.h>
 #include <modules/storage.h>
 #include <modules/comm/comm.h>
 
+#include "state.h"
+#include "logger.h"
 #include "version.h"
 
 int main(void) {
@@ -50,8 +55,14 @@ int main(void) {
     Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
 
     Wdgd_Init();
+    I2Cd_Init(true);
     Storage_LoadAll();
     SDCd_Init();
+    State_Init();
+    Logger_Init();
+
+    SPId_Init();
+    gfxInit();
 
     while (1) {
         palToggleLine(LINE_LED_SYS_ACTIVE);
