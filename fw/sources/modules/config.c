@@ -36,6 +36,7 @@
 
 uint32_t config_item_uint[CONFIG_UINT_COUNT];
 uint8_t config_item_bool[CONFIG_BOOL_COUNT];
+float config_item_float[CONFIG_FLOAT_COUNT];
 
 system_info_t *Config_GetSystem(void)
 {
@@ -73,6 +74,32 @@ void Config_ResetUint(void)
         config_item_uint[i] = config_default_uint[i];
     }
     Storage_Update(STORAGE_UPDATE_UINT);
+}
+
+float Config_GetFloat(config_item_float_t item)
+{
+    ASSERT_NOT(item >= CONFIG_FLOAT_COUNT || CONFIG_FLOAT_COUNT == 0);
+    return config_item_float[item];
+}
+
+void Config_SetFloat(config_item_float_t item, float value)
+{
+    ASSERT_NOT(item >= CONFIG_FLOAT_COUNT || CONFIG_FLOAT_COUNT == 0);
+
+    Log_Debug(LOG_SOURCE_CONFIG, "Float item %d set to %f", item, value);
+    config_item_float[item] = value;
+    Storage_Update(STORAGE_UPDATE_FLOAT);
+}
+
+void Config_ResetFloat(void)
+{
+    int i;
+    Log_Debug(LOG_SOURCE_CONFIG, "Reseting float items");
+
+    for (i = 0; i < CONFIG_FLOAT_COUNT; i++) {
+        config_item_float[i] = config_default_float[i];
+    }
+    Storage_Update(STORAGE_UPDATE_FLOAT);
 }
 
 bool Config_GetBool(config_item_bool_t item)
@@ -114,6 +141,7 @@ void Config_Reset(void)
 {
     Config_ResetUint();
     Config_ResetBool();
+    Config_ResetFloat();
 }
 
 /** @} */

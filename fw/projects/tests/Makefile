@@ -19,6 +19,7 @@ OPT		:= -O0
 CSTD		= -std=c11
 INCLUDES	= \
 	-I $(SOURCES) \
+	-I $(SOURCES)/app/ecu \
 	-I $(SOURCES)/tests/unit \
 	-I $(SOURCES)/tests/unit/helpers \
 	-I $(UNITY_DIR)/src \

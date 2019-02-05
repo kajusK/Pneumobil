@@ -68,6 +68,27 @@ extern void Config_SetUint(config_item_uint_t item, uint32_t value);
 extern void Config_ResetUint(void);
 
 /**
+ * Get float item from config module
+ *
+ * @param [in] item ID of item requested
+ * @return requested item value
+ */
+extern float Config_GetFloat(config_item_float_t item);
+
+/**
+ * Set float item to config module
+ *
+ * @param [in] item ID of item requested
+ * @param [in] value value to store
+ */
+extern void Config_SetFloat(config_item_float_t item, float value);
+
+/**
+ * Reset float items to default values
+ */
+extern void Config_ResetFloat(void);
+
+/**
  * Get bool item from config module
  *
  * @param [in] item ID of item requested

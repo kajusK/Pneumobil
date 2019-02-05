@@ -63,6 +63,7 @@ uint32_t *chThdCreateStatic(void *wsp, size_t size,
 systime_t chVTTimeElapsedSinceX(systime_t time);
 void chMtxLock(mutex_t *mp);
 void chMtxUnlock(mutex_t *mp);
+uint32_t chTimeI2S(uint32_t time);
 
 #endif
 

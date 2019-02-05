@@ -77,4 +77,9 @@ void chMtxUnlock(mutex_t *mp)
     (void) mp;
 }
 
+uint32_t chTimeI2S(uint32_t time)
+{
+    return time;
+}
+
 /** @} */

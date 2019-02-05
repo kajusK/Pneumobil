@@ -85,6 +85,27 @@ TEST(Config, SetGetUint)
     TEST_ASSERT_EQUAL(123456, Config_GetUint(CONFIG_UINT_COUNT - 1));
 }
 
+TEST(Config, SetGetFloat)
+{
+    assert_should_fail = true;
+    Config_SetFloat(CONFIG_FLOAT_COUNT, 1);
+    Config_SetFloat(CONFIG_FLOAT_COUNT + 10, 1);
+    Config_GetFloat(CONFIG_FLOAT_COUNT);
+    Config_GetFloat(CONFIG_FLOAT_COUNT + 10);
+    assert_should_fail = false;
+
+    Config_SetFloat(CONFIG_FLOAT_TEST1, 123.456);
+    TEST_ASSERT_EQUAL_FLOAT(123.456, Config_GetFloat(CONFIG_FLOAT_TEST1));
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_FLOAT, st_update);
+
+    Config_SetFloat(CONFIG_FLOAT_TEST2, 321.012);
+    TEST_ASSERT_EQUAL_FLOAT(321.012, Config_GetFloat(CONFIG_FLOAT_TEST2));
+
+    Config_SetFloat(CONFIG_FLOAT_COUNT - 1, 0.1234);
+    TEST_ASSERT_EQUAL_FLOAT(0.1234, Config_GetFloat(CONFIG_FLOAT_COUNT - 1));
+}
+
 TEST(Config, SetGetBool)
 {
     assert_should_fail = true;
@@ -120,6 +141,16 @@ TEST(Config, ResetUint)
     TEST_ASSERT_EQUAL(4000, Config_GetUint(CONFIG_UINT_TEST4));
 }
 
+TEST(Config, ResetFloat)
+{
+    Config_ResetFloat();
+    TEST_ASSERT_TRUE(update_called);
+    TEST_ASSERT_EQUAL(STORAGE_UPDATE_FLOAT, st_update);
+
+    TEST_ASSERT_EQUAL_FLOAT(1.234, Config_GetFloat(CONFIG_FLOAT_TEST1));
+    TEST_ASSERT_EQUAL_FLOAT(4.321, Config_GetFloat(CONFIG_FLOAT_TEST2));
+}
+
 TEST(Config, ResetBool)
 {
     Config_ResetBool();
@@ -149,8 +180,10 @@ TEST(Config, GetSystem)
 TEST_GROUP_RUNNER(Config)
 {
     RUN_TEST_CASE(Config, SetGetUint);
+    RUN_TEST_CASE(Config, SetGetFloat);
     RUN_TEST_CASE(Config, SetGetBool);
     RUN_TEST_CASE(Config, ResetUint);
+    RUN_TEST_CASE(Config, ResetFloat);
     RUN_TEST_CASE(Config, ResetBool);
     RUN_TEST_CASE(Config, GetSystem);
 }

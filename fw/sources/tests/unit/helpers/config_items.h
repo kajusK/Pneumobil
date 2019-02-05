@@ -60,11 +60,18 @@ typedef enum {
     CONFIG_BOOL_CAN_PROMISCUOUS,
 } config_item_bool_t;
 
+typedef enum {
+    CONFIG_FLOAT_TEST1,
+    CONFIG_FLOAT_TEST2,
+    CONFIG_FLOAT_COUNT,
+} config_item_float_t;
+
 #undef extern
 #define extern extern
 
 extern const uint32_t config_default_uint[CONFIG_UINT_COUNT];
 extern const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8 + 1];
+extern const float config_default_float[CONFIG_FLOAT_COUNT];
 
 #undef extern
 #define extern static

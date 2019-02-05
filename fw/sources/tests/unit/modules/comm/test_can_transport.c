@@ -111,12 +111,6 @@ static void Cand_RegisterRxCb(cand_rx_cb_t cb)
     (void) cb;
 }
 
-static bool Config_GetBool(config_item_bool_t item)
-{
-    TEST_ASSERT_EQUAL(CONFIG_BOOL_CAN_PROMISCUOUS, item);
-    return true;
-}
-
 static void Cand_Init(uint32_t baudrate, const cand_filter_t *filters,
         uint8_t count)
 {

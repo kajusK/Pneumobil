@@ -35,7 +35,8 @@
 
 typedef enum {
     STORAGE_UPDATE_UINT = 0x01,
-    STORAGE_UPDATE_BOOL = 0x02
+    STORAGE_UPDATE_BOOL = 0x02,
+    STORAGE_UPDATE_FLOAT = 0x03
 } storage_update_t;
 
 /**

@@ -70,13 +70,13 @@ static void chPoolFree(char *mp, void *objp)
     (void) objp;
 }
 
-static void subscr1(log_msg_t *msg)
+static void subscr1(const log_msg_t *msg)
 {
     memcpy(&msg1, msg, sizeof(msg1));
     called1 = true;
 }
 
-static void subscr2(log_msg_t *msg)
+static void subscr2(const log_msg_t *msg)
 {
     memcpy(&msg2, msg, sizeof(msg2));
     called2 = true;

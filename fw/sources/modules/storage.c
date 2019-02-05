@@ -45,13 +45,16 @@ typedef struct {
 #define STORAGE_VERSION_SIZE   sizeof(storage_version_t)
 #define STORAGE_UINT_SIZE       sizeof(config_item_uint)
 #define STORAGE_BOOL_SIZE       sizeof(config_item_bool)
+#define STORAGE_FLOAT_SIZE       sizeof(config_item_bool)
 
 #define STORAGE_ADDR_VERSION    0
 #define STORAGE_ADDR_UINT       (STORAGE_ADDR_VERSION + STORAGE_VERSION_SIZE + STORAGE_CRC_SIZE)
 #define STORAGE_ADDR_BOOL       (STORAGE_ADDR_UINT + STORAGE_UINT_SIZE + STORAGE_CRC_SIZE)
+#define STORAGE_ADDR_FLOAT      (STORAGE_ADDR_BOOL + STORAGE_BOOL_SIZE + STORAGE_CRC_SIZE)
 
 extern uint32_t config_item_uint[CONFIG_UINT_COUNT];
 extern uint8_t config_item_bool[CONFIG_BOOL_COUNT];
+extern float config_item_float[CONFIG_FLOAT_COUNT];
 
 THD_WORKING_AREA(storagei_thread_area, 64);
 static thread_t *storagei_thread;
@@ -138,6 +141,18 @@ static bool Storagei_WriteBool(void)
             STORAGE_BOOL_SIZE);
 }
 
+static bool Storagei_ReadFloat(void)
+{
+    return Storagei_Read((uint8_t *)config_item_float, STORAGE_ADDR_FLOAT,
+            STORAGE_FLOAT_SIZE);
+}
+
+static float Storagei_WriteFloat(void)
+{
+    return Storagei_Write((const uint8_t *)config_item_float, STORAGE_ADDR_FLOAT,
+            STORAGE_FLOAT_SIZE);
+}
+
 /**
  * Processing update events
  */
@@ -159,6 +174,9 @@ static THD_FUNCTION(Storagei_Thread, arg)
         }
         if (events2 & STORAGE_UPDATE_UINT) {
             Storagei_WriteUint();
+        }
+        if (events2 & STORAGE_UPDATE_FLOAT) {
+            Storagei_WriteFloat();
         }
     }
 }
@@ -200,6 +218,12 @@ bool Storage_LoadAll(void)
     if (Storagei_ReadBool() != true) {
         Log_Warn(LOG_SOURCE_SYSTEM, "Eeprom bool crc failed, resetting bools");
         Config_ResetBool();
+        ret = false;
+    }
+
+    if (Storagei_ReadFloat() != true) {
+        Log_Warn(LOG_SOURCE_SYSTEM, "Eeprom float crc failed, resetting floats");
+        Config_ResetFloat();
         ret = false;
     }
 

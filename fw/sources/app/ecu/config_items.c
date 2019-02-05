@@ -49,4 +49,8 @@ const uint8_t config_default_bool[CONFIG_BOOL_COUNT/8+1] = {
     0x00,
 };
 
+const float config_default_float[CONFIG_FLOAT_COUNT] = {
+    0.0,
+};
+
 /** @} */
