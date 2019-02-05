@@ -178,6 +178,16 @@ static void ECU_ValvesFrontClose(void)
     valves = VALVES_BRAKE_BACK;
 }
 
+uint8_t Race_GetFillingPct(void)
+{
+    return 50;
+}
+
+uint16_t Race_GetDeadpointMs(void)
+{
+    return 10;
+}
+
 /* *****************************************************************************
  * Tests
 ***************************************************************************** */
