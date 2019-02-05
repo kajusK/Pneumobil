@@ -105,7 +105,7 @@ def gen_gcc(items, module):
             uintempty = False
             enum_uint += enumline
             defuint += "    "+str(int(i['defval']))+", /* "+name+" */\n"
-        if i['type'] == "FLOAT":
+        elif i['type'] == "FLOAT":
             floatempty = False
             enum_float += enumline
             deffloat += "    "+str(float(i['defval']))+", /* "+name+" */\n"
