@@ -58,12 +58,12 @@ static GFXINLINE bool_t getpin_pressed(GMouse* m) {
 
 static GFXINLINE void aquire_bus(GMouse* m) {
     (void) m;
-    SPId_Select(SPI_LCD_TOUCH);
+    SPId_Select(SPID_LCD_TOUCH);
 }
 
 static GFXINLINE void release_bus(GMouse* m) {
     (void) m;
-    SPId_Unselect(SPI_LCD_TOUCH);
+    SPId_Unselect(SPID_LCD_TOUCH);
 }
 
 static GFXINLINE uint16_t read_value(GMouse* m, uint16_t port) {
@@ -72,7 +72,7 @@ static GFXINLINE uint16_t read_value(GMouse* m, uint16_t port) {
     static uint8_t rxbuf[3] = {0};
 
     txbuf[0] = port;
-    spiExchange(SPId_GetDrv(SPID_TOUCH), 3, txbuf, rxbuf);
+    spiExchange(SPId_GetDrv(SPID_LCD_TOUCH), 3, txbuf, rxbuf);
 
     return ((uint16_t) rxbuf[1] << 5) | (rxbuf[2] >> 3);
 }
