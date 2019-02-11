@@ -80,7 +80,7 @@ static GFXINLINE void post_init_board(GDisplay *g)
 static GFXINLINE void setpin_reset(GDisplay *g, bool_t state)
 {
     (void) g;
-    (void) state;
+    palWriteLine(LINE_LCD_REST, !state);
 }
 
 static GFXINLINE void acquire_bus(GDisplay *g)
