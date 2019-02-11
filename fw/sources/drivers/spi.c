@@ -34,43 +34,52 @@
 #define SPID_DISP JOIN(SPID, SPI_DISP_SCK)
 #define SPID_COMM JOIN(SPID, SPI_COMM_SCK)
 
-MUTEX_DECL(spidi_disp_mutex);
-MUTEX_DECL(spidi_comm_mutex);
+/*
+ * Configuration for SPI driver for rf module
+ *
+ * SPI4 96M clk,  10M BME, nrf 10M - 16 divider to 6M
+ */
+static const SPIConfig spidi_conf_comm = {
+    false,
+    NULL, /* End callback */
+    (SPI_CR1_BR_2 | SPI_CR1_MSTR), /* CR1 */
+    0, /* CR2 */
+};
+
+/*
+ * Configuration for SPI driver for LCD modules
+ *
+ * spi2 48M clk, 40M sd card, 2MHz touch controller - 32 divider to 1,5M
+ */
+static const SPIConfig spidi_conf_disp = {
+    false,
+    NULL, /* End callback */
+    (SPI_CR1_BR_0 | SPI_CR1_BR_1 | SPI_CR1_MSTR), /* CR1 */
+    0, /* CR2 */
+};
 
 void SPId_Init(void)
 {
-    SPIConfig config;
-
-    config.end_cb = NULL;
-    config.ssline = (ioline_t) 0;
-    /* SPI4 96M in up to 10 mhz BME, ntf 10M - 16 divider, 6M */
-    config.cr1 = SPI_CR1_BR_0 | SPI_CR1_BR_1 | SPI_CR1_MSTR;
-    config.cr2 = 0;
-    spiStart(&SPID_COMM, &config);
-
-    /* spi2 48M, 40M sd card, 2MHz touch controller - 32 divider to 1,5M */
-    config.cr1 = SPI_CR1_BR_2 | SPI_CR1_MSTR;
-    spiStart(&SPID_DISP, &config);
+    spiStart(&SPID_COMM, &spidi_conf_comm);
+    spiStart(&SPID_DISP, &spidi_conf_disp);
 }
 
 void SPId_Select(spid_device_t device)
 {
+    spiAcquireBus(SPId_GetDrv(device));
+
     switch (device) {
         case SPID_LCD_TOUCH:
             palClearLine(LINE_LCD_T_CS);
-            chMtxLock(&spidi_disp_mutex);
             break;
         case SPID_LCD_SD:
             palClearLine(LINE_LCD_SD_CS);
-            chMtxLock(&spidi_disp_mutex);
             break;
         case SPID_RFM:
             palClearLine(LINE_RFM_CS);
-            chMtxLock(&spidi_comm_mutex);
             break;
         case SPID_BME:
             palClearLine(LINE_BME_CS);
-            chMtxLock(&spidi_comm_mutex);
             break;
         default:
             ASSERT(false);
@@ -83,24 +92,21 @@ void SPId_Unselect(spid_device_t device)
     switch (device) {
         case SPID_LCD_TOUCH:
             palSetLine(LINE_LCD_T_CS);
-            chMtxUnlock(&spidi_disp_mutex);
             break;
         case SPID_LCD_SD:
             palSetLine(LINE_LCD_SD_CS);
-            chMtxUnlock(&spidi_disp_mutex);
             break;
         case SPID_RFM:
             palSetLine(LINE_RFM_CS);
-            chMtxUnlock(&spidi_comm_mutex);
             break;
         case SPID_BME:
             palSetLine(LINE_BME_CS);
-            chMtxUnlock(&spidi_comm_mutex);
             break;
         default:
             ASSERT(false);
             break;
     }
+    spiReleaseBus(SPId_GetDrv(device));
 }
 
 SPIDriver *SPId_GetDrv(spid_device_t device)

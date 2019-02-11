@@ -33,7 +33,7 @@
 
 static void Encoderdi_Start(bool invert)
 {
-    QEIConfig config;
+    static QEIConfig config;
     config.mode = QEI_MODE_QUADRATURE;
     config.resolution = QEI_BOTH_EDGES;
     if (invert) {

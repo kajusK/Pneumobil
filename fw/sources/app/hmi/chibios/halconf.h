@@ -463,7 +463,7 @@
  * @note    Disabling this option saves both code and data space.
  */
 #if !defined(SPI_USE_CIRCULAR) || defined(__DOXYGEN__)
-#define SPI_USE_CIRCULAR                    FALSE
+#define SPI_USE_CIRCULAR                    TRUE
 #endif
 
 
@@ -472,7 +472,7 @@
  * @note    Disabling this option saves both code and data space.
  */
 #if !defined(SPI_USE_MUTUAL_EXCLUSION) || defined(__DOXYGEN__)
-#define SPI_USE_MUTUAL_EXCLUSION            FALSE
+#define SPI_USE_MUTUAL_EXCLUSION            TRUE
 #endif
 
 /**
@@ -480,7 +480,7 @@
  * @note    Disabling this option saves both code and data space.
  */
 #if !defined(SPI_SELECT_MODE) || defined(__DOXYGEN__)
-#define SPI_SELECT_MODE                     SPI_SELECT_MODE_LINE
+#define SPI_SELECT_MODE                     SPI_SELECT_MODE_NONE
 #endif
 
 /*===========================================================================*/

@@ -66,7 +66,7 @@ void Uartd_SendByte(uint8_t byte)
 
 void Uartd_Init(uint32_t baudrate)
 {
-    SerialConfig sdConfig;
+    static SerialConfig sdConfig;
 
     sdConfig.speed = baudrate;
     sdConfig.cr1 = 0;

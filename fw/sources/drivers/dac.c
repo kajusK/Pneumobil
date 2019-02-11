@@ -39,7 +39,7 @@ void Dacd_SetOutputMv(uint16_t out_mv)
 
 void Dacd_Init(void)
 {
-    DACConfig config;
+    static DACConfig config;
 
     /** Init value of dac output */
     config.init = 0;

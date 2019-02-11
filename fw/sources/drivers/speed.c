@@ -69,7 +69,13 @@ uint32_t Speedd_GetSpeedDms(void)
 void Speedd_Init(uint16_t mm_per_pulse)
 {
     /* 1 kHz clock - period will be in ms */
-    GPTConfig gptConf = { 1000, Speeddi_TimerCallback, 0, 0 };
+    static const GPTConfig gptConf = {
+        1000,
+        Speeddi_TimerCallback,
+        0,
+        0
+    };
+
     gptStart(&PERIOD_GPT, &gptConf);
 
     speeddi_mm_per_pulse = mm_per_pulse;

@@ -84,7 +84,7 @@ bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
 
 void I2Cd_Init(bool full_speed)
 {
-    I2CConfig config;
+    static I2CConfig config;
 
 #ifdef STM32F4XX
     config.op_mode = OPMODE_I2C;

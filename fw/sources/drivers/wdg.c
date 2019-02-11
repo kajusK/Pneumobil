@@ -35,6 +35,14 @@
 /** Stack and stuff for thread */
 THD_WORKING_AREA(wdgi_thread_area, 32);
 
+static const WDGConfig wdgdi_config = {
+    0, /* Prescaler, running from 40 kHz, 0 == /4 */
+    1000, /* Reload reg == 10 Hz */
+#if STM32_IWDG_IS_WINDOWED
+    0,
+#endif
+};
+
 static THD_FUNCTION(Wdgd_Thread, arg)
 {
     (void) arg;
@@ -47,20 +55,10 @@ static THD_FUNCTION(Wdgd_Thread, arg)
 
 void Wdgd_Init(void)
 {
-    WDGConfig config;
-
     (void) chThdCreateStatic(wdgi_thread_area, sizeof(wdgi_thread_area),
                     WDG_THREAD_PRIO, Wdgd_Thread, NULL);
 
-    /* Prescaler, running from 40 kHz, 0 == /4 */
-    config.pr = 0;
-    /* 12 bit reload register == 10 Hz */
-    config.rlr = 1000;
-#if STM32_IWDG_IS_WINDOWED
-    config.winr = 0;
-#endif
-
-    wdgStart(&WDGD1, &config);
+    wdgStart(&WDGD1, &wdgdi_config);
 }
 
 /** @} */

@@ -84,7 +84,7 @@ void Cand_RegisterRxCb(cand_rx_cb_t cb)
 
 void Cand_Init(uint32_t baudrate, const cand_filter_t *filters, uint8_t count)
 {
-    CANConfig config;
+    static CANConfig config;
     CANFilter driver_filters[STM32_CAN_MAX_FILTERS];
     uint32_t brp;
 
