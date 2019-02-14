@@ -70,7 +70,7 @@ bool Cand_SendFrame(const CANTxFrame *frame)
 
     ASSERT_NOT(frame == NULL);
 
-    res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, TIME_INFINITE);
+    res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
     if (res != MSG_OK) {
         return false;
     }
