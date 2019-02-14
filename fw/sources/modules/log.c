@@ -26,6 +26,8 @@
  */
 
 #include <ch.h>
+#include <hal.h>
+#include <chprintf.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +52,7 @@ static log_subscription_t logi_subscriptions[LOG_CALLBACKS_NUM];
 static log_msg_t logi_messages[LOG_BUFFER_LEN];
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(logi_thread_area, 128);
+THD_WORKING_AREA(logi_thread_area, 512);
 MEMORYPOOL_DECL(logi_msg_pool, LOG_BUFFER_LEN, 4, 0);
 static msg_t logi_letter[LOG_BUFFER_LEN];
 MAILBOX_DECL(logi_mailbox, &logi_letter, LOG_BUFFER_LEN);
@@ -108,7 +110,7 @@ static void Logi_AddEntry(log_src_t src, log_severity_t severity,
         return;
     }
 
-    vsnprintf(msg->msg, LOG_MSG_LEN, format, ap);
+    chvsnprintf(msg->msg, LOG_MSG_LEN, format, ap);
     msg->src = src;
     msg->severity = severity;
     msg->time = chTimeI2S(chVTGetSystemTime());

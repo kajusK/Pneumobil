@@ -41,7 +41,7 @@
 #define SENDER_THREAD_PRIO (NORMALPRIO - 1)
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(senderi_thread_area, 128);
+THD_WORKING_AREA(senderi_thread_area, 1024);
 
 static void Senderi_SendState(void)
 {

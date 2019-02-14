@@ -56,7 +56,7 @@ extern uint32_t config_item_uint[CONFIG_UINT_COUNT];
 extern uint8_t config_item_bool[CONFIG_BOOL_COUNT];
 extern float config_item_float[CONFIG_FLOAT_COUNT];
 
-THD_WORKING_AREA(storagei_thread_area, 64);
+THD_WORKING_AREA(storagei_thread_area, 512);
 static thread_t *storagei_thread;
 
 
