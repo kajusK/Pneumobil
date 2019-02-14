@@ -72,7 +72,7 @@ extern uint16_t Adcd_RefToSupplyMv(uint16_t raw);
  *
  * @param [in] channels         List of channel numbers to measure
  * @param [out] buffer          Buffer where the data will be stored
- * @param [in] len              Amount of channels (same as buffer length)
+ * @param [in] len              Amount of channels (same as buffer length), must be dividable by 2
  * @param [in] circular         True for circular conversion, false for single
  */
 extern void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer,

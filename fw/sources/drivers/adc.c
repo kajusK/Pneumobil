@@ -82,9 +82,9 @@ void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
         bool circular)
 {
     uint32_t chsel = 0;
-    ADCConversionGroup adcGroup = {
-        circular,       /* Circular mode enable */
-        len,            /* Number of channels in conversion */
+    static ADCConversionGroup adcGroup = {
+        false,       /* Circular mode enable */
+        0,            /* Number of channels in conversion */
         NULL,           /* Conversion end callback */
         Adcdi_ErrorCb,  /* Conversion error callback */
         ADC_CFGR1_CONT | ADC_CFGR1_RES_12BIT,   /* CFGR1 */
@@ -96,14 +96,18 @@ void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
         0,                 /* Chanel selection */
     };
 
+    adcGroup.circular = circular;
+    adcGroup.num_channels = len;
+
     for (int i = 0; i < len; i++) {
         chsel |= 1 << channels[i];
     }
     adcGroup.chselr = chsel;
 
-    adcConvert(&ADCD1, &adcGroup, buffer, len);
     if (circular) {
         adcStartConversion(&ADCD1, &adcGroup, buffer, len);
+    } else {
+        adcConvert(&ADCD1, &adcGroup, buffer, len);
     }
 }
 
