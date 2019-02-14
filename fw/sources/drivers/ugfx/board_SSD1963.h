@@ -73,7 +73,7 @@ static GFXINLINE void post_init_board(GDisplay *g)
 {
     (void) g;
     /* FSMC delay reduced as the controller now runs at full speed */
-    FSMC_Bank1->BTCR[0+1] = FSMC_BTR1_ADDSET_0 | FSMC_BTR1_DATAST_2 | FSMC_BTR1_BUSTURN_0 ;
+    FSMC_Bank1->BTCR[0+1] = FSMC_BTR1_ADDSET_0 | FSMC_BTR1_DATAST_0 | FSMC_BTR1_BUSTURN_0 ;
     FSMC_Bank1->BTCR[0] = FSMC_BCR1_MWID_0 | FSMC_BCR1_WREN | FSMC_BCR1_MBKEN;
 }
 
