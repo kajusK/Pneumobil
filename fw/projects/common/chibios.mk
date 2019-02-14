@@ -4,7 +4,7 @@
 
 ##############################################################################
 # Compiler options here.
-USE_OPT = -Os -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu11 \
+USE_OPT = -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu11 \
 		--specs=nano.specs --specs=nosys.specs
 
 # C specific options here (added to USE_OPT).
@@ -125,7 +125,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -D PORT_IGNORE_GCC_VERSION_CHECK
 
 # Define ASM defines here
 UADEFS =
