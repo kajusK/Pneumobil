@@ -254,6 +254,35 @@ void Log_Error(log_src_t src, const char *format, ...)
     va_end(ap);
 }
 
+const char *Log_GetSeverityStr(log_severity_t severity)
+{
+    static const char severityStr[LOG_SEVERITY_COUNT][8] = {
+        "Unknown",
+        "Error",
+        "Warn",
+        "Info",
+        "Debug",
+    };
+
+    ASSERT_NOT(severity >= LOG_SEVERITY_COUNT);
+    return severityStr[severity];
+}
+
+const char *Log_GetSourceStr(log_src_t src)
+{
+    static const char sourceStr[LOG_SOURCE_COUNT][7] = {
+        "SYSTEM",
+        "DRIVER",
+        "COMM",
+        "CONFIG",
+        "ECU",
+        "HMI",
+    };
+
+    ASSERT_NOT(src >= LOG_SOURCE_COUNT);
+    return sourceStr[src];
+}
+
 void Log_Init(void)
 {
     int i;

@@ -45,23 +45,6 @@ static FIL loggeri_syslog_file;
 static FIL loggeri_race_file;
 static uint32_t loggeri_log_created_timestamp;
 
-static const char loggeri_severity_str[LOG_SEVERITY_COUNT][8] = {
-    "Unknown",
-    "Error",
-    "Warn",
-    "Info",
-    "Debug",
-};
-
-static const char loggeri_source_str[LOG_SOURCE_COUNT][7] = {
-    "SYSTEM",
-    "DRIVER",
-    "COMM",
-    "CONFIG",
-    "ECU",
-    "HMI",
-};
-
 static const char loggeri_race_mode_str[4][14] = {
     "arcade",
     "acceleration",
@@ -90,8 +73,7 @@ static void Loggeri_LogCb(const log_msg_t *log)
 
     /* Print errors are ignored - SD card could be removed,... */
     f_printf(&loggeri_syslog_file, "%s %s <%s>: %s\n",
-            buf, loggeri_source_str[log->src],
-            loggeri_severity_str[log->severity],
+            buf, Log_GetSourceStr(log->src), Log_GetSeverityStr(log->severity),
             log->msg);
     f_sync(&loggeri_syslog_file);
 }
@@ -202,6 +184,8 @@ void Logger_Init(void)
         Loggeri_CardInsertedCb();
     }
     SDCd_AddInsertCallback(Loggeri_CardInsertedCb);
+
+    //TODO add task that will periodically log the state
 }
 
 /** @} */

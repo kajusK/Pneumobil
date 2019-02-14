@@ -156,6 +156,22 @@ extern void Log_Warn(log_src_t src, const char *format, ...);
 extern void Log_Error(log_src_t src, const char *format, ...);
 
 /**
+ * Get name of the given severity in string
+ *
+ * @param [in] severity     Severity to get name for
+ * @return Pointer to constant string
+ */
+extern const char *Log_GetSeverityStr(log_severity_t severity);
+
+/**
+ * Get name of the given log source in string
+ *
+ * @param [in] src     Log source to get name for
+ * @return Pointer to constant string
+ */
+extern const char *Log_GetSourceStr(log_src_t src);
+
+/**
  * Initialize logging module
  */
 extern void Log_Init(void);
