@@ -33,7 +33,7 @@
 #include "drivers/eeprom.h"
 
 /** I2C address of the eeprom */
-#define EEPROM_I2C_ADDR 0xa0
+#define EEPROM_I2C_ADDR (0xa0 >> 1)
 
 /** Size of eeprom page */
 #define EEPROM_PAGE_SIZE 32

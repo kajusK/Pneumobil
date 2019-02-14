@@ -69,17 +69,16 @@ bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
 #if I2C_USE_MUTUAL_EXCLUSION
     i2cAcquireBus(&I2CD1);
 #endif
-    //TODO
     res = i2cMasterTransmitTimeout(&I2CD1, address, txbuf, txbytes,
             rxbuf, rxbytes, TIME_MS2I(I2CD_TIMEOUT_MS));
 #if I2C_USE_MUTUAL_EXCLUSION
     i2cReleaseBus(&I2CD1);
 #endif
 
-    if (res != MSG_OK) {
-        return false;
+    if (res == MSG_OK && i2cGetErrors(&I2CD1) == I2C_NO_ERROR) {
+        return true;
     }
-    return true;
+    return false;
 }
 
 void I2Cd_Init(bool full_speed)
@@ -89,7 +88,7 @@ void I2Cd_Init(bool full_speed)
 #ifdef STM32F4XX
     config.op_mode = OPMODE_I2C;
     config.clock_speed = full_speed ? 400000 : 100000;
-    config.duty_cycle = STD_DUTY_CYCLE;
+    config.duty_cycle = full_speed ? FAST_DUTY_CYCLE_2 : STD_DUTY_CYCLE;
 #else
     config.cr1 = 0;
     config.cr2 = 0;
