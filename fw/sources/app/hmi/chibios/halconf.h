@@ -36,6 +36,14 @@
 #include "halconf_community.h"
 
 /**
+ * @brief enable printing float values using chprintf
+ */
+
+#if !defined(CHPRINTF_USE_FLOAT)
+#define CHPRINTF_USE_FLOAT                  TRUE
+#endif
+
+/**
  * @brief   Enables the PAL subsystem.
  */
 #if !defined(HAL_USE_PAL) || defined(__DOXYGEN__)

@@ -40,6 +40,7 @@ LDSCRIPT= $(STARTUPLD)/STM32F412xE.ld
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 USRSRC = $(wildcard $(APP_DIR)/*.c) \
+	$(wildcard $(APP_DIR)/*/*.c) \
 	$(wildcard $(SOURCES)/modules/*.c) \
 	$(wildcard $(SOURCES)/modules/*/*.c) \
 	$(SOURCES)/drivers/can.c \

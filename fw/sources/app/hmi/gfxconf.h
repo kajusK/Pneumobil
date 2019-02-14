@@ -54,8 +54,8 @@
 //    #define GFX_CPU_NO_ALIGNMENT_FAULTS              GFXOFF
 //    #define GFX_CPU_ENDIAN                           GFX_CPU_ENDIAN_UNKNOWN
     #define GFX_OS_HEAP_SIZE                         0
-//    #define GFX_OS_NO_INIT                           GFXOFF
-//    #define GFX_OS_INIT_NO_WARNING                   GFXOFF
+    #define GFX_OS_NO_INIT                           GFXON
+    #define GFX_OS_INIT_NO_WARNING                   GFXON
 //    #define GFX_OS_PRE_INIT_FUNCTION                 myHardwareInitRoutine
 //    #define GFX_OS_EXTRA_INIT_FUNCTION               myOSInitRoutine
 //    #define GFX_OS_EXTRA_DEINIT_FUNCTION             myOSDeInitRoutine
@@ -92,12 +92,12 @@
 //    #define GDISP_NEED_TEXT_BOXPADTB                 1
 //#define GDISP_NEED_ANTIALIAS                     GFXON
 //    #define GDISP_NEED_UTF8                          GFXOFF
-#define GDISP_NEED_TEXT_KERNING                  GFXON
+//#define GDISP_NEED_TEXT_KERNING                  GFXON
 //    #define GDISP_INCLUDE_FONT_UI1                   GFXOFF
 //    #define GDISP_INCLUDE_FONT_UI2                   GFXOFF            // The smallest preferred font.
     #define GDISP_INCLUDE_FONT_LARGENUMBERS          GFXON
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANS10          GFXOFF
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS12          GFXON
+    #define GDISP_INCLUDE_FONT_DEJAVUSANS12          GFXON
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANS16          GFXOFF
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANS20          GFXOFF
     #define GDISP_INCLUDE_FONT_DEJAVUSANS24          GFXON
@@ -201,9 +201,9 @@
     #define GWIN_CONSOLE_USE_HISTORY                 GFXON
 //        #define GWIN_CONSOLE_HISTORY_AVERAGING       GFXON
 //        #define GWIN_CONSOLE_HISTORY_ATCREATE        GFXON
-//        #define GWIN_CONSOLE_ESCSEQ                  GFXON
+        #define GWIN_CONSOLE_ESCSEQ                  GFXON
 //    #define GWIN_CONSOLE_USE_BASESTREAM              GFXOFF
-//    #define GWIN_CONSOLE_USE_FLOAT                   GFXOFF
+    #define GWIN_CONSOLE_USE_FLOAT                   GFXON
 //#define GWIN_NEED_GRAPH                              GFXOFF
 //#define GWIN_NEED_GL3D                               GFXOFF
 
@@ -306,7 +306,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // GFILE                                                                 //
 ///////////////////////////////////////////////////////////////////////////
-#define GFX_USE_GFILE                                GFXOFF
+//#define GFX_USE_GFILE                                GFXOFF
 
 //#define GFILE_NEED_PRINTG                            GFXOFF
 //#define GFILE_NEED_SCANG                             GFXOFF
