@@ -125,10 +125,13 @@ def gen_gcc(items, module):
 
     if uintempty:
         enum_uint += "    CONFIG_UINT_DUMMY,\n"
+        defuint += "    0, /* DUMMY */\n"
     if floatempty:
         enum_float += "    CONFIG_FLOAT_DUMMY,\n"
+        deffloat += "    0, /* DUMMY */\n"
     if boolempty:
         enum_bool += "    CONFIG_BOOL_DUMMY,\n"
+        defbool += "    0, /* DUMMY */\n"
 
     enum_uint += "    CONFIG_UINT_COUNT,\n"
     enum_uint += "} config_item_uint_t;"
@@ -144,14 +147,14 @@ def gen_gcc(items, module):
 
     #TODO insert dummy values when list is empty
 
-    regex1 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*\(\),_\n\r]*} config_item_uint_t;'
-    regex2 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*\(\),_\n\r]*} config_item_bool_t;'
-    regex3 = '(\/\*.*$\n)*typedef enum {[ \t\w\d\/\*\(\),_\n\r]*} config_item_float_t;'
+    regex1 = '(\/\*.*$\n)*typedef enum {[^}]*} config_item_uint_t;'
+    regex2 = '(\/\*.*$\n)*typedef enum {[^}]*} config_item_bool_t;'
+    regex3 = '(\/\*.*$\n)*typedef enum {[^}]*} config_item_float_t;'
     update_file(module, [regex1, regex2, regex3], [enum_uint, enum_bool, enum_float])
 
-    regex1 = '(\/\*.*$\n)*const .* config_default_uint\[.* {[ \t\w\d\/\*,_\n\r]*};'
-    regex2 = '(\/\*.*$\n)*const .* config_default_bool\[.* {[ \t\w\d\/\*,_\n\r]*};'
-    regex3 = '(\/\*.*$\n)*const .* config_default_float\[.* {[ \t\w\d\/\*,_\n\r]*};'
+    regex1 = '(\/\*.*$\n)*const .* config_default_uint\[.* {[^}]*};'
+    regex2 = '(\/\*.*$\n)*const .* config_default_bool\[.* {[^}]*};'
+    regex3 = '(\/\*.*$\n)*const .* config_default_float\[.* {[^}]*};'
     update_file(module, [regex1, regex2, regex3], [defuint, defbool, deffloat], False);
 
 def gen_python(items):
