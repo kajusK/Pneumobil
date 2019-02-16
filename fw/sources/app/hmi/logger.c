@@ -71,10 +71,10 @@ static void Loggeri_LogCb(const log_msg_t *log)
     RTCd_GetTime(&timeinfo);
     asctime_r(&timeinfo, buf);
 
-    /* Print errors are ignored - SD card could be removed,... */
-    f_printf(&loggeri_syslog_file, "%s %s <%s>: %s\n",
-            buf, Log_GetSourceStr(log->src), Log_GetSeverityStr(log->severity),
-            log->msg);
+    /* Print errors are ignored - SD card could be removed in the meanwhile */
+    f_printf(&loggeri_syslog_file, "%s [%s] %s <%s>: %s\n",
+            buf, Log_GetModuleStr(log->module), Log_GetSourceStr(log->src),
+            Log_GetSeverityStr(log->severity), log->msg);
     f_sync(&loggeri_syslog_file);
 }
 
@@ -163,12 +163,6 @@ void Logger_AddRaceLogEntry(void)
     f_sync(&loggeri_race_file);
 }
 
-void Logger_AddSyslogExternal(log_src_t src, log_severity_t severity,
-        const char *msg, uint8_t len)
-{
-    //TODO
-}
-
 /** Should be called on card insertion */
 void Logger_Init(void)
 {
@@ -177,7 +171,7 @@ void Logger_Init(void)
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severity[i] = LOG_SEVERITY_INFO;
     }
-    Log_Subscribe(Loggeri_LogCb, severity);
+    Log_Subscribe(Loggeri_LogCb, severity, true);
 
     /* Add callback for card inserted, if card inserted already, run it */
     if (SDCd_IsReady()) {

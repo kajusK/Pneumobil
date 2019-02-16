@@ -163,13 +163,32 @@ comm_error_t Comm_ResetConfig(void)
 comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload)
 {
-    (void) node;
-#ifndef BOARD_HMI
     (void) len;
+#ifndef BOARD_HMI
+    (void) node;
     (void) payload;
 #else
-    Logger_AddSyslogExternal(payload->source, payload->severity,
-            (char *) payload->message, len);
+    log_module_t module;
+    switch (node) {
+        case COMM_NODE_ECU:
+            module = LOG_MODULE_ECU;
+            break;
+        case COMM_NODE_PSU:
+            module = LOG_MODULE_PSU;
+            break;
+        case COMM_NODE_HMI:
+            module = LOG_MODULE_HMI;
+            break;
+        case COMM_NODE_SDU:
+            module = LOG_MODULE_SDU;
+            break;
+        default:
+            return COMM_ERR_INCORRECT_PARAM;
+            break;
+    }
+
+    Log_AddEntry(module, payload->source, payload->severity,
+            (const char *) payload->message);
 #endif
     return COMM_OK;
 }
@@ -512,12 +531,12 @@ void Comm_Init(void)
     }
     severity[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_INFO;
     severity[LOG_SOURCE_ECU] = LOG_SEVERITY_INFO;
-    Log_Subscribe(Commi_SendLogCan, severity);
+    Log_Subscribe(Commi_SendLogCan, severity, false);
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severity[i] = LOG_SEVERITY_INFO;
     }
-    Log_Subscribe(Commi_SendLogUart, severity);
+    Log_Subscribe(Commi_SendLogUart, severity, false);
 }
 
 /** @} */

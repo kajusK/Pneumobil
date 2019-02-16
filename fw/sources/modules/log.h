@@ -29,7 +29,7 @@
 #define __MODULES_LOG_H
 
 #include <types.h>
-#include <stdarg.h>
+#include "version.h"
 
 /*
  * Maximum length of a log message
@@ -67,10 +67,34 @@ typedef enum {
 } log_src_t;
 
 /**
+ * Origin module of the message
+ */
+typedef enum {
+    LOG_MODULE_ECU,
+    LOG_MODULE_HMI,
+    LOG_MODULE_PSU,
+    LOG_MODULE_SDU,
+    LOG_MODULE_COUNT,
+} log_module_t;
+
+#ifdef BOARD_HMI
+    #define LOG_MODULE_MYSELF LOG_MODULE_HMI
+#elif defined(BOARD_ECU)
+    #define LOG_MODULE_MYSELF LOG_MODULE_ECU
+#elif defined(BOARD_PSU)
+    #define LOG_MODULE_MYSELF LOG_MODULE_PSU
+#elif defined(BOARD_PSU)
+    #define LOG_MODULE_MYSELF LOG_MODULE_SDU
+#else
+    #error Undefined board
+#endif
+
+/**
  * Logger entry
  */
 typedef struct {
     uint32_t time;          /** Seconds since boot */
+    log_module_t module;
     log_severity_t severity;
     log_src_t src;
     char msg[LOG_MSG_LEN];
@@ -80,14 +104,30 @@ typedef struct {
 typedef void (*log_callback_t)(const log_msg_t *msg);
 
 /**
+ * Add message to log queue
+ *
+ * Specific function should be used (Log_Error,...) instead for normal logging,
+ * this function is intended for logging logs received from other modules
+ *
+ * @param [in] module   Origin module of the message
+ * @param [in] src      Source of the message
+ * @param [in] severity Log message severity
+ * @param [in] message  Message string to be logged
+ */
+extern void Log_AddEntry(log_module_t module, log_src_t src,
+        log_severity_t severity, const char *message);
+
+/**
  * Subscribe to logs
  *
  * @param [in] cb       Callback to be called upon log reception
  * @param [in] severity Array of severities for each log_src_t item
+ * @param [in] external Interested in logs from other boards than this one
  *
  * @return  true if succeeded
  */
-extern bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[]);
+extern bool Log_Subscribe(log_callback_t cb, const log_severity_t severity[],
+        bool external);
 
 /**
  * Unsubscribe callback from logs
@@ -170,6 +210,14 @@ extern const char *Log_GetSeverityStr(log_severity_t severity);
  * @return Pointer to constant string
  */
 extern const char *Log_GetSourceStr(log_src_t src);
+
+/**
+ * Get name of the module that sent this message
+ *
+ * @param [in] module       Module id
+ * @return Pointer to module string
+ */
+extern const char *Log_GetModuleStr(log_module_t module);
 
 /**
  * Initialize logging module

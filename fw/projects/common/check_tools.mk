@@ -12,7 +12,8 @@ CODECHECK_FLAGS := --enable=warning,performance -j 4 \
     $(addprefix -I, $(USRINC)) \
     --template=gcc --suppress=missingIncludeSystem \
     --suppress=unusedFunction --suppress=unmatchedSuppression \
-    --suppress=missingInclude --platform=unix32 -q
+    --suppress=missingInclude --suppress=va_list_usedBeforeStarted \
+    --platform=unix32 -q
 
 .PHONY : stylecheck codecheck
 

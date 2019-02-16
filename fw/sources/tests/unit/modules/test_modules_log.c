@@ -110,7 +110,7 @@ TEST(Log, Subscriptions)
     log_severity_t severities[LOG_SOURCE_COUNT];
 
     assert_should_fail = true;
-    Log_Subscribe(NULL, NULL);
+    Log_Subscribe(NULL, NULL, false);
     assert_should_fail = false;
 
     TEST_ASSERT_EQUAL(Logi_GetHighestSeverity(), LOG_SEVERITY_NONE);
@@ -120,11 +120,11 @@ TEST(Log, Subscriptions)
     }
 
     severities[LOG_SOURCE_COUNT-2] = LOG_SEVERITY_WARNING;
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
     TEST_ASSERT_EQUAL(LOG_SEVERITY_WARNING, Logi_GetHighestSeverity());
 
     severities[LOG_SOURCE_COUNT-2] = LOG_SEVERITY_ERROR;
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities, false));
     TEST_ASSERT_EQUAL(LOG_SEVERITY_WARNING, Logi_GetHighestSeverity() );
 
     severities[LOG_SOURCE_COUNT-2] = LOG_SEVERITY_DEBUG;
@@ -149,6 +149,7 @@ TEST(Log, SendLog)
     msg.time = 123;
     msg.severity = LOG_SEVERITY_WARNING;
     msg.src = LOG_SOURCE_SYSTEM;
+    msg.module = LOG_MODULE_MYSELF;
     sprintf(msg.msg, "Hello World!");
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
@@ -160,11 +161,11 @@ TEST(Log, SendLog)
     TEST_ASSERT_FALSE(called2);
 
     severities[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_ERROR;
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
 
     severities[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_INFO;
     severities[LOG_SOURCE_CONFIG] = LOG_SEVERITY_WARNING;
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities, false));
 
     Logi_SendLog(&msg);
     TEST_ASSERT_FALSE(called1);
@@ -212,7 +213,7 @@ TEST(Log, AddEntry)
     }
 
     severities[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_WARNING;
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
 
     Log_Debug(LOG_SOURCE_SYSTEM, "Hello World %d", 123);
     TEST_ASSERT_FALSE(msg_called);
@@ -239,7 +240,7 @@ TEST(Log, GetSubscription)
         severities[i] = i % LOG_SEVERITY_COUNT;
     }
 
-    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
     memset(results, 0xff, LOG_SEVERITY_COUNT);
     TEST_ASSERT_TRUE(Log_GetSubscription(subscr1, results));
     TEST_ASSERT_EQUAL_HEX8_ARRAY(severities, results, LOG_SOURCE_COUNT);

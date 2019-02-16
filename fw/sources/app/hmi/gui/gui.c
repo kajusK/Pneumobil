@@ -158,7 +158,7 @@ void Gui_Init(void)
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severity[i] = LOG_SEVERITY_INFO;
     }
-    Log_Subscribe(Gui_ConsoleLogCb, severity);
+    Log_Subscribe(Gui_ConsoleLogCb, severity, true);
 }
 
 /** @} */

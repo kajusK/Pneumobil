@@ -90,9 +90,9 @@ void Gui_ConsoleLogCb(const log_msg_t *log)
             break;
     }
 
-    gwinPrintf(ghConsole, "%s \033b%s\033B \033%c<%s>\033C: %s\n\r",
-            buf, Log_GetSourceStr(log->src), color,
-            Log_GetSeverityStr(log->severity), log->msg);
+    gwinPrintf(ghConsole, "%s \033b[%s] %s\033B \033%c<%s>\033C: %s\n\r",
+            buf, Log_GetModuleStr(log->module), Log_GetSourceStr(log->src),
+            color, Log_GetSeverityStr(log->severity), log->msg);
 }
 
 /** @} */
