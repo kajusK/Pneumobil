@@ -57,7 +57,6 @@ typedef enum {
     CONFIG_BOOL_ENCODER_INVERT,
     CONFIG_BOOL_PNEU_NON_BLOCK,
     CONFIG_BOOL_COUNT,
-    CONFIG_BOOL_CAN_PROMISCUOUS,
 } config_item_bool_t;
 
 typedef enum {
