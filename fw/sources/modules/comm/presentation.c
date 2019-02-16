@@ -136,8 +136,8 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         /* Generic commands*/
         case COMM_CMD_SYSTEM_STATUS:
             if (packet->len == 0) {
-                retval = Comm_GetSysStatus((comm_sys_status_t *) response.payload);
-                response.len = sizeof(comm_sys_status_t);
+                retval = Comm_SysStatus((comm_sys_status_t *) packet->payload);
+                replyRequired = false;
             }
             break;
         case COMM_CMD_SET_LOG_MASK:

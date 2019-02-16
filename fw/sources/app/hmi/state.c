@@ -26,12 +26,30 @@
  */
 
 #include <string.h>
+#include <modules/log.h>
+#include <utils/time.h>
+#include <utils/assert.h>
+
 #include "state.h"
+
+/** Time from last module seen time to consider it online */
+#define STATE_CONSIDER_ONLINE_MS 5000
 
 static state_t statei_state;
 static state_pneu_t * const statei_pneu = &statei_state.pneu;
 static state_car_t * const statei_car = &statei_state.car;
 static state_psu_t * const statei_psu = &statei_state.psu;
+
+static void Statei_SetNodeOnline(state_node_t *module)
+{
+    ASSERT_NOT(module == NULL);
+
+    if ((millis() - module->_seen) > STATE_CONSIDER_ONLINE_MS) {
+        module->online = false;
+    } else {
+        module->online = true;
+    }
+}
 
 void State_UpdateCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
         uint16_t distance_m, state_race_mode_t mode)
@@ -94,8 +112,55 @@ void State_UpdatePSUVoltage(uint16_t volt5_mv, uint16_t volt12_mv,
     statei_psu->psu24_mv = volt24_mv;
 }
 
+void State_UpdateNode(comm_node_t node, uint16_t uptime_s, int8_t temp_c,
+        uint16_t core_mv)
+{
+    state_node_t *node_var;
+
+    switch (node) {
+        case COMM_NODE_PSU:
+            node_var = &statei_state.node.psu;
+            break;
+        case COMM_NODE_ECU:
+            node_var = &statei_state.node.ecu;
+            break;
+        case COMM_NODE_SDU:
+            node_var = &statei_state.node.sdu;
+            break;
+        case COMM_NODE_DEBUG:
+            node_var = &statei_state.node.dbg;
+            break;
+        case COMM_NODE_HMI:
+            Log_Error(LOG_SOURCE_HMI,
+                    "Received state of HMI that was not sent by HMI");
+            return;
+            break;
+        default:
+            Log_Error(LOG_SOURCE_HMI, "Received state for unknown module %d",
+                    node);
+            return;
+            break;
+    }
+
+    node_var->uptime_s = uptime_s;
+    node_var->temp_c = temp_c;
+    node_var->core_mv = core_mv;
+    node_var->_seen = millis();
+}
+
 state_t *State_Get(void)
 {
+    Statei_SetNodeOnline(&statei_state.node.ecu);
+    Statei_SetNodeOnline(&statei_state.node.psu);
+    Statei_SetNodeOnline(&statei_state.node.sdu);
+    Statei_SetNodeOnline(&statei_state.node.dbg);
+
+    //TODO
+    statei_state.node.hmi.online = true;
+    statei_state.node.hmi.core_mv = 0;
+    statei_state.node.hmi.temp_c = 0;
+    statei_state.node.hmi.uptime_s = millis();
+
     return &statei_state;
 }
 
@@ -107,10 +172,6 @@ state_race_mode_t State_GetRaceMode(void)
 void State_Init(void)
 {
     memset(&statei_state, 0, sizeof(statei_state));
-
-    //TODO start thread that will be sending keep aplive to other nodes to see their state
 }
-
-
 
 /** @} */

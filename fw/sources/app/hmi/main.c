@@ -25,7 +25,6 @@
  * @{
  */
 
-#include <gfx.h>
 #include <ch.h>
 #include <hal.h>
 
@@ -41,6 +40,7 @@
 #include "state.h"
 #include "logger.h"
 #include "version.h"
+#include "gui/gui.h"
 
 int main(void) {
     halInit();
@@ -54,17 +54,19 @@ int main(void) {
     Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
     Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
 
-    Wdgd_Init();
+    //Wdgd_Init();
     I2Cd_Init(true);
+    Storage_Init();
     Storage_LoadAll();
     SDCd_Init();
     State_Init();
     Logger_Init();
 
     SPId_Init();
-    gfxInit();
+    Gui_Init();
 
     while (1) {
+        Comm_SendSystemStatus();
         palToggleLine(LINE_LED_SYS_ACTIVE);
         chThdSleepMilliseconds(500);
     }

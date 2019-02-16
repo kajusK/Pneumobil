@@ -85,21 +85,26 @@ typedef struct {
 } state_psu_t;
 
 typedef struct {
-    bool ecu_online;
-    uint16_t ecu_mv;
+    uint32_t _seen;
+    bool online;
+    uint16_t core_mv;
     int8_t temp_c;
+    uint16_t uptime_s;
+} state_node_t;
 
-    bool psu_online;
-    uint16_t psu_mv;
-
-    bool sdu_online;
-    uint16_t sdu_mv;
-} state_modules_t;
+typedef struct {
+    state_node_t psu;
+    state_node_t hmi;
+    state_node_t ecu;
+    state_node_t sdu;
+    state_node_t dbg;
+} state_nodes_t;
 
 typedef struct {
     state_psu_t psu;
     state_car_t car;
     state_pneu_t pneu;
+    state_nodes_t node;
 } state_t;
 
 /*
@@ -119,6 +124,10 @@ extern void State_UpdatePSUCurrent(uint16_t cur5v_ma, uint16_t cur12v_ma,
         uint16_t cur24v_ma);
 extern void State_UpdatePSUVoltage(uint16_t volt5_mv, uint16_t volt12_mv,
         uint16_t volt24_mv);
+
+#include <modules/comm/comm.h>
+extern void State_UpdateNode(comm_node_t node, uint16_t uptime_s, int8_t temp_c,
+        uint16_t core_mv);
 
 /**
  * Get car state data

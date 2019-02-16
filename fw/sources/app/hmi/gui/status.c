@@ -50,6 +50,20 @@ static GHandle ghLabelBack1In, ghLabelBack2In, ghLabelBack1Out, ghLabelBack2Out;
 static GHandle ghLabelEndstopBack, ghLabelEndstopFront;
 static GHandle ghPistonProgress;
 
+static void Gui_StatusUpdateNode(GHandle label, state_node_t *node)
+{
+    char buf[BUFSIZE];
+    char const *state;
+    if (node->online) {
+        state = "On";
+    } else {
+        state= "Off";
+    }
+
+    chsnprintf(buf, BUFSIZE, "%s, %4d mV, %3d", state, node->core_mv, node->temp_c);
+    Gui_LabelUpdate(label, buf);
+}
+
 void Gui_StatusInit(GHandle ghTab)
 {
     GWidgetInit wi;
@@ -277,6 +291,12 @@ void Gui_StatusUpdate(void)
     char buf[BUFSIZE];
 
     state_t *state = State_Get();
+
+    Gui_StatusUpdateNode(ghLabelHmi, &state->node.hmi);
+    Gui_StatusUpdateNode(ghLabelEcu, &state->node.ecu);
+    Gui_StatusUpdateNode(ghLabelPsu, &state->node.psu);
+    Gui_StatusUpdateNode(ghLabelSdu, &state->node.sdu);
+    Gui_StatusUpdateNode(ghLabelDbg, &state->node.dbg);
 
     chsnprintf(buf, BUFSIZE, "%4d mV", state->psu.battery.bat1_mv);
     Gui_LabelUpdate(ghLabelBat1, buf);

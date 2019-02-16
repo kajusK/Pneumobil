@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "utils/assert.h"
+#include "utils/time.h"
 
 #include "modules/log.h"
 #include "modules/config.h"
@@ -52,16 +53,16 @@ static void Commi_SendLogUart(const log_msg_t *log)
 /* ***************************************************************************
  * Application layer module local functions
  *************************************************************************** */
-comm_error_t Comm_GetSysStatus(comm_sys_status_t *status)
+comm_error_t Comm_SysStatus(const comm_sys_status_t *status)
 {
     ASSERT_NOT(status == NULL);
-
-    //TODO
-    status->device_id = COMM_MY_ID;
-    status->state = 0;
-    status->uptime_s = 0;
-    status->core_temp_c = 0;
-    status->core_voltage_mv = 0;
+#ifndef BOARD_HMI
+    (void) status;
+#else
+    //TODO device id
+    State_UpdateNode(status->device_id, status->uptime_s, status->core_temp_c,
+            status->core_voltage_mv);
+#endif
 
     return COMM_OK;
 }
@@ -517,6 +518,19 @@ void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv, uint16_t v24_mv)
     Comm_SendPacket(COMM_CMD_PSU_voltage, (uint8_t *)&volt, sizeof(cur));
 }
 #endif
+
+void Comm_SendSystemStatus(void)
+{
+    comm_sys_status_t status;
+
+    status.device_id = COMM_MY_ID;
+    status.state = 0;
+    status.uptime_s = millis();
+    status.core_temp_c = 0;
+    status.core_voltage_mv = 0;
+
+    Comm_SendPacket(COMM_CMD_SYSTEM_STATUS, (uint8_t *)&status, sizeof(status));
+}
 
 void Comm_Init(void)
 {

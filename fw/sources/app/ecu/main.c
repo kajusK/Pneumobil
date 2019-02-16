@@ -52,8 +52,9 @@ int main(void) {
     Log_Info(LOG_SOURCE_ECU, "Version %d.%d", VER_MAJOR, VER_MINOR);
     Log_Info(LOG_SOURCE_ECU, "Compiled: %s", __DATE__ "-" __TIME__);
 
-    Wdgd_Init();
+    //Wdgd_Init();
     I2Cd_Init(true);
+    Storage_Init();
     Storage_LoadAll();
     ECU_Init();
     Car_Init();
@@ -63,7 +64,8 @@ int main(void) {
     Log_Info(LOG_SOURCE_ECU, "Init done");
 
     while (1) {
-        //TODO process the state and update let accordingly
+        //TODO process the state and update led accordingly
+        Comm_SendSystemStatus();
         palToggleLine(LINE_LED_SYS_ACTIVE);
         chThdSleepMilliseconds(500);
     }

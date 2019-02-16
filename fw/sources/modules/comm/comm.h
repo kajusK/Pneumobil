@@ -155,6 +155,8 @@ extern void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv,
         uint16_t v24_mv);
 #endif
 
+extern void Comm_SendSystemStatus(void);
+
 /**
  * Initialize communication module and its submodules
  */

@@ -32,7 +32,7 @@
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
 
-extern comm_error_t Comm_GetSysStatus(comm_sys_status_t *status);
+extern comm_error_t Comm_SysStatus(const comm_sys_status_t *status);
 extern comm_error_t Comm_SetLogMask(const comm_log_mask_t *payload);
 extern comm_error_t Comm_GetLogMask(uint8_t interface,
     comm_log_mask_t *response);
