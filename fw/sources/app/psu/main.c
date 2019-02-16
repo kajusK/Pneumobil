@@ -29,11 +29,13 @@
 #include <hal.h>
 
 #include <drivers/wdg.h>
+#include <drivers/adc.h>
 #include <modules/log.h>
 #include <modules/config.h>
 #include <modules/comm/comm.h>
 
 #include "version.h"
+#include "psu.h"
 
 int main(void) {
     halInit();
@@ -47,9 +49,10 @@ int main(void) {
     Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
     Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
 
-    Config_SetBool(0, 0);
     Wdgd_Init();
-
+    Adcd_Init();
+    Config_Reset();
+    Psu_Init();
     Log_Info(LOG_SOURCE_SYSTEM, "Init done");
 
     while (1) {

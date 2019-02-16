@@ -164,7 +164,7 @@ TEST(Log, SendLog)
     TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
 
     severities[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_INFO;
-    severities[LOG_SOURCE_CONFIG] = LOG_SEVERITY_WARNING;
+    severities[LOG_SOURCE_MODULE] = LOG_SEVERITY_WARNING;
     TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities, false));
 
     Logi_SendLog(&msg);
@@ -189,12 +189,12 @@ TEST(Log, SendLog)
     called1 = false;
     called2 = false;
     msg.severity = LOG_SEVERITY_ERROR;
-    msg.src = LOG_SOURCE_CONFIG;
+    msg.src = LOG_SOURCE_MODULE;
     Logi_SendLog(&msg);
     TEST_ASSERT_FALSE(called1);
     TEST_ASSERT_TRUE(called2);
     TEST_ASSERT_EQUAL(LOG_SEVERITY_ERROR, msg2.severity);
-    TEST_ASSERT_EQUAL(LOG_SOURCE_CONFIG, msg2.src);
+    TEST_ASSERT_EQUAL(LOG_SOURCE_MODULE, msg2.src);
 }
 
 TEST(Log, SendLogExternal)

@@ -61,7 +61,7 @@ void Config_SetUint(config_item_uint_t item, uint32_t value)
 {
     ASSERT_NOT(item >= CONFIG_UINT_COUNT || CONFIG_UINT_COUNT == 0);
 
-    Log_Debug(LOG_SOURCE_CONFIG, "Unsigned item %d set to %u", item, value);
+    Log_Debug(LOG_SOURCE_MODULE, "Unsigned item %d set to %u", item, value);
     config_item_uint[item] = value;
 #ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_UINT);
@@ -71,7 +71,7 @@ void Config_SetUint(config_item_uint_t item, uint32_t value)
 void Config_ResetUint(void)
 {
     int i;
-    Log_Debug(LOG_SOURCE_CONFIG, "Reseting unsigned items");
+    Log_Debug(LOG_SOURCE_MODULE, "Reseting unsigned items");
 
     for (i = 0; i < CONFIG_UINT_COUNT; i++) {
         config_item_uint[i] = config_default_uint[i];
@@ -91,7 +91,7 @@ void Config_SetFloat(config_item_float_t item, float value)
 {
     ASSERT_NOT(item >= CONFIG_FLOAT_COUNT || CONFIG_FLOAT_COUNT == 0);
 
-    Log_Debug(LOG_SOURCE_CONFIG, "Float item %d set to %f", item, value);
+    Log_Debug(LOG_SOURCE_MODULE, "Float item %d set to %f", item, value);
     config_item_float[item] = value;
 #ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_FLOAT);
@@ -101,7 +101,7 @@ void Config_SetFloat(config_item_float_t item, float value)
 void Config_ResetFloat(void)
 {
     int i;
-    Log_Debug(LOG_SOURCE_CONFIG, "Reseting float items");
+    Log_Debug(LOG_SOURCE_MODULE, "Reseting float items");
 
     for (i = 0; i < CONFIG_FLOAT_COUNT; i++) {
         config_item_float[i] = config_default_float[i];
@@ -125,7 +125,7 @@ void Config_SetBool(config_item_bool_t item, bool value)
     uint8_t mask;
     ASSERT_NOT(item >= CONFIG_BOOL_COUNT || CONFIG_BOOL_COUNT == 0);
 
-    Log_Debug(LOG_SOURCE_CONFIG, "Bool item %d set to %d", item, value);
+    Log_Debug(LOG_SOURCE_MODULE, "Bool item %d set to %d", item, value);
     mask = 1 << (item % 8);
     if (value) {
         config_item_bool[item / 8] |= mask;
@@ -140,7 +140,7 @@ void Config_SetBool(config_item_bool_t item, bool value)
 void Config_ResetBool(void)
 {
     int i;
-    Log_Debug(LOG_SOURCE_CONFIG, "Reseting bool items");
+    Log_Debug(LOG_SOURCE_MODULE, "Reseting bool items");
 
     for (i = 0; i < CONFIG_BOOL_COUNT/8 + 1; i++) {
         config_item_bool[i] = config_default_bool[i];
