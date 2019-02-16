@@ -41,6 +41,14 @@ extern void Gui_StatusInit(GHandle ghTab);
  */
 extern void Gui_StatusUpdate(void);
 
+/**
+ * Process events for this and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_StatusProcessEvent(GEvent *ev);
+
 #endif
 
 /** @} */

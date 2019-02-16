@@ -29,11 +29,36 @@
 #define __INCLUDE_HMI_GUI_TABS_H
 
 #include <types.h>
+#include <gfx.h>
+
+typedef enum {
+    TAB_RACE,
+    TAB_STATUS,
+    TAB_SETUP,
+    TAB_DEBUG,
+    TAB_CONSOLE,
+    TAB_UNKNOWN,
+} gui_tab_t;
 
 /**
- * @brief Draw the tabs screen
+ * Draw the tabs screen
  */
 extern void Gui_TabsInit(void);
+
+/**
+ * Get currently active tab
+ *
+ * @return Current tab
+ */
+extern gui_tab_t Gui_TabsGetActive(void);
+
+/**
+ * Process events for tabs and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_TabsProcessEvent(GEvent *ev);
 
 #endif
 

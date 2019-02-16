@@ -99,4 +99,9 @@ void Gui_SetupInit(GHandle ghTab)
 
 }
 
+bool Gui_SetupProcessEvent(GEvent *ev)
+{
+    return false;
+}
+
 /** @} */

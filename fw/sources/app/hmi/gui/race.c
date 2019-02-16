@@ -36,12 +36,13 @@
 #include "gui/race.h"
 
 #define BUFSIZE 32
+#define RADIO_GROUP_MODE 0
 
 static GHandle ghLabelSpeedUnit;
 
 static GHandle ghLabelSpeed, ghLabelDistance, ghLabelRaceTime, ghLabelSpeedAvg, ghLabelDatetime, ghLabelGear;
 static GHandle ghLabelPress1, ghLabelPress2, ghLabelPress3;
-static GHandle ghBtRaceReset, ghBtSetArcade, ghBtSetAcceleration, ghBtSetLongDist, ghBtHorn;
+static GHandle ghBtRaceReset, ghRadioSetArcade, ghRadioSetAcceleration, ghRadioSetLongDist, ghBtHorn;
 
 void Gui_RaceInit(GHandle ghTab)
 {
@@ -134,24 +135,25 @@ void Gui_RaceInit(GHandle ghTab)
     ghLabelPress3 = gwinLabelCreate(0, &wi);
 
     /* buttons */
-    wi.customDraw = NULL;
     Gui_SetFont(GUI_FONT_NORM);
     wi.g.width = 120;
     wi.g.height = GUI_BUTTON_HEIGHT;
     wi.g.y = tabHeight - wi.g.height - GUI_MARGIN;
+    wi.customDraw = gwinRadioDraw_Button;
 
     wi.g.x = GUI_MARGIN;
     wi.text = "Arcade";
-    ghBtSetArcade = gwinButtonCreate(0, &wi);
+    ghRadioSetArcade = gwinRadioCreate(0, &wi, RADIO_GROUP_MODE);
 
     wi.g.x += wi.g.width + 10;
     wi.text = "Acceler.";
-    ghBtSetAcceleration = gwinButtonCreate(0, &wi);
+    ghRadioSetAcceleration = gwinRadioCreate(0, &wi, RADIO_GROUP_MODE);
 
     wi.g.x += wi.g.width + 10;
     wi.text = "Long Dist";
-    ghBtSetLongDist = gwinButtonCreate(0, &wi);
+    ghRadioSetLongDist = gwinRadioCreate(0, &wi, RADIO_GROUP_MODE);
 
+    wi.customDraw = NULL;
     wi.g.x = tabWidth/2 + 10;
     wi.text = "(Re)Start";
     ghBtRaceReset = gwinButtonCreate(0, &wi);
@@ -193,317 +195,53 @@ void Gui_RaceUpdate(void)
     chsnprintf(buf, BUFSIZE, "%02d:%02d  %02d.%02d. %d", timp.tm_hour, timp.tm_min,
             timp.tm_mday, timp.tm_mon + 1, timp.tm_year+1900);
     Gui_LabelUpdate(ghLabelDatetime, buf);
+
+    if (state->car.mode == RACE_MODE_ARCADE) {
+        gwinRadioPress(ghRadioSetArcade);
+    } else if (state->car.mode == RACE_MODE_ACCELERATION) {
+        gwinRadioPress(ghRadioSetAcceleration);
+    } else if (state->car.mode == RACE_MODE_LONG_DISTANCE) {
+        gwinRadioPress(ghRadioSetLongDist);
+    }
 }
 
-#if 0
-
-/**
- * Periodic screen values updating
- */
-void Gui_RaceUpdate(void)
+bool Gui_RaceProcessEvent(GEvent *ev)
 {
-    //average speed color change
+    GHandle handle;
+    handle = ((GEventGWin *)ev)->gwin;
+
+    switch (ev->type) {
+        case GEVENT_GWIN_RADIO:
+            if (((GEventGWinRadio *)ev)->group != RADIO_GROUP_MODE) {
+                return false;
+            }
+
+            if (handle == ghRadioSetArcade) {
+                State_SetRaceMode(RACE_MODE_ARCADE);
+            } else if (handle == ghRadioSetAcceleration) {
+                State_SetRaceMode(RACE_MODE_ACCELERATION);
+            } else if (handle == ghRadioSetLongDist) {
+                State_SetRaceMode(RACE_MODE_LONG_DISTANCE);
+            } else {
+                return false;
+            }
+            break;
+
+        case GEVENT_GWIN_BUTTON:
+            if (handle == ghBtHorn) {
+                //TODO
+            } else if (handle == ghBtRaceReset) {
+                State_SetRaceMode(State_GetRaceMode());
+            } else {
+                return false;
+            }
+            break;
+
+        default:
+            return false;
+            break;
+    }
+    return true;
 }
-
-#include <gfx.h>
-
-/* Generic stuff */
-static GListener gl;
-static font_t font_big, font_norm;
-
-/* Race tab */
-
-/* Diagnostic tab */
-static GHandle ghPistonPos;
-static GHandle ghBtVLeft1In, ghBtVLeft1Out, ghBtVLeft1Close;
-static GHandle ghBtVLeft2In, ghBtVLeft2Out, ghBtVLeft2Close;
-static GHandle ghBtVRight1In, ghBtVRight1Out, ghBtVRight1Close;
-static GHandle ghBtVRight2In, ghBtVRight2Out, ghBtVRight2Close;
-static GHandle ghLabelBrake, ghLabelThrottle, ghLabelShifting;
-static GHandle ghLabelGear1, ghLabelGear2;
-static GHandle ghLabelVoltage, ghLabelCurrent;
-static GHandle ghLabelGpsFix, ghLabelGpsLat, ghLabelGpsLon, ghLabelGpsSatellites;
-static GHandle ghLabelPres1, ghLabelPres2, ghLabelPres3;
-static GHandle ghRegulatorSet;
-
-/* Setup tab */
-static GHandle ghBtTurnaroundInc, ghBtTurnaroundDec;
-static GHandle ghBtSave, ghBtReload;
-static GHandle ghLabelTurnaround, ghFillingSlider;
-static GHandle ghContrastSlider, ghBacklightSlider, ghChScreenFlip;
-
-/* Debug tab */
-static GHandle ghConsole;
-
-/* default screen with runtime information - speed, distance, time,.. */
-static void gui_create_views(void)
-{
-
-        /* ======================== Race ============================ */
-
-        /* ======================== Diagnostic ============================ */
-        wi.g.parent = ghTabDiag;
-
-
-        /* ======================== Config ============================ */
-
-        /* ======================== Console ============================ */
-        wi.g.parent = ghTabConsole;
-        wi.g.x = 0;
-        wi.g.y = 0;
-        wi.g.width = tabWidth;
-        wi.g.height = tabHeight;
-        ghConsole = gwinConsoleCreate(0, &wi.g);
-
-        gwinSetColor(ghConsole, Red);
-        gwinSetBgColor(ghConsole, Blue);
-        gwinShow(ghConsole);
-        gwinClear(ghConsole);
-}
-
-/* Save configured values */
-static void gui_config_save(void)
-{
-        conf.gui.backlight = gwinSliderGetPosition(ghBacklightSlider);
-        conf.gui.contrast = gwinSliderGetPosition(ghContrastSlider);
-        conf.gui.rotate = gdispGetOrientation() == GDISP_ROTATE_180;
-        //conf.pneu.turnaround is already set
-        conf.pneu.filling = gwinSliderGetPosition(ghFillingSlider);
-
-        //TODO show result
-        if (config_write() != 0)
-                ;
-        //TODO send data to device
-}
-
-/* Replace current config by saved values */
-static void gui_config_reload(void)
-{
-        //TODO show result
-        if (config_read() != 0)
-                ;
-
-        gdispSetBacklight(conf.gui.backlight);
-        gdispSetContrast(conf.gui.contrast);
-        if (conf.gui.rotate)
-                gdispSetOrientation(GDISP_ROTATE_180);
-        else
-                gdispSetOrientation(GDISP_ROTATE_0);
-
-        gwinSliderSetPosition(ghBacklightSlider, conf.gui.backlight);
-        gwinSliderSetPosition(ghContrastSlider, conf.gui.contrast);
-        gwinSliderSetPosition(ghFillingSlider, conf.pneu.filling);
-        gwinSetText(ghLabelTurnaround, conf.pneu.turnaround_ms, TRUE);
-}
-
-static void gui_valves_set(enum e_valve valve, enum e_valve_state state)
-{
-        GHandle bt_in, bt_close, bt_out;
-
-        switch (valve) {
-                case VALVE_LEFT_1:
-                        bt_in = ghBtVLeft1In;
-                        bt_out = ghBtVLeft1Out;
-                        bt_close = ghBtVLeft1Close;
-                        break;
-                case VALVE_RIGHT_1:
-                        bt_in = ghBtVRight1In;
-                        bt_out = ghBtVRight1Out;
-                        bt_close = ghBtVRight1Close;
-                        break;
-                case VALVE_LEFT_2:
-                        bt_in = ghBtVLeft2In;
-                        bt_out = ghBtVLeft2Out;
-                        bt_close = ghBtVLeft2Close;
-                        break;
-                case VALVE_RIGHT_2:
-                        bt_in = ghBtVRight2In;
-                        bt_out = ghBtVRight2Out;
-                        bt_close = ghBtVRight2Close;
-                        break;
-        }
-
-        switch (state) {
-                case VALVE_IN:
-                        gwinSetEnabled(bt_in, 0);
-                        gwinSetEnabled(bt_out, 1);
-                        gwinSetEnabled(bt_close, 1);
-                        break;
-                case VALVE_OUT:
-                        gwinSetEnabled(bt_out, 0);
-                        gwinSetEnabled(bt_in, 1);
-                        gwinSetEnabled(bt_close, 1);
-                        break;
-                case VALVE_CLOSE:
-                        gwinSetEnabled(bt_close, 0);
-                        gwinSetEnabled(bt_out, 1);
-                        gwinSetEnabled(bt_in, 1);
-                        break;
-        }
-
-        //TODO send command to data
-}
-
-/* if inc is true, increase turnaround time, decrease otherwise */
-static void gui_set_turnaround(uint8_t inc)
-{
-        if (inc)
-                conf.pneu.turnaround_ms++;
-        else
-                conf.pneu.turnaround_ms--;
-
-        gwinSetText(ghLabelTurnaround, conf.pneu.turnaround_ms, TRUE);
-}
-
-static void gui_race_start_stop(void)
-{
-        //prepnout text na stop pokud je stop,
-        //ghBtRaceStart = gwinButtonCreate(0, &wi);
-
-}
-
-static void gui_race_reset(void)
-{
-
-}
-
-/* Enter diagnostic mode, switch pneu controller to diag */
-static void gui_diag_start(void)
-{
-
-}
-
-/* Exit diagnostic mode */
-static void gui_diag_stop(void)
-{
-
-}
-
-/* redraw speed, distance, time, valves,... */
-void gui_update(uint8_t speed, uint16_t distance, time_t time)
-{
-
-}
-
-/* print data to console */
-void gui_puts_console(char *string)
-{
-        gwinPutString(ghConsole, string);
-        //show unreaded message present
-        gwinTabsetSetTitle(ghTabConsole, "Console (!)", FALSE);
-        //TODO font a zmenit barvu labelu tabu ze obsahuje nova data
-
-}
-
-void gui_check_events(void)
-{
-        GEvent* pe;
-        static GHandle handle;
-
-        while(1) {
-                // Get an Event
-                pe = geventEventWait(&gl, 1);
-                if (pe == NULL)
-                        return;
-                handle = ((GEventGWinSlider *)pe)->gwin;
-
-                switch(pe->type) {
-                case GEVENT_GWIN_SLIDER:
-                        if (handle == ghBacklightSlider) {
-                                gdispSetBacklight(((GEventGWinSlider *)pe)->position);
-                        }
-                        else if (handle == ghContrastSlider) {
-                                gdispSetContrast(((GEventGWinSlider *)pe)->position);
-                        }
-                        break;
-
-                case GEVENT_GWIN_CHECKBOX:
-                        if (handle == ghChScreenFlip) {
-                                if(((GEventGWinCheckbox*)pe)->isChecked)
-                                        gdispSetOrientation(GDISP_ROTATE_0);
-                                else
-                                        gdispSetOrientation(GDISP_ROTATE_180);
-                        }
-                        break;
-
-                case GEVENT_GWIN_BUTTON:
-                        /* Race tab */
-                        if (handle == ghBtRaceStart)
-                                gui_race_start_stop();
-                        else if (handle == ghBtRaceReset)
-                                gui_race_reset();
-
-                        /* Diagnostic tab */
-                        else if (handle == ghBtVLeft1In)
-                                gui_valves_set(VALVE_LEFT_1, VALVE_IN);
-                        else if (handle == ghBtVLeft1Out)
-                                gui_valves_set(VALVE_LEFT_1, VALVE_OUT);
-                        else if (handle == ghBtVLeft1Close)
-                                gui_valves_set(VALVE_LEFT_1, VALVE_CLOSE);
-                        else if (handle == ghBtVLeft2In)
-                                gui_valves_set(VALVE_LEFT_2, VALVE_IN);
-                        else if (handle == ghBtVLeft2Out)
-                                gui_valves_set(VALVE_LEFT_2, VALVE_OUT);
-                        else if (handle == ghBtVLeft2Close)
-                                gui_valves_set(VALVE_LEFT_2, VALVE_CLOSE);
-                        //
-                        else if (handle == ghBtVRight1In)
-                                gui_valves_set(VALVE_RIGHT_1, VALVE_IN);
-                        else if (handle == ghBtVRight1Out)
-                                gui_valves_set(VALVE_RIGHT_1, VALVE_OUT);
-                        else if (handle == ghBtVRight1Close)
-                                gui_valves_set(VALVE_RIGHT_1, VALVE_CLOSE);
-                        else if (handle == ghBtVRight2In)
-                                gui_valves_set(VALVE_RIGHT_2, VALVE_IN);
-                        else if (handle == ghBtVRight2Out)
-                                gui_valves_set(VALVE_RIGHT_2, VALVE_OUT);
-                        else if (handle == ghBtVRight2Close)
-                                gui_valves_set(VALVE_RIGHT_2, VALVE_CLOSE);
-
-                        /* Config tab */
-                        else if (handle == ghBtTurnaroundDec)
-                                gui_set_turnaround(0);
-                        else if (handle == ghBtTurnaroundInc)
-                                gui_set_turnaround(1);
-                        else if (handle == ghBtSave)
-                                gui_config_save();
-                        else if (handle == ghBtReload)
-                                gui_config_reload();
-                        break;
-
-                case GEVENT_GWIN_TABSET:
-                        if (handle == ghTabDiag)
-                                gui_diag_start();
-                        gui_diag_stop();
-                        break;
-                }
-        }
-}
-
-void gui_setup(void)
-{
-        gfxInit();
-
-        if (conf.gui.rotate)
-                gdispSetOrientation(GDISP_ROTATE_180);
-
-        gdispSetBacklight(conf.gui.backlight);
-        gdispSetContrast(conf.gui.contrast);
-
-        font_norm = gdispOpenFont("DejaVuSans24");
-        gwinSetDefaultFont(font_norm);
-        gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
-        gdispClear(White);
-
-        //font for large numbers
-        font_big = gdispOpenFont("DejaVuSans32");
-
-        // listen for events
-        geventListenerInit(&gl);
-        gwinAttachListener(&gl);
-
-        gui_create_views();
-}
-#endif
 
 /** @} */

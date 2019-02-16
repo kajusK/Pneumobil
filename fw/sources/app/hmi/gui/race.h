@@ -32,7 +32,7 @@
 #include <gfx.h>
 
 /**
- * @brief Draw the race screen
+ * Draw the race screen
  */
 extern void Gui_RaceInit(GHandle ghTab);
 
@@ -40,6 +40,14 @@ extern void Gui_RaceInit(GHandle ghTab);
  * Update values on Race screen
  */
 extern void Gui_RaceUpdate(void);
+
+/**
+ * Process events for this and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_RaceProcessEvent(GEvent *ev);
 
 #endif
 

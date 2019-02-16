@@ -31,8 +31,9 @@
 #include <drivers/rtc.h>
 #include <modules/log.h>
 
-#include "gui/console.h"
 #include "gui/gui.h"
+#include "gui/tabs.h"
+#include "gui/console.h"
 
 #define CONSOLE_BLACK '0'
 #define CONSOLE_RED '1'
@@ -44,6 +45,7 @@
 #define CONSOLE_WHITE '7'
 
 static GHandle ghConsole;
+static GHandle ghTabConsole;
 
 void Gui_ConsoleInit(GHandle ghTab)
 {
@@ -62,6 +64,8 @@ void Gui_ConsoleInit(GHandle ghTab)
     gwinClear(ghConsole);
     gwinConsoleSetBuffer(ghConsole, gTrue);
     Gui_SetFont(GUI_FONT_NORM);
+
+    ghTabConsole = ghTab;
 }
 
 void Gui_ConsoleLogCb(const log_msg_t *log)
@@ -93,6 +97,25 @@ void Gui_ConsoleLogCb(const log_msg_t *log)
     gwinPrintf(ghConsole, "%s \033b[%s] %s\033B \033%c<%s>\033C: %s\n\r",
             buf, Log_GetModuleStr(log->module), Log_GetSourceStr(log->src),
             color, Log_GetSeverityStr(log->severity), log->msg);
+
+    if (log->severity > LOG_SEVERITY_INFO && Gui_TabsGetActive() != TAB_CONSOLE) {
+        Gui_ConsoleSetUrgent(true);
+    }
+}
+
+void Gui_ConsoleSetUrgent(bool urgent)
+{
+    if (urgent) {
+        gwinTabsetSetTitle(ghTabConsole, "Console (!)", FALSE);
+    } else {
+        gwinTabsetSetTitle(ghTabConsole, "Console", FALSE);
+    }
+}
+
+bool Gui_ConsoleProcessEvent(GEvent *ev)
+{
+    (void) ev;
+    return false;
 }
 
 /** @} */

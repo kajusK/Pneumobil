@@ -142,6 +142,13 @@ extern state_t *State_Get(void);
 extern state_race_mode_t State_GetRaceMode(void);
 
 /**
+ * Send command to change race mode to ecu
+ *
+ * @param [in] mode     Mode to be used
+ */
+extern bool State_SetRaceMode(state_race_mode_t mode);
+
+/**
  * Initialize State module
  */
 extern void State_Init(void);

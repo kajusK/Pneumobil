@@ -32,9 +32,17 @@
 #include <gfx.h>
 
 /**
- * @brief Draw the setup screen
+ * Draw the setup screen
  */
 extern void Gui_SetupInit(GHandle ghTab);
+
+/**
+ * Process events for this and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_SetupProcessEvent(GEvent *ev);
 
 #endif
 

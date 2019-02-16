@@ -33,7 +33,7 @@
 #include <modules/log.h>
 
 /**
- * @brief Draw the console screen
+ * Draw the console screen
  */
 extern void Gui_ConsoleInit(GHandle ghTab);
 
@@ -43,6 +43,21 @@ extern void Gui_ConsoleInit(GHandle ghTab);
  * @param [in] log      Pointer to generated log message
  */
 extern void Gui_ConsoleLogCb(const log_msg_t *log);
+
+/**
+ * Set console label to urgent
+ *
+ * @param [in] urgent   If true, set to urgent, else to normal
+ */
+extern void Gui_ConsoleSetUrgent(bool urgent);
+
+/**
+ * Process events for this and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_ConsoleProcessEvent(GEvent *ev);
 
 #endif
 

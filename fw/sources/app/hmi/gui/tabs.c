@@ -36,7 +36,7 @@
 #include "gui/tabs.h"
 
 static GHandle ghTabset;
-static GHandle ghTabRace, ghTabStatus, ghTabConfig, ghTabDebug, ghTabConsole;
+static GHandle ghTabRace, ghTabStatus, ghTabSetup, ghTabDebug, ghTabConsole;
 static GHandle ghLabelMode, ghLabelBattery;
 
 void Gui_TabsInit(void)
@@ -54,12 +54,12 @@ void Gui_TabsInit(void)
     ghTabConsole = gwinTabsetAddTab(ghTabset, "Console", FALSE);
     ghTabRace = gwinTabsetAddTab(ghTabset, "Race", FALSE);
     ghTabStatus = gwinTabsetAddTab(ghTabset, "Status", FALSE);
-    ghTabConfig = gwinTabsetAddTab(ghTabset, "Config", FALSE);
+    ghTabSetup = gwinTabsetAddTab(ghTabset, "Setup", FALSE);
     ghTabDebug = gwinTabsetAddTab(ghTabset, "Debug", FALSE);
 
     Gui_RaceInit(ghTabRace);
     Gui_StatusInit(ghTabStatus);
-    Gui_SetupInit(ghTabConfig);
+    Gui_SetupInit(ghTabSetup);
     Gui_DebugInit(ghTabDebug);
     Gui_ConsoleInit(ghTabConsole);
 
@@ -76,6 +76,52 @@ void Gui_TabsInit(void)
     wi.text = "0 mA, 0%";
     ghLabelBattery = gwinLabelCreate(0, &wi);
     */
+}
+
+gui_tab_t Gui_TabsGetActive(void)
+{
+    if (gwinGetVisible(ghTabRace)) {
+        return TAB_RACE;
+    }
+    if (gwinGetVisible(ghTabStatus)) {
+        return TAB_STATUS;
+    }
+    if (gwinGetVisible(ghTabSetup)) {
+        return TAB_SETUP;
+    }
+    if (gwinGetVisible(ghTabDebug)) {
+        return TAB_DEBUG;
+    }
+    if (gwinGetVisible(ghTabConsole)) {
+        return TAB_CONSOLE;
+    }
+
+    return TAB_UNKNOWN;
+}
+
+bool Gui_TabsProcessEvent(GEvent *ev)
+{
+    if (ev->type == GEVENT_GWIN_TABSET) {
+        if (((GEventGWinTabset *)ev)->ghPage == ghTabConsole) {
+            Gui_ConsoleSetUrgent(false);
+        }
+        return true;
+    }
+
+    switch (Gui_TabsGetActive()) {
+        case TAB_RACE:
+            return Gui_RaceProcessEvent(ev);
+        case TAB_STATUS:
+            return Gui_StatusProcessEvent(ev);
+        case TAB_SETUP:
+            return Gui_SetupProcessEvent(ev);
+        case TAB_DEBUG:
+            return Gui_DebugProcessEvent(ev);
+        case TAB_CONSOLE:
+            return Gui_ConsoleProcessEvent(ev);
+        default:
+            return false;
+    }
 }
 
 /** @} */

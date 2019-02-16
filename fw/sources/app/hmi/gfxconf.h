@@ -220,7 +220,7 @@
     #define GWIN_NEED_CHECKBOX                       GFXON
 //    #define GWIN_NEED_IMAGE                          GFXOFF
 //        #define GWIN_NEED_IMAGE_ANIMATION            GFXOFF
-//    #define GWIN_NEED_RADIO                          GFXOFF
+    #define GWIN_NEED_RADIO                          GFXON
     #define GWIN_NEED_LIST                           GFXON
 //        #define GWIN_NEED_LIST_IMAGES                GFXOFF
    #define GWIN_NEED_PROGRESSBAR                    GFXON

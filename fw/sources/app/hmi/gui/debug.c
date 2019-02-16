@@ -157,4 +157,9 @@ void Gui_DebugInit(GHandle ghTab)
 #endif
 }
 
+bool Gui_DebugProcessEvent(GEvent *ev)
+{
+    return false;
+}
+
 /** @} */

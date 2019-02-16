@@ -32,9 +32,17 @@
 #include <gfx.h>
 
 /**
- * @brief Draw the debug screen
+ * Draw the debug screen
  */
 extern void Gui_DebugInit(GHandle ghTab);
+
+/**
+ * Process events for this and nested windows
+ *
+ * @param [in] ev       Event to be processed
+ * @return True if event processed (found related object)
+ */
+extern bool Gui_DebugProcessEvent(GEvent *ev);
 
 #endif
 

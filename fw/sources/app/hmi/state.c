@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <modules/log.h>
+#include <modules/comm/comm.h>
 #include <utils/time.h>
 #include <utils/assert.h>
 
@@ -167,6 +168,12 @@ state_t *State_Get(void)
 state_race_mode_t State_GetRaceMode(void)
 {
     return statei_state.car.mode;
+}
+
+bool State_SetRaceMode(state_race_mode_t mode)
+{
+    statei_state.car.mode = mode;
+    return Comm_SendEcuStartRace(mode);
 }
 
 void State_Init(void)

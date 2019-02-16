@@ -39,6 +39,27 @@ static font_t guii_big_font;
 static font_t guii_middle_font;
 static font_t guii_norm_font;
 static font_t guii_tiny_font;
+static GListener guii_event_listener;
+
+#define GUI_THREAD_PRIO (NORMALPRIO - 1)
+THD_WORKING_AREA(guii_thread_area, 512);
+
+/**
+ * Processing gui events
+ */
+static THD_FUNCTION(Gui_Thread, arg)
+{
+    (void) arg;
+    GEvent *ev;
+
+    while (true) {
+        ev = geventEventWait(&guii_event_listener, gDelayForever);
+        if (Gui_TabsProcessEvent(ev) == false) {
+            Log_Warn(LOG_SOURCE_HMI, "Unknown gui event occured (%d)", ev->type);
+        }
+    }
+}
+
 
 /**
  * @brief Loading touchscreen calibration data for uGFX lib
@@ -52,7 +73,6 @@ static font_t guii_tiny_font;
 gBool LoadMouseCalibration(unsigned instance, void* data, gMemSize sz)
 {
     (void) instance;
-    //Note: If you want to use the container as a pop-up or top-level window element, you might want to take a look at the frame widget instead.
 
     float calib[6];
     ASSERT(sz == sizeof(calib));
@@ -149,16 +169,18 @@ void Gui_Init(void)
     guii_big_font = gdispScaleFont(gdispOpenFont("LargeNumbers"), 6, 9);
     Gui_SetFont(GUI_FONT_NORM);
 
-    // listen for events
-//    geventListenerInit(&gl);
-//    gwinAttachListener(&gl);
-
     Gui_TabsInit();
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severity[i] = LOG_SEVERITY_INFO;
     }
     Log_Subscribe(Gui_ConsoleLogCb, severity, true);
+
+    geventListenerInit(&guii_event_listener);
+    gwinAttachListener(&guii_event_listener);
+
+    (void) chThdCreateStatic(guii_thread_area, sizeof(guii_thread_area),
+                GUI_THREAD_PRIO, Gui_Thread, NULL);
 }
 
 /** @} */

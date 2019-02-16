@@ -346,4 +346,10 @@ void Gui_StatusUpdate(void)
     gwinProgressbarSetPosition(ghPistonProgress, state->pneu.piston_pct);
 }
 
+bool Gui_StatusProcessEvent(GEvent *ev)
+{
+    (void) ev;
+    return false;
+}
+
 /** @} */
