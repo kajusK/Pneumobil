@@ -1,7 +1,7 @@
 /*
     BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
 
-    This file is part of BUT pneumobil ECU.
+    This file is part of BUT pneumobil SDU.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@
 */
 
 /**
- * @file    ecu/version.h
+ * @file    sdu/version.h
  * @brief   System version information
  *
- * @addtogroup app-ecu
+ * @addtogroup app-sdu
  * @{
  */
 
