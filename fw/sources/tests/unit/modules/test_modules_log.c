@@ -197,6 +197,29 @@ TEST(Log, SendLog)
     TEST_ASSERT_EQUAL(LOG_SOURCE_CONFIG, msg2.src);
 }
 
+TEST(Log, SendLogExternal)
+{
+    log_msg_t msg;
+    log_severity_t severities[LOG_SOURCE_COUNT];
+
+    msg.time = 123;
+    msg.severity = LOG_SEVERITY_WARNING;
+    msg.src = LOG_SOURCE_SYSTEM;
+    msg.module = LOG_MODULE_PSU;
+    sprintf(msg.msg, "Hello World!");
+
+    for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
+        severities[i] = LOG_SEVERITY_DEBUG;
+    }
+
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr1, severities, false));
+    TEST_ASSERT_TRUE(Log_Subscribe(subscr2, severities, true));
+
+    Logi_SendLog(&msg);
+    TEST_ASSERT_FALSE(called1);
+    TEST_ASSERT_TRUE(called2);
+}
+
 TEST(Log, AddEntry)
 {
     log_severity_t severities[LOG_SOURCE_COUNT];
@@ -225,6 +248,7 @@ TEST(Log, AddEntry)
     TEST_ASSERT_EQUAL(LOG_SOURCE_SYSTEM, msg_send.src);
     TEST_ASSERT_GREATER_THAN(0, msg_send.time);
     TEST_ASSERT_EQUAL_STRING("Hello World 123", msg_send.msg);
+
 }
 
 TEST(Log, GetSubscription)
@@ -252,6 +276,7 @@ TEST_GROUP_RUNNER(Log)
 {
     RUN_TEST_CASE(Log, Subscriptions);
     RUN_TEST_CASE(Log, SendLog);
+    RUN_TEST_CASE(Log, SendLogExternal);
     RUN_TEST_CASE(Log, AddEntry);
     RUN_TEST_CASE(Log, GetSubscription);
 }
