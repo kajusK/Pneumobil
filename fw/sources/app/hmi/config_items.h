@@ -36,6 +36,7 @@
 typedef enum {
     CONFIG_UINT_BACKLIGHT, /* Default lcd backlight percentage */
     CONFIG_UINT_CONTRAST, /* Default LCD contrast */
+    CONFIG_UINT_LOG_PERIOD_MS, /* Logging period on sd card in ms */
     CONFIG_UINT_COUNT,
 } config_item_uint_t;
 

@@ -31,6 +31,7 @@
 #include <ff.h>
 
 #include <modules/log.h>
+#include <modules/config.h>
 #include <utils/assert.h>
 #include <utils/time.h>
 #include <drivers/fatfs/sdc.h>
@@ -40,6 +41,10 @@
 #include "logger.h"
 
 #define RACE_LOG_DIR "/race_log"
+#define LOGGER_THREAD_PRIO NORMALPRIO
+
+/** Stack and stuff for thread */
+THD_WORKING_AREA(loggeri_thread_area, 512);
 
 static FIL loggeri_syslog_file;
 static FIL loggeri_race_file;
@@ -79,6 +84,31 @@ static void Loggeri_LogCb(const log_msg_t *log)
 }
 
 /**
+ * Add new entry to race log, data are fetched from various modules
+ */
+static void Loggeri_AddRaceLogEntry(void)
+{
+    char speed[6];
+    uint32_t time;
+    state_t *state = State_Get();
+
+    if (!SDCd_IsReady()) {
+        return;
+    }
+
+    time = millis() - loggeri_log_created_timestamp;
+
+    snprintf(speed, sizeof(speed), "%.1f", state->car.speed_kmh);
+
+    f_printf(&loggeri_race_file, "%d;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",
+            time, speed, state->car.distance_m, state->pneu.press1_kpa,
+            state->pneu.press2_kpa, state->pneu.press3_kpa,
+            state->pneu.piston_pct, state->car.throttle, state->car.brake,
+            state->car.gear);
+    f_sync(&loggeri_race_file);
+}
+
+/**
  * Will be called on card insertion
  *
  * Create directory structure, log files, etc...
@@ -98,6 +128,19 @@ static void Loggeri_CardInsertedCb(void)
     }
 
     Logger_NewRaceLogFile();
+}
+
+static THD_FUNCTION(Logger_Thread, arg)
+{
+    systime_t time;
+    (void) arg;
+
+    while (true) {
+        time = chTimeAddX(chVTGetSystemTime(),
+                TIME_MS2I(Config_GetUint(CONFIG_UINT_LOG_PERIOD_MS)));
+        Loggeri_AddRaceLogEntry();
+        chThdSleepUntil(time);
+    }
 }
 
 bool Logger_NewRaceLogFile(void)
@@ -138,32 +181,6 @@ bool Logger_NewRaceLogFile(void)
     return true;
 }
 
-/**
- * Add new entry to race log, data are fetched from various modules
- */
-void Logger_AddRaceLogEntry(void)
-{
-    char speed[6];
-    uint32_t time;
-    state_t *state = State_Get();
-
-    if (!SDCd_IsReady()) {
-        return;
-    }
-
-    time = millis() - loggeri_log_created_timestamp;
-
-    snprintf(speed, sizeof(speed), "%.1f", state->car.speed_kmh);
-
-    f_printf(&loggeri_race_file, "%d;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",
-            time, speed, state->car.distance_m, state->pneu.press1_kpa,
-            state->pneu.press2_kpa, state->pneu.press3_kpa,
-            state->pneu.piston_pct, state->car.throttle, state->car.brake,
-            state->car.gear);
-    f_sync(&loggeri_race_file);
-}
-
-/** Should be called on card insertion */
 void Logger_Init(void)
 {
     log_severity_t severity[LOG_SOURCE_COUNT];
@@ -179,7 +196,8 @@ void Logger_Init(void)
     }
     SDCd_AddInsertCallback(Loggeri_CardInsertedCb);
 
-    //TODO add task that will periodically log the state
+    (void) chThdCreateStatic(loggeri_thread_area, sizeof(loggeri_thread_area),
+                LOGGER_THREAD_PRIO, Logger_Thread, NULL);
 }
 
 /** @} */
