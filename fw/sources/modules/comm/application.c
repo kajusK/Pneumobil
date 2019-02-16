@@ -502,9 +502,9 @@ void Comm_SendBatteryState(uint16_t b1_mv, uint16_t b2_mv, uint16_t cur_ma,
 {
     comm_battery_state_t state;
 
-    state.bat1_mv = bat1_mv;
-    state.bat2_mv = bat2_mv;
-    state.current_ma = current_ma;
+    state.bat1_mv = b1_mv;
+    state.bat2_mv = b2_mv;
+    state.current_ma = cur_ma;
     state.charge_pct = charge_pct;
 
     Comm_SendPacket(COMM_CMD_BATTERY_STATE, (uint8_t *)&state, sizeof(state));
@@ -529,7 +529,7 @@ void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv, uint16_t v24_mv)
     volt.voltage12v_mv = v12_mv;
     volt.voltage24v_mv = v24_mv;
 
-    Comm_SendPacket(COMM_CMD_PSU_voltage, (uint8_t *)&volt, sizeof(cur));
+    Comm_SendPacket(COMM_CMD_PSU_VOLTAGE, (uint8_t *)&volt, sizeof(volt));
 }
 #endif
 
