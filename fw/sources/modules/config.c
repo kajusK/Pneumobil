@@ -28,6 +28,7 @@
  */
 
 #include "version.h"
+#include "setup.h"
 #include "utils/assert.h"
 #include "modules/log.h"
 #include "modules/storage.h"
@@ -62,7 +63,9 @@ void Config_SetUint(config_item_uint_t item, uint32_t value)
 
     Log_Debug(LOG_SOURCE_CONFIG, "Unsigned item %d set to %u", item, value);
     config_item_uint[item] = value;
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_UINT);
+#endif
 }
 
 void Config_ResetUint(void)
@@ -73,7 +76,9 @@ void Config_ResetUint(void)
     for (i = 0; i < CONFIG_UINT_COUNT; i++) {
         config_item_uint[i] = config_default_uint[i];
     }
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_UINT);
+#endif
 }
 
 float Config_GetFloat(config_item_float_t item)
@@ -88,7 +93,9 @@ void Config_SetFloat(config_item_float_t item, float value)
 
     Log_Debug(LOG_SOURCE_CONFIG, "Float item %d set to %f", item, value);
     config_item_float[item] = value;
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_FLOAT);
+#endif
 }
 
 void Config_ResetFloat(void)
@@ -99,7 +106,9 @@ void Config_ResetFloat(void)
     for (i = 0; i < CONFIG_FLOAT_COUNT; i++) {
         config_item_float[i] = config_default_float[i];
     }
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_FLOAT);
+#endif
 }
 
 bool Config_GetBool(config_item_bool_t item)
@@ -123,7 +132,9 @@ void Config_SetBool(config_item_bool_t item, bool value)
     } else {
         config_item_bool[item / 8] &= ~mask;
     }
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_BOOL);
+#endif
 }
 
 void Config_ResetBool(void)
@@ -134,7 +145,9 @@ void Config_ResetBool(void)
     for (i = 0; i < CONFIG_BOOL_COUNT/8 + 1; i++) {
         config_item_bool[i] = config_default_bool[i];
     }
+#ifdef HAS_STORAGE
     Storage_Update(STORAGE_UPDATE_BOOL);
+#endif
 }
 
 void Config_Reset(void)

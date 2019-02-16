@@ -83,7 +83,7 @@ typedef enum {
     #define LOG_MODULE_MYSELF LOG_MODULE_ECU
 #elif defined(BOARD_PSU)
     #define LOG_MODULE_MYSELF LOG_MODULE_PSU
-#elif defined(BOARD_PSU)
+#elif defined(BOARD_SDU)
     #define LOG_MODULE_MYSELF LOG_MODULE_SDU
 #else
     #error Undefined board

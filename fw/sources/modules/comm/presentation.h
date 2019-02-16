@@ -28,6 +28,8 @@
 #ifndef __MODULES_COMM_PRESENTATION_H
 #define __MODULES_COMM_PRESENTATION_H
 
+#include "version.h"
+#include "setup.h"
 #include "modules/log.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/session.h"
@@ -36,7 +38,10 @@
 
 /** Interfaces to send data over */
 #define IFACE_CAN Comm_CanSend
-#define IFACE_UART Comm_UartSend
+
+#ifdef HAS_COMM_UART
+    #define IFACE_UART Comm_UartSend
+#endif
 
 enum {
     COMM_CONFIG_TYPE_BOOL = 0x00,

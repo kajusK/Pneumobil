@@ -164,7 +164,7 @@ def gen_python(items):
 if args.module is not None:
     modules = [args.module]
 else:
-    modules = ["ECU", "HMI"]
+    modules = ["ECU", "HMI", "SDU"]
 
 data = get_data(SOURCE);
 for m in modules:

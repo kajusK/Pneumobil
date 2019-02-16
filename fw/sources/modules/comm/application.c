@@ -47,7 +47,9 @@ static void Commi_SendLogCan(const log_msg_t *log)
 static void Commi_SendLogUart(const log_msg_t *log)
 {
     ASSERT_NOT(log == NULL);
+#ifdef HAS_COMM_UART
     Comm_SendLog(IFACE_UART, log);
+#endif
 }
 
 /* ***************************************************************************
@@ -550,7 +552,9 @@ void Comm_Init(void)
 
     Comm_SessionInit();
     Comm_CanInit();
+#ifdef HAS_COMM_UART
     Comm_UartInit();
+#endif
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {
         severity[i] = LOG_SEVERITY_WARNING;
