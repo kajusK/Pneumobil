@@ -208,18 +208,23 @@ comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
     return COMM_OK;
 }
 
-/* ***************************************************************************
- * HMI specific commands
- *************************************************************************** */
-#ifdef BOARD_HMI
 void Comm_CarState(const comm_car_state_t *payload)
 {
     ASSERT_NOT(payload == NULL);
 
+#ifdef BOARD_HMI
     State_UpdateCarState(payload->speed_dms, payload->speed_avg_dms,
             payload->distance_m, payload->mode);
+#elif defined(BOARD_SDU)
+    Sdu_SetCarState(payload->speed_dms, payload->speed_avg_dms, payload->mode);
+#endif
 }
 
+
+/* ***************************************************************************
+ * HMI specific commands
+ *************************************************************************** */
+#ifdef BOARD_HMI
 void Comm_CarIO(const comm_car_io_t *payload)
 {
     ASSERT_NOT(payload == NULL);

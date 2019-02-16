@@ -197,7 +197,6 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         case COMM_CMD_REBOOT:
         break;
 
-#ifdef BOARD_HMI
         /* ECU commands*/
         case COMM_CMD_CAR_STATE:
             if (packet->len == sizeof(comm_car_state_t)) {
@@ -205,6 +204,8 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 replyRequired = false;
             }
             break;
+
+#ifdef BOARD_HMI
         case COMM_CMD_CAR_IO:
             if (packet->len == sizeof(comm_car_io_t)) {
                 Comm_CarIO((comm_car_io_t *) packet->payload);
@@ -237,7 +238,6 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
             }
             break;
 #else
-        case COMM_CMD_CAR_STATE:
         case COMM_CMD_CAR_IO:
         case COMM_CMD_PNEU_STATE:
         case COMM_CMD_GPS_POSITION:

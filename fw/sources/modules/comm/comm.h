@@ -155,6 +155,10 @@ extern void Comm_SendPSUVoltage(uint16_t v5_mv, uint16_t v12_mv,
         uint16_t v24_mv);
 #endif
 
+#ifdef BOARD_SDU
+    #include "sdu.h"
+#endif
+
 extern void Comm_SendSystemStatus(void);
 
 /**

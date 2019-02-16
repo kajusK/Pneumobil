@@ -34,6 +34,7 @@
 #include <modules/comm/comm.h>
 
 #include "version.h"
+#include "sdu.h"
 
 int main(void) {
     halInit();
@@ -47,8 +48,9 @@ int main(void) {
     Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
     Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
 
-    Config_SetBool(0, 0);
     Wdgd_Init();
+    Config_Reset();
+    Sdu_Init();
 
     Log_Info(LOG_SOURCE_SYSTEM, "Init done");
 
