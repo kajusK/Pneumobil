@@ -41,6 +41,7 @@
 enum {
     COMM_CONFIG_TYPE_BOOL = 0x00,
     COMM_CONFIG_TYPE_UINT = 0x01,
+    COMM_CONFIG_TYPE_FLOAT = 0x02,
 };
 
 enum {

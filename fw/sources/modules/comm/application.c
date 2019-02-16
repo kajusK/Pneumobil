@@ -119,6 +119,12 @@ comm_error_t Comm_SetConfig(const comm_config_item_t *payload)
             }
             Config_SetUint(payload->id, (bool) payload->u32);
             break;
+        case COMM_CONFIG_TYPE_FLOAT:
+            if (payload->id >= CONFIG_FLOAT_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            Config_SetFloat(payload->id, (float) payload->u32);
+            break;
 
         default:
             return COMM_ERR_INCORRECT_PARAM;
@@ -146,6 +152,12 @@ comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
                 return COMM_ERR_INCORRECT_PARAM;
             }
             response->u32 = Config_GetUint(id);
+            break;
+        case COMM_CONFIG_TYPE_FLOAT:
+            if (id >= CONFIG_FLOAT_COUNT) {
+                return COMM_ERR_INCORRECT_PARAM;
+            }
+            response->u32 = Config_GetFloat(id);
             break;
 
         default:
