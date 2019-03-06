@@ -104,7 +104,7 @@ void Cand_Init(uint32_t baudrate, const cand_filter_t *filters, uint8_t count)
      * bit time = tq (3 + TS[3:0] + TS[2:0]) = tq * 10
      * tq = (BRP[9:0] + 1) * APB period (1/STM32_PCLK)
      */
-    brp = STM32_PCLK/baudrate - 1;
+    brp = STM32_PCLK/baudrate/10 - 1;
     config.btr = CAN_BTR_BRP(brp) | CAN_BTR_TS1(3) | CAN_BTR_TS2(4) | CAN_BTR_SJW(1);
 
     canStart(&CAND, &config);

@@ -34,8 +34,11 @@
 /** Amount of slots for multipart messages beying received simultaneously */
 #define COMM_CAN_MBOX_SLOTS 4
 
-/** Can baudrate to be used */
-#define COMM_CAN_BAUDRATE 1000000
+/**
+ * Can baudrate to be used
+ * STM32_PCLK/baudrate/10 should be natural number
+ */
+#define COMM_CAN_BAUDRATE 480000
 
 /**
  * Send message over CAN
