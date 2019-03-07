@@ -39,7 +39,7 @@
 static uartd_rx_cb_t uartdi_rx_cb;
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(uartdi_thread_area, 128);
+THD_WORKING_AREA(uartdi_thread_area, 256);
 
 static THD_FUNCTION(Uartd_Thread, arg)
 {

@@ -44,7 +44,7 @@
 static cand_rx_cb_t candi_rx_cb;
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(candi_thread_area, 128);
+THD_WORKING_AREA(candi_thread_area, 256);
 
 static THD_FUNCTION(Cand_Thread, arg)
 {
