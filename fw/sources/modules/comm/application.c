@@ -61,7 +61,6 @@ comm_error_t Comm_SysStatus(const comm_sys_status_t *status)
 #ifndef BOARD_HMI
     (void) status;
 #else
-    //TODO device id
     State_UpdateNode(status->device_id, status->uptime_s, status->core_temp_c,
             status->core_voltage_mv);
 #endif
