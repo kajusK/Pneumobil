@@ -69,7 +69,9 @@ static THD_FUNCTION(Sender_Thread, arg)
     while (true) {
         time = chTimeAddX(chVTGetSystemTime(), chTimeMS2I(looptime_ms));
         Senderi_SendState();
-        chThdSleepUntil(time);
+        if (chVTGetSystemTime() < time) {
+            chThdSleepUntil(time);
+        }
     }
 }
 
