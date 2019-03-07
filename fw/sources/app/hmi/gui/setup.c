@@ -30,6 +30,7 @@
 
 void Gui_SetupInit(GHandle ghTab)
 {
+    (void) ghTab;
 #if 0
     GWidgetInit     wi;
 
@@ -99,8 +100,14 @@ void Gui_SetupInit(GHandle ghTab)
 
 }
 
+void Gui_SetupUpdate(void)
+{
+    return;
+}
+
 bool Gui_SetupProcessEvent(GEvent *ev)
 {
+    (void) ev;
     return false;
 }
 

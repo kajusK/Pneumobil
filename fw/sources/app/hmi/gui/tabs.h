@@ -53,6 +53,11 @@ extern void Gui_TabsInit(void);
 extern gui_tab_t Gui_TabsGetActive(void);
 
 /**
+ * Update the currently active tab content
+ */
+extern bool Gui_TabsUpdate(void);
+
+/**
  * Process events for tabs and nested windows
  *
  * @param [in] ev       Event to be processed

@@ -37,6 +37,11 @@
 extern void Gui_SetupInit(GHandle ghTab);
 
 /**
+ * Update data on this screen
+ */
+extern void Gui_SetupUpdate(void);
+
+/**
  * Process events for this and nested windows
  *
  * @param [in] ev       Event to be processed

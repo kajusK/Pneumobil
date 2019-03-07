@@ -157,6 +157,11 @@ void Gui_DebugInit(GHandle ghTab)
 #endif
 }
 
+void Gui_DebugUpdate(void)
+{
+    return;
+}
+
 bool Gui_DebugProcessEvent(GEvent *ev)
 {
     return false;

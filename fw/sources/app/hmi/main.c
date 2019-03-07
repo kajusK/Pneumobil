@@ -43,6 +43,8 @@
 #include "gui/gui.h"
 
 int main(void) {
+    int slowCount = 0;
+
     halInit();
     /** Kernel becomes thread, rtos is activated */
     chSysInit();
@@ -66,9 +68,13 @@ int main(void) {
     Gui_Init();
 
     while (1) {
-        Comm_SendSystemStatus();
-        palToggleLine(LINE_LED_SYS_ACTIVE);
-        chThdSleepMilliseconds(500);
+        Gui_Update();
+        if (++slowCount == 5) {
+            slowCount = 0;
+            Comm_SendSystemStatus();
+            palToggleLine(LINE_LED_SYS_ACTIVE);
+        }
+        chThdSleepMilliseconds(100);
     }
 }
 

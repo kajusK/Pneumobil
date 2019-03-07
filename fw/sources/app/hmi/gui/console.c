@@ -112,6 +112,11 @@ void Gui_ConsoleSetUrgent(bool urgent)
     }
 }
 
+void Gui_ConsoleUpdate(void)
+{
+    return;
+}
+
 bool Gui_ConsoleProcessEvent(GEvent *ev)
 {
     (void) ev;

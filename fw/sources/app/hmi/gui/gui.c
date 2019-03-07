@@ -42,7 +42,7 @@ static font_t guii_tiny_font;
 static GListener guii_event_listener;
 
 #define GUI_THREAD_PRIO (NORMALPRIO - 1)
-THD_WORKING_AREA(guii_thread_area, 512);
+THD_WORKING_AREA(guii_thread_area, 1024);
 
 /**
  * Processing gui events
@@ -146,6 +146,11 @@ void Gui_LabelUpdate(GHandle label, const char *buf)
     }
 
     gwinSetText(label, buf, TRUE);
+}
+
+void Gui_Update(void)
+{
+    Gui_TabsUpdate();
 }
 
 void Gui_Init(void)

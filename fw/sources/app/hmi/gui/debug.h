@@ -37,6 +37,11 @@
 extern void Gui_DebugInit(GHandle ghTab);
 
 /**
+ * Update data on this screen
+ */
+extern void Gui_DebugUpdate(void);
+
+/**
  * Process events for this and nested windows
  *
  * @param [in] ev       Event to be processed

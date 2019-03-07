@@ -52,6 +52,11 @@ extern void Gui_ConsoleLogCb(const log_msg_t *log);
 extern void Gui_ConsoleSetUrgent(bool urgent);
 
 /**
+ * Update data on this screen
+ */
+extern void Gui_ConsoleUpdate(void);
+
+/**
  * Process events for this and nested windows
  *
  * @param [in] ev       Event to be processed

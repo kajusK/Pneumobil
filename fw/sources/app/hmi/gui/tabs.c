@@ -99,6 +99,31 @@ gui_tab_t Gui_TabsGetActive(void)
     return TAB_UNKNOWN;
 }
 
+bool Gui_TabsUpdate(void)
+{
+    switch (Gui_TabsGetActive()) {
+        case TAB_RACE:
+            Gui_RaceUpdate();
+            break;
+        case TAB_STATUS:
+            Gui_StatusUpdate();
+            break;
+        case TAB_SETUP:
+            Gui_SetupUpdate();
+            break;
+        case TAB_DEBUG:
+            Gui_DebugUpdate();
+            break;
+        case TAB_CONSOLE:
+            Gui_ConsoleUpdate();
+            break;
+        default:
+            return false;
+            break;
+    }
+    return true;
+}
+
 bool Gui_TabsProcessEvent(GEvent *ev)
 {
     if (ev->type == GEVENT_GWIN_TABSET) {

@@ -81,7 +81,7 @@ void Gui_StatusInit(GHandle ghTab)
     wi.g.x = GUI_MARGIN;
     wi.g.y = GUI_MARGIN;
     wi.g.height = gdispGetFontMetric(font, fontHeight) + GUI_LINES_SPACING;
-    wi.g.width = tabWidth/2;
+    wi.g.width = tabWidth/2 - GUI_MARGIN;
     labelOffset = gdispGetStringWidth("HMI:", font) + GUI_OFFSET_SPACING;
 
     /* Modules Status */

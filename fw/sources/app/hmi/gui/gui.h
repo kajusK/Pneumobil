@@ -66,6 +66,11 @@ extern void Gui_SetFont(gui_font_t font);
 extern void Gui_LabelUpdate(GHandle label, const char *buf);
 
 /**
+ * Update values on current gui screen
+ */
+extern void Gui_Update(void);
+
+/**
  * @brief Initialize the gui subsystem
  */
 extern void Gui_Init(void);
