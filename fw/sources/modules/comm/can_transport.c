@@ -49,18 +49,51 @@ typedef struct {
 } comm_can_mbox_t;
 
 /** Can ID format */
-typedef union {
-    struct {
-        uint16_t priority : 2;      /** Priority of the message */
-        uint16_t src : 4;           /** Identifier of source node */
-        uint16_t dest : 4;          /** Identifier of destination node */
-        uint16_t multipart : 1;     /** multiple part message will follow */
-    };
-    uint16_t intval;
+typedef struct {
+    uint16_t priority : 2;      /** Priority of the message */
+    uint16_t src : 4;           /** Identifier of source node */
+    uint16_t dest : 4;          /** Identifier of destination node */
+    uint16_t multipart : 1;     /** multiple part message will follow */
 } comm_can_id_t;
 
 /** Storage area for multipart messages */
 static comm_can_mbox_t cani_rx_mbox[COMM_CAN_MBOX_SLOTS];
+
+/**
+ * Convert received sid into can id structure
+ *
+ * The bitfields cannont be used due to way compiler arranges them to bytes
+ *
+ * @param sid   SID 11 bits long (aligned to LSB)
+ * @return  Converted id
+ */
+static comm_can_id_t Commi_SID2Struct(uint32_t sid)
+{
+    comm_can_id_t id;
+
+    id.multipart = sid & 0x01;
+    id.dest = (sid >> 1) & 0x0f;
+    id.src = (sid >> 5) & 0x0f;
+    id.priority = (sid >> 9) & 0x03;
+    return id;
+}
+
+/**
+ * Convert given can id into SID to be send
+ *
+ * @param id    Can id
+ * @return SID  SID aligned to right (to LSB)
+ */
+static uint32_t Commi_Struct2SID(comm_can_id_t id)
+{
+    uint32_t sid = 0;
+
+    sid |= id.multipart & 0x01;
+    sid |= (id.dest & 0x0f) << 1;
+    sid |= (id.src & 0x0f) << 5;
+    sid |= (id.priority & 0x03) << 9;
+    return sid;
+}
 
 /**
  * Find mailbox slot to use for storing multipart messafe from given source
@@ -118,7 +151,7 @@ static bool Commi_CanProcessMultipart(const CANRxFrame *frame)
 
     ASSERT_NOT(frame == NULL);
 
-    id.intval = frame->SID;
+    id = Commi_SID2Struct(frame->SID);
 
     if (frame->DLC < 2) {
         Log_Warn(LOG_SOURCE_COMM,
@@ -217,7 +250,7 @@ static bool Commi_CanProcessFrame(const CANRxFrame *frame)
     }
 
     /** No need to filter ids, this is done in hardware based on can filters */
-    id.intval = frame->SID;
+    id = Commi_SID2Struct(frame->SID);
     if (!id.multipart) {
         return Comm_HandlePayload(id.src, id.dest, frame->data8, frame->DLC,
                 Comm_CanSend);
@@ -253,7 +286,8 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
     id.src = COMM_MY_ID;
     id.dest = dest;
     id.priority = priority;
-    frame.SID = id.intval;
+    id.multipart = 0;
+    frame.SID = Commi_Struct2SID(id);
 
     /* Small frame */
     if (len <= 8) {
@@ -263,6 +297,9 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
     }
 
     /* multipart message */
+    id.multipart = 1;
+    frame.SID = Commi_Struct2SID(id);
+
     seq = 0;
     sent = 0;
     offset = 2;
@@ -305,12 +342,12 @@ void Comm_CanInit(void)
 
     id.dest = COMM_MY_ID;
     mask.dest = COMM_NODE_BROADCAST;
-    filters[0].id = id.intval;
-    filters[0].mask = mask.intval;
+    filters[0].id = Commi_Struct2SID(id);
+    filters[0].mask = Commi_Struct2SID(mask);
 
     id.dest = COMM_NODE_BROADCAST;
-    filters[1].id = id.intval;
-    filters[1].mask = mask.intval;
+    filters[1].id = Commi_Struct2SID(id);
+    filters[1].mask = Commi_Struct2SID(mask);
 
     Cand_Init(COMM_CAN_BAUDRATE, filters, sizeof(filters)/sizeof(filters[0]));
     Cand_RegisterRxCb(Commi_CanProcessFrame);
