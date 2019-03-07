@@ -33,6 +33,8 @@
 /** Timeout for i2c transmit command */
 #define I2CD_TIMEOUT_MS 100
 
+static I2CConfig i2cdi_config;
+
 #ifndef STM32F4XX
 static uint32_t I2Cdi_CalcTiming(bool full_speed)
 {
@@ -78,24 +80,26 @@ bool I2Cd_Transceive(uint8_t address, const uint8_t *txbuf, size_t txbytes,
     if (res == MSG_OK && i2cGetErrors(&I2CD1) == I2C_NO_ERROR) {
         return true;
     }
+    /** timeout should never happen, driver must be restarted afterwards */
+    if (res == MSG_TIMEOUT) {
+        i2cStart(&I2CD1, &i2cdi_config);
+    }
     return false;
 }
 
 void I2Cd_Init(bool full_speed)
 {
-    static I2CConfig config;
-
 #ifdef STM32F4XX
-    config.op_mode = OPMODE_I2C;
-    config.clock_speed = full_speed ? 400000 : 100000;
-    config.duty_cycle = full_speed ? FAST_DUTY_CYCLE_2 : STD_DUTY_CYCLE;
+    i2cdi_config.op_mode = OPMODE_I2C;
+    i2cdi_config.clock_speed = full_speed ? 400000 : 100000;
+    i2cdi_config.duty_cycle = full_speed ? FAST_DUTY_CYCLE_2 : STD_DUTY_CYCLE;
 #else
-    config.cr1 = 0;
-    config.cr2 = 0;
-    config.timingr = I2Cdi_CalcTiming(full_speed);
+    i2cdi_config.cr1 = 0;
+    i2cdi_config.cr2 = 0;
+    i2cdi_config.timingr = I2Cdi_CalcTiming(full_speed);
 #endif
 
-    i2cStart(&I2CD1, &config);
+    i2cStart(&I2CD1, &i2cdi_config);
 }
 
 /** @} */
