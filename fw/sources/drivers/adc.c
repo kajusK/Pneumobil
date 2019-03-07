@@ -75,7 +75,7 @@ int8_t Adcd_RawToTemp(uint16_t raw)
 
 uint16_t Adcd_RefToSupplyMv(uint16_t raw)
 {
-    return ((uint32_t) 300*REF_CAL)/raw;
+    return ((uint32_t) 3300*REF_CAL)/raw;
 }
 
 void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
