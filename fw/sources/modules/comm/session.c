@@ -63,6 +63,9 @@ comm_error_t Comm_SendPayload(const comm_packet_t *packet,
 
     if (link_iface(packet->node, packet->priority, (uint8_t *) &packet->cmd,
                 packet->len + 1) != true) {
+        if (response != NULL) {
+            chMtxUnlock(&commi_session_mutex);
+        }
         return COMM_ERR_LINK;
     }
 
