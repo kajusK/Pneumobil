@@ -125,7 +125,7 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
 
     ASSERT_NOT(packet == NULL || send_iface == NULL);
 
-    if (dest != COMM_MY_ID || dest != COMM_NODE_BROADCAST) {
+    if (dest != COMM_MY_ID && dest != COMM_NODE_BROADCAST) {
         Log_Warn(LOG_SOURCE_COMM, "Received message for node %x, ignoring",
                 dest);
         return false;
