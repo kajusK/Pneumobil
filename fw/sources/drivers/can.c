@@ -67,16 +67,10 @@ static THD_FUNCTION(Cand_Thread, arg)
 bool Cand_SendFrame(const CANTxFrame *frame)
 {
     msg_t res;
-    uint32_t retries = CAN_TRANSMIT_RETRIES;
 
     ASSERT_NOT(frame == NULL);
 
-    while (retries-- != 0) {
-        res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
-        if (res == MSG_OK) {
-                break;
-        }
-    }
+    res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
     if (res != MSG_OK) {
         return false;
     }
