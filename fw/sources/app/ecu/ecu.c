@@ -42,7 +42,7 @@
 #define ECU_THREAD_PRIO (NORMALPRIO + 1)
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(ecui_thread_area, 128);
+THD_WORKING_AREA(ecui_thread_area, 256);
 
 /** Current ECU state */
 typedef enum {
