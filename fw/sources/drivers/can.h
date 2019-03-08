@@ -31,7 +31,8 @@
 #include <hal.h>
 #include <types.h>
 
-#define CAN_TIMEOUT_MS 10
+#define CAN_TIMEOUT_MS 1
+#define CAN_TRANSMIT_RETRIES 5
 
 /** Callback for received frame */
 typedef bool (*cand_rx_cb_t)(const CANRxFrame *frame);

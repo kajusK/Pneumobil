@@ -44,7 +44,7 @@
 static cand_rx_cb_t candi_rx_cb;
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(candi_thread_area, 256);
+THD_WORKING_AREA(candi_thread_area, 512);
 
 static THD_FUNCTION(Cand_Thread, arg)
 {
@@ -55,7 +55,7 @@ static THD_FUNCTION(Cand_Thread, arg)
     while (true) {
         res = canReceiveTimeout(&CAND, CAN_ANY_MAILBOX, &frame, TIME_INFINITE);
         if (res != MSG_OK) {
-            chThdSleep(TIME_MS2I(50));
+            continue;
         }
 
         if (candi_rx_cb != NULL) {
@@ -67,10 +67,16 @@ static THD_FUNCTION(Cand_Thread, arg)
 bool Cand_SendFrame(const CANTxFrame *frame)
 {
     msg_t res;
+    uint32_t retries = CAN_TRANSMIT_RETRIES;
 
     ASSERT_NOT(frame == NULL);
 
-    res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
+    while (retries-- != 0) {
+        res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
+        if (res == MSG_OK) {
+                break;
+        }
+    }
     if (res != MSG_OK) {
         return false;
     }
@@ -99,13 +105,14 @@ void Cand_Init(uint32_t baudrate, const cand_filter_t *filters, uint8_t count)
     canSTM32SetFilters(&CAND, STM32_CAN_MAX_FILTERS,
             count, driver_filters);
 
-    config.mcr = 0;
+    /* Auto wakeup, auto recovery, no auto retransmission */
+    config.mcr = CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_NART;
     /*
-     * bit time = tq (3 + TS[3:0] + TS[2:0]) = tq * 10
+     * bit time = tq (3 + TS[3:0] + TS[2:0]) = tq * 16
      * tq = (BRP[9:0] + 1) * APB period (1/STM32_PCLK)
      */
-    brp = STM32_PCLK/baudrate/10 - 1;
-    config.btr = CAN_BTR_BRP(brp) | CAN_BTR_TS1(3) | CAN_BTR_TS2(4) | CAN_BTR_SJW(1);
+    brp = STM32_PCLK/baudrate/16 - 1;
+    config.btr = CAN_BTR_BRP(brp) | CAN_BTR_TS1(12) | CAN_BTR_TS2(1) | CAN_BTR_SJW(1);
 
     canStart(&CAND, &config);
     (void) chThdCreateStatic(candi_thread_area, sizeof(candi_thread_area),

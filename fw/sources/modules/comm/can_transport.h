@@ -36,9 +36,9 @@
 
 /**
  * Can baudrate to be used
- * STM32_PCLK/baudrate/10 should be natural number
+ * STM32_PCLK/baudrate/16 should be natural number
  */
-#define COMM_CAN_BAUDRATE 480000
+#define COMM_CAN_BAUDRATE 500000
 
 /**
  * Send message over CAN
