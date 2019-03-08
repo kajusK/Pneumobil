@@ -236,9 +236,9 @@ void Comm_CarIO(const comm_car_io_t *payload)
                 (payload->endstops >> 1) & 0x01,    /* endstop front */
                 payload->endstops & 0x01,           /* endstop back */
                 payload->inputs & 0x01,             /* throttle */
-                (payload->inputs << 1) & 0x01,      /* brake */
-                (payload->inputs << 2) & 0x01,      /* horn */
-                (payload->inputs << 3) & 0x01,      /* shifting */
+                (payload->inputs >> 1) & 0x01,      /* brake */
+                (payload->inputs >> 2) & 0x01,      /* horn */
+                (payload->inputs >> 3) & 0x01,      /* shifting */
                 payload->gear);
 }
 
