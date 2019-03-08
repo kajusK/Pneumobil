@@ -99,14 +99,14 @@ void Cand_Init(uint32_t baudrate, const cand_filter_t *filters, uint8_t count)
         driver_filters[i].mode = 0; /* mask mode */
         driver_filters[i].scale = 1; /* 32 bits mode */
         driver_filters[i].assignment = 0; /* must be 0 */
-        driver_filters[i].register1 = filters[i].id;
-        driver_filters[i].register2 = filters[i].mask;
+        driver_filters[i].register1 = filters[i].id << CAN_RI1R_STID_Pos;
+        driver_filters[i].register2 = filters[i].mask << CAN_RI1R_STID_Pos;
     }
     canSTM32SetFilters(&CAND, STM32_CAN_MAX_FILTERS,
             count, driver_filters);
 
-    /* Auto wakeup, auto recovery, no auto retransmission */
-    config.mcr = CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_NART;
+    /* Auto wakeup, auto recovery */
+    config.mcr = CAN_MCR_ABOM | CAN_MCR_AWUM;
     /*
      * bit time = tq (3 + TS[3:0] + TS[2:0]) = tq * 16
      * tq = (BRP[9:0] + 1) * APB period (1/STM32_PCLK)
