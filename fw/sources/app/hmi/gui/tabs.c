@@ -51,11 +51,11 @@ void Gui_TabsInit(void)
     wi.g.y = 0;
 
     ghTabset = gwinTabsetCreate(0, &wi, 0);
-    ghTabConsole = gwinTabsetAddTab(ghTabset, "Console", FALSE);
     ghTabRace = gwinTabsetAddTab(ghTabset, "Race", FALSE);
     ghTabStatus = gwinTabsetAddTab(ghTabset, "Status", FALSE);
     ghTabSetup = gwinTabsetAddTab(ghTabset, "Setup", FALSE);
     ghTabDebug = gwinTabsetAddTab(ghTabset, "Debug", FALSE);
+    ghTabConsole = gwinTabsetAddTab(ghTabset, "Console", FALSE);
 
     Gui_RaceInit(ghTabRace);
     Gui_StatusInit(ghTabStatus);
