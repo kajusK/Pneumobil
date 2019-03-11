@@ -39,7 +39,7 @@
 /**
  * Amount of callback allowed
  */
-#define LOG_CALLBACKS_NUM   3
+#define LOG_CALLBACKS_NUM   4
 
 /**
  * Log severity
