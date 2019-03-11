@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 7
 Title "BUT Pneumobil - ECU inputs"
-Date "2018-10-04"
-Rev "0.1"
+Date "2019-03-11"
+Rev "0.2"
 Comp "Brno University of Technology"
 Comment1 "Jakub Kaderka"
 Comment2 ""
@@ -1351,9 +1351,9 @@ F 3 "http://www.intersil.com/content/dam/intersil/documents/cd40/cd4050bms.pdf" 
 	6    4350 5500
 	1    0    0    -1  
 $EndComp
-Text HLabel 5550 4450 2    50   Output ~ 0
-GEARBOX_1
 Text HLabel 5550 4800 2    50   Output ~ 0
+GEARBOX_1
+Text HLabel 5550 4450 2    50   Output ~ 0
 GEARBOX_2
 $Comp
 L power:+3V3 #PWR?
@@ -1368,9 +1368,9 @@ F 3 "" H 5600 5000 50  0001 C CNN
 	1    5600 5000
 	0    1    1    0   
 $EndComp
-Text HLabel 5550 5150 2    50   Output ~ 0
-BT_MODE
 Text HLabel 5550 5500 2    50   Output ~ 0
+BT_MODE
+Text HLabel 5550 5150 2    50   Output ~ 0
 BT_SHIFTING
 Wire Wire Line
 	1900 4450 3000 4450
@@ -2073,7 +2073,7 @@ Wire Wire Line
 	5150 5500 4850 5500
 Connection ~ 4850 5500
 Wire Wire Line
-	5450 4450 5550 4450
+	5450 5150 5550 5150
 Wire Wire Line
 	5500 4650 5600 4650
 Wire Wire Line
@@ -2081,7 +2081,7 @@ Wire Wire Line
 Wire Wire Line
 	5500 5000 5600 5000
 Wire Wire Line
-	5450 5150 5550 5150
+	5450 4450 5550 4450
 Wire Wire Line
 	5450 5500 5550 5500
 Wire Wire Line
