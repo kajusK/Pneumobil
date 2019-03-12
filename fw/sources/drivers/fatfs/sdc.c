@@ -35,7 +35,7 @@
 #define POOLING_INTERVAL_MS    10
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(sdcdi_thread_area, 64);
+THD_WORKING_AREA(sdcdi_thread_area, 1024);
 
 /** True if card is mounted and ready to be used */
 static bool sdcdi_ready;
@@ -147,7 +147,7 @@ static THD_FUNCTION(SDCd_Thread, arg)
 
 bool SDCd_AddInsertCallback(sdcd_cb_t cb)
 {
-    if (sdcdi_insert_cb == NULL) {
+    if (sdcdi_insert_cb != NULL) {
         return false;
     }
     sdcdi_insert_cb = cb;
