@@ -40,11 +40,11 @@
 #include "state.h"
 #include "logger.h"
 
-#define RACE_LOG_DIR "/race_log"
-#define LOGGER_THREAD_PRIO NORMALPRIO
+#define RACE_LOG_DIR "race_log"
+#define LOGGER_THREAD_PRIO (NORMALPRIO - 1)
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(loggeri_thread_area, 512);
+THD_WORKING_AREA(loggeri_thread_area, 1024);
 
 static FIL loggeri_syslog_file;
 static FIL loggeri_race_file;
@@ -74,7 +74,7 @@ static void Loggeri_LogCb(const log_msg_t *log)
     }
 
     RTCd_GetTime(&timeinfo);
-    asctime_r(&timeinfo, buf);
+    strftime(buf, sizeof(buf), "%c", &timeinfo);
 
     /* Print errors are ignored - SD card could be removed in the meanwhile */
     f_printf(&loggeri_syslog_file, "%s [%s] %s <%s>: %s\n",
@@ -162,15 +162,17 @@ bool Logger_NewRaceLogFile(void)
 
     RTCd_GetTime(&timeinfo);
 
-    snprintf(filename, 128, RACE_LOG_DIR "/%s_", loggeri_race_mode_str[mode]);
-    asctime_r(&timeinfo, &filename[strlen(filename)]);
-    strncat(filename, ".csv", 128 - strlen(filename));
+    snprintf(filename, sizeof(filename), RACE_LOG_DIR "/%s_",
+            loggeri_race_mode_str[mode]);
+    strftime(&filename[strlen(filename)], sizeof(filename)-strlen(filename),
+            "%d_%m_%Y_%H-%M-%S.csv", &timeinfo);
 
     res = f_open(&loggeri_race_file, filename, FA_WRITE | FA_CREATE_ALWAYS);
     if (res != FR_OK) {
         Log_Error(LOG_SOURCE_HMI, "Failed to create log file %s", filename);
         return false;
     }
+    loggeri_log_created_timestamp = millis();
 
     f_puts("time [ms];speed [km/h];distance [m];"
         "pressure1 [kpa];pressure2 [kpa];pressure3 [kpa];"
