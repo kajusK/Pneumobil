@@ -31,6 +31,7 @@
 #include <utils/time.h>
 #include <utils/assert.h>
 
+#include "logger.h"
 #include "state.h"
 
 /** Time from last module seen time to consider it online */
@@ -172,7 +173,9 @@ state_race_mode_t State_GetRaceMode(void)
 
 bool State_SetRaceMode(state_race_mode_t mode)
 {
+    Log_Info(LOG_SOURCE_HMI, "Setting race mode to %d", mode);
     statei_state.car.mode = mode;
+    Logger_NewRaceLogFile();
     return Comm_SendEcuStartRace(mode);
 }
 
