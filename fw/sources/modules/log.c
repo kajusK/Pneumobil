@@ -54,7 +54,7 @@ static log_subscription_t logi_subscriptions[LOG_CALLBACKS_NUM];
 static log_msg_t logi_messages[LOG_BUFFER_LEN];
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(logi_thread_area, 512);
+THD_WORKING_AREA(logi_thread_area, 1024);
 MEMORYPOOL_DECL(logi_msg_pool, LOG_BUFFER_LEN, 4, 0);
 static msg_t logi_letter[LOG_BUFFER_LEN];
 MAILBOX_DECL(logi_mailbox, &logi_letter, LOG_BUFFER_LEN);
@@ -298,10 +298,11 @@ const char *Log_GetSourceStr(log_src_t src)
     static const char sourceStr[LOG_SOURCE_COUNT][8] = {
         "SYSTEM",
         "DRIVER",
+		"MODULE",
         "COMM",
-        "CONFIG",
-        "ECU",
-        "HMI",
+		"ECU",
+		"HMI",
+		"POWER"
     };
 
     ASSERT_NOT(src >= LOG_SOURCE_COUNT);
