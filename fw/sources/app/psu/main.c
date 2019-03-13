@@ -37,7 +37,8 @@
 #include "version.h"
 #include "psu.h"
 
-int main(void) {
+int main(void)
+{
     halInit();
     /** Kernel becomes thread, rtos is activated */
     chSysInit();
