@@ -45,7 +45,7 @@ typedef struct {
 #define STORAGE_VERSION_SIZE   sizeof(storage_version_t)
 #define STORAGE_UINT_SIZE       sizeof(config_item_uint)
 #define STORAGE_BOOL_SIZE       sizeof(config_item_bool)
-#define STORAGE_FLOAT_SIZE       sizeof(config_item_bool)
+#define STORAGE_FLOAT_SIZE       sizeof(config_item_float)
 
 #define STORAGE_ADDR_VERSION    0
 #define STORAGE_ADDR_UINT       (STORAGE_ADDR_VERSION + STORAGE_VERSION_SIZE + STORAGE_CRC_SIZE)
@@ -170,13 +170,19 @@ static THD_FUNCTION(Storagei_Thread, arg)
         } while (events1 != 0 || events2 == 0);
 
         if (events2 & STORAGE_UPDATE_BOOL) {
-            Storagei_WriteBool();
+            if (!Storagei_WriteBool()) {
+                Log_Warn(LOG_SOURCE_SYSTEM, "Writing bools failed");
+            }
         }
         if (events2 & STORAGE_UPDATE_UINT) {
-            Storagei_WriteUint();
+            if (!Storagei_WriteUint()) {
+                Log_Warn(LOG_SOURCE_SYSTEM, "Writing uint failed");
+            }
         }
         if (events2 & STORAGE_UPDATE_FLOAT) {
-            Storagei_WriteFloat();
+            if (!Storagei_WriteFloat()) {
+                Log_Warn(LOG_SOURCE_SYSTEM, "Writing float failed");
+            }
         }
     }
 }
