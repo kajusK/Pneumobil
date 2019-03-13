@@ -30,6 +30,9 @@
 #include <time.h>
 #include <ff.h>
 
+#include <hal.h>
+#include <chprintf.h>
+
 #include <modules/log.h>
 #include <modules/config.h>
 #include <utils/assert.h>
@@ -98,7 +101,7 @@ static void Loggeri_AddRaceLogEntry(void)
 
     time = millis() - loggeri_log_created_timestamp;
 
-    snprintf(speed, sizeof(speed), "%.1f", state->car.speed_kmh);
+    chsnprintf(speed, sizeof(speed), "%.1f", state->car.speed_kmh);
 
     f_printf(&loggeri_race_file, "%d;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",
             time, speed, state->car.distance_m, state->pneu.press1_kpa,
