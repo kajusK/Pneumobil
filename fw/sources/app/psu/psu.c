@@ -37,7 +37,7 @@
 
 #define PSU_THREAD_PRIO NORMALPRIO
 /** Stack and stuff for thread */
-THD_WORKING_AREA(psui_thread_area, 512);
+THD_WORKING_AREA(psui_thread_area, 256);
 
 /** Gain of the current measurement IO */
 #define GAIN_CUR_BAT 20
