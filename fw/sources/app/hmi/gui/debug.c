@@ -26,145 +26,292 @@
  */
 
 #include <gfx.h>
+
+#include <modules/comm/comm.h>
+
+#include "state.h"
+#include "gui/gui.h"
 #include "gui/debug.h"
+
+#define RADIO_GROUP_F1 1
+#define RADIO_GROUP_F2 2
+#define RADIO_GROUP_B1 3
+#define RADIO_GROUP_B2 4
+#define RADIO_GROUP_MOVE 5
+
+typedef struct {
+    bool out1;
+    bool out2;
+    bool horn;
+    bool brake;
+    bool dual;
+    state_valve_t front1;
+    state_valve_t front2;
+    state_valve_t back1;
+    state_valve_t back2;
+} gui_debug_t;
+
+static GHandle ghLabelValveF1, ghLabelValveF2, ghLabelValveB1, ghLabelValveB2;
+static GHandle ghRadioF1In, ghRadioF1Out, ghRadioF1Close;
+static GHandle ghRadioF2In, ghRadioF2Out, ghRadioF2Close;
+static GHandle ghRadioB1In, ghRadioB1Out, ghRadioB1Close;
+static GHandle ghRadioB2In, ghRadioB2Out, ghRadioB2Close;
+
+static GHandle ghLabelValves, ghLabelOutputs;
+static GHandle ghChboxDual, ghChboxHorn, ghChboxBrake, ghChboxOut1, ghChboxOut2;
+static GHandle ghChboxEnable;
+static GHandle ghRadioFront, ghRadioBack, ghRadioClose;
+
+static gui_debug_t guii_debug;
+
+static void Guii_DebugSetValues(void)
+{
+    Comm_SendEcuDebug(guii_debug.front1, guii_debug.front2, guii_debug.back1,
+            guii_debug.back2, guii_debug.horn, guii_debug.brake,
+            guii_debug.out1, guii_debug.out2);
+}
+
+static void Guii_DebugValveDraw(GWidgetInit *wi, const char *name, GHandle *label,
+        GHandle *in, GHandle *out, GHandle *close, uint8_t group)
+{
+    gCoord width, height;
+
+    width = wi->g.width;
+    height = wi->g.height;
+
+    wi->text = name;
+    *label = gwinLabelCreate(0, wi);
+
+    wi->customDraw = gwinRadioDraw_Button;
+    wi->g.y += wi->g.height + GUI_MARGIN;
+
+    wi->g.width = GUI_BUTTON_WIDTH;
+    wi->g.height = GUI_BUTTON_HEIGHT;
+    wi->text = "In";
+    *in = gwinRadioCreate(0, wi, group);
+
+    wi->g.x += GUI_BUTTON_WIDTH + GUI_OFFSET_SPACING;
+    wi->text = "Out";
+    *out = gwinRadioCreate(0, wi, group);
+
+    wi->g.x += GUI_BUTTON_WIDTH + GUI_OFFSET_SPACING;
+    wi->text = "Close";
+    *close = gwinRadioCreate(0, wi, group);
+
+    wi->g.x -= GUI_BUTTON_WIDTH*2 + GUI_OFFSET_SPACING*2;
+    wi->g.y += wi->g.height + GUI_OFFSET_SPACING;
+    wi->g.width = width;
+    wi->g.height = height;
+    wi->customDraw = NULL;
+}
 
 void Gui_DebugInit(GHandle ghTab)
 {
-#if 0
-    GWidgetInit     wi;
+    GWidgetInit wi;
+    gCoord tabWidth, tabHeight;
+    font_t font;
+
+    font = gwinGetDefaultFont();
+    tabWidth = gwinGetInnerWidth(ghTab);
+    tabHeight = gwinGetInnerHeight(ghTab);
 
     gwinWidgetClearInit(&wi);
     wi.g.parent = ghTab;
     wi.g.show = gTrue;
-    wi.g.x = 0;
-    wi.g.y = 0;
-    wi.g.width = gwinGetInnerWidth(ghTab);
-    wi.g.height = gwinGetInnerHeight(ghTab);
+    wi.g.height = gdispGetFontMetric(font, fontHeight);
+    wi.g.width = (tabWidth - 2*GUI_MARGIN)/2;
 
-        // inputs
-        wi.g.width = 290; wi.g.height = LABEL_HEIGHT;
-        wi.g.x = 10; wi.g.y = 10;
-        wi.text = "Off";
-        ghLabelBrake = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelBrake, 120, "Brake: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelThrottle = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelThrottle, 120, "Throttle: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelShifting = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelShifting, 120, "Shifting: ");
+    /* Valves control */
+    wi.g.x = GUI_MARGIN;
+    wi.g.y = GUI_MARGIN;
+    Guii_DebugValveDraw(&wi, "Front 1:", &ghLabelValveF1, &ghRadioF1In,
+            &ghRadioF1Out, &ghRadioF1Close, RADIO_GROUP_F1);
 
-        // gearbox
-        wi.g.y += wi.g.height + 5;
-        ghLabelGear1 = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGear1, 120, "Gear 1: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelGear2 = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGear2, 120, "Gear 2: ");
+    Guii_DebugValveDraw(&wi, "Front 2:", &ghLabelValveF2, &ghRadioF2In,
+            &ghRadioF2Out, &ghRadioF2Close, RADIO_GROUP_F2);
 
-        // current, voltage
-        wi.g.y += wi.g.height + 5;
-        wi.text = "N/A";
-        ghLabelCurrent = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelCurrent, 120, "Current: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelVoltage = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelVoltage, 120, "Voltage: ");
+    Guii_DebugValveDraw(&wi, "Back 1:", &ghLabelValveB1, &ghRadioB1In,
+            &ghRadioB1Out, &ghRadioB1Close, RADIO_GROUP_B1);
 
-        // gps
-        wi.g.y = 10; wi.g.x = 350;
-        ghLabelGpsFix = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGpsFix, 150, "GPS fix: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelGpsLat = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGpsLat, 150, "Latitude: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelGpsLon = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGpsLon, 150, "Longitude: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelGpsSatellites = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelGpsSatellites, 150, "Satellites: ");
+    Guii_DebugValveDraw(&wi, "Back 2:", &ghLabelValveB2, &ghRadioB2In,
+            &ghRadioB2Out, &ghRadioB2Close, RADIO_GROUP_B2);
 
-        // pressures
-        wi.g.y += wi.g.height + 5;
-        ghLabelPres1 = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelPres1, 150, "Press 1: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelPres2 = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelPres2, 150, "Press 2: ");
-        wi.g.y += wi.g.height + 5;
-        ghLabelPres3 = gwinLabelCreate(0, &wi);
-        gwinLabelSetAttribute(ghLabelPres3, 150, "Press 3: ");
+    wi.g.y = GUI_MARGIN;
+    wi.g.x = wi.g.width;
+    wi.text = "Valve control:";
+    ghLabelValves = gwinLabelCreate(0, &wi);
 
-        // pressure regulator control
-        wi.g.width = 700; wi.g.height = 40;
-        wi.g.x = tabwidth/2 - wi.g.width/2;
-        wi.g.y = tabheight - 2*(BUTTON_HEIGHT+5) - 2*wi.g.height - 30;
-        wi.text = "Regulator pressure";
-        ghRegulatorSet = gwinSliderCreate(0, &wi);
-        gwinSliderSetPosition(ghRegulatorSet, 0);
+    wi.g.y += wi.g.height + GUI_MARGIN;
+    wi.g.width = GUI_BUTTON_WIDTH;
+    wi.g.height = GUI_BUTTON_HEIGHT;
+    wi.customDraw = gwinCheckboxDraw_Button;
+    wi.text = "Dual";
+    ghChboxDual = gwinCheckboxCreate(0, &wi);
+
+    wi.g.y += GUI_BUTTON_HEIGHT + GUI_OFFSET_SPACING;
+    wi.customDraw = gwinRadioDraw_Button;
+    wi.text = "Back";
+    ghRadioBack = gwinRadioCreate(0, &wi, RADIO_GROUP_MOVE);
+
+    wi.g.x += GUI_BUTTON_WIDTH + GUI_OFFSET_SPACING;
+    wi.text = "Front";
+    ghRadioFront = gwinRadioCreate(0, &wi, RADIO_GROUP_MOVE);
+
+    wi.g.x += GUI_BUTTON_WIDTH + GUI_OFFSET_SPACING;
+    wi.text = "Close";
+    ghRadioClose = gwinRadioCreate(0, &wi, RADIO_GROUP_MOVE);
+
+    /* Outputs control */
+    wi.customDraw = NULL;
+    wi.g.x = (tabWidth - 2*GUI_MARGIN)/2;
+    wi.g.y += wi.g.height + GUI_OFFSET_SPACING;
+    wi.text = "Outputs control:";
+    wi.g.height = gdispGetFontMetric(font, fontHeight);
+    ghLabelOutputs = gwinLabelCreate(0, &wi);
+
+    wi.customDraw = gwinCheckboxDraw_Button;
+    wi.g.y += wi.g.height + GUI_MARGIN;
+    wi.g.width = GUI_BUTTON_WIDTH;
+    wi.g.height = GUI_BUTTON_HEIGHT;
+    wi.text = "Horn";
+    ghChboxHorn = gwinCheckboxCreate(0, &wi);
+
+    wi.g.x += wi.g.width + GUI_OFFSET_SPACING;
+    wi.text = "Brake";
+    ghChboxBrake = gwinCheckboxCreate(0, &wi);
 
 
-        // Valves Control
-        wi.g.y += wi.g.height + 20;
-        wi.text = "Piston position";
-        ghPistonPos = gwinProgressbarCreate(0, &wi);
-        gwinProgressbarSetPosition(ghPistonPos, 50);
+    wi.g.x = (tabWidth - 2*GUI_MARGIN)/2;
+    wi.g.y += wi.g.height + GUI_OFFSET_SPACING;
 
-        wi.g.x = 10; wi.g.y += wi.g.height + 5;
-        wi.g.width = 100; wi.g.height = BUTTON_HEIGHT;
+    wi.text = "Out1";
+    ghChboxOut1 = gwinCheckboxCreate(0, &wi);
 
-        //left valve 1
-        wi.text = "In";
-        ghBtVLeft1In = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Out";
-        ghBtVLeft1Out = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Close";
-        ghBtVLeft1Close = gwinButtonCreate(0, &wi);
+    wi.g.x += wi.g.width + GUI_OFFSET_SPACING;
+    wi.text = "Out2";
+    ghChboxOut2 = gwinCheckboxCreate(0, &wi);
 
-        //right valve 1
-        wi.g.x = tabwidth - 3*(wi.g.width + 5);
-        wi.text = "In";
-        ghBtVRight1In = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Out";
-        ghBtVRight1Out = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Close";
-        ghBtVRight1Close = gwinButtonCreate(0, &wi);
-
-        //left valve 2
-        wi.g.x = 10; wi.g.y += wi.g.height + 10;
-        wi.text = "In";
-        ghBtVLeft2In = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Out";
-        ghBtVLeft2Out = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Close";
-        ghBtVLeft2Close = gwinButtonCreate(0, &wi);
-
-        //right valve 2
-        wi.g.x = tabwidth - 3*(wi.g.width + 5);
-        wi.text = "In";
-        ghBtVRight2In = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Out";
-        ghBtVRight2Out = gwinButtonCreate(0, &wi);
-        wi.g.x += wi.g.width + 5; wi.text = "Close";
-        ghBtVRight2Close = gwinButtonCreate(0, &wi);
-
-        //make closed buttons gray
-        gwinSetEnabled(ghBtVLeft1Close, 0);
-        gwinSetEnabled(ghBtVLeft2Close, 0);
-        gwinSetEnabled(ghBtVRight1Close, 0);
-        gwinSetEnabled(ghBtVRight2Close, 0);
-#endif
+    /* Mode control */
+    wi.g.x = tabWidth - wi.g.width - GUI_MARGIN;
+    wi.g.y = tabHeight - wi.g.height - GUI_MARGIN;
+    wi.text = "Enable";
+    ghChboxEnable = gwinCheckboxCreate(0, &wi);
 }
 
 void Gui_DebugUpdate(void)
 {
-    return;
+    gwinCheckboxCheck(ghChboxEnable, State_GetRaceMode() == RACE_MODE_DEBUG);
 }
 
 bool Gui_DebugProcessEvent(GEvent *ev)
 {
-    return false;
+    GHandle handle;
+    handle = ((GEventGWin *)ev)->gwin;
+
+    switch (ev->type) {
+        case GEVENT_GWIN_CHECKBOX:
+            if (handle == ghChboxEnable) {
+                State_SetRaceMode(RACE_MODE_DEBUG);
+            } else if (handle == ghChboxDual) {
+                guii_debug.dual = gwinCheckboxIsChecked(ghChboxDual);
+            } else if (handle == ghChboxHorn) {
+                guii_debug.horn = gwinCheckboxIsChecked(ghChboxHorn);
+                Guii_DebugSetValues();
+            } else if (handle == ghChboxBrake) {
+                guii_debug.brake = gwinCheckboxIsChecked(ghChboxBrake);
+                Guii_DebugSetValues();
+            } else if (handle == ghChboxOut1) {
+                guii_debug.out1 = gwinCheckboxIsChecked(ghChboxOut1);
+                Guii_DebugSetValues();
+            } else if (handle == ghChboxOut2) {
+                guii_debug.out2 = gwinCheckboxIsChecked(ghChboxOut2);
+                Guii_DebugSetValues();
+            } else {
+                return false;
+            }
+            break;
+
+        case GEVENT_GWIN_RADIO:
+            /* Separate valve control */
+            if (handle == ghRadioF1In) {
+                guii_debug.front1 = VALVE_IN;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioF1Out) {
+                guii_debug.front1 = VALVE_OUT;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioF1Close) {
+                guii_debug.front1 = VALVE_CLOSED;
+                Guii_DebugSetValues();
+
+            } else if (handle == ghRadioF2In) {
+                guii_debug.front2 = VALVE_IN;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioF2Out) {
+                guii_debug.front2 = VALVE_OUT;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioF2Close) {
+                guii_debug.front2 = VALVE_CLOSED;
+                Guii_DebugSetValues();
+
+            } else if (handle == ghRadioB1In) {
+                guii_debug.back1 = VALVE_IN;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioB1Out) {
+                guii_debug.back1 = VALVE_OUT;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioB1Close) {
+                guii_debug.back1 = VALVE_CLOSED;
+                Guii_DebugSetValues();
+
+            } else if (handle == ghRadioB2In) {
+                guii_debug.back2 = VALVE_IN;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioB2Out) {
+                guii_debug.back2 = VALVE_OUT;
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioB2Close) {
+                guii_debug.back2 = VALVE_CLOSED;
+                Guii_DebugSetValues();
+
+            /* common valves control */
+            } else if (handle == ghRadioFront) {
+                guii_debug.front1 = VALVE_OUT;
+                guii_debug.back1 = VALVE_IN;
+                if (gwinCheckboxIsChecked(ghChboxDual)) {
+                    guii_debug.front2 = VALVE_OUT;
+                    guii_debug.back2 = VALVE_IN;
+                } else {
+                    guii_debug.front2 = VALVE_CLOSED;
+                    guii_debug.back2 = VALVE_CLOSED;
+                }
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioBack) {
+                guii_debug.front1 = VALVE_IN;
+                guii_debug.back1 = VALVE_OUT;
+                if (gwinCheckboxIsChecked(ghChboxDual)) {
+                    guii_debug.front2 = VALVE_IN;
+                    guii_debug.back2 = VALVE_OUT;
+                } else {
+                    guii_debug.front2 = VALVE_CLOSED;
+                    guii_debug.back2 = VALVE_CLOSED;
+                }
+                Guii_DebugSetValues();
+            } else if (handle == ghRadioClose) {
+                guii_debug.front1 = VALVE_CLOSED;
+                guii_debug.front2 = VALVE_CLOSED;
+                guii_debug.back1 = VALVE_CLOSED;
+                guii_debug.back2 = VALVE_CLOSED;
+                Guii_DebugSetValues();
+            } else {
+                return false;
+            }
+            break;
+
+        default:
+            return false;
+            break;
+    }
+    return true;
 }
 
 /** @} */
