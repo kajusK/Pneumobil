@@ -234,7 +234,7 @@
 
 #define GWIN_NEED_CONTAINERS                         GFXON
 //    #define GWIN_NEED_CONTAINER                      GFXOFF
-//    #define GWIN_NEED_FRAME                          GFXOFF
+    #define GWIN_NEED_FRAME                          GFXON
     #define GWIN_NEED_TABSET                         GFXON
         #define GWIN_TABSET_TABHEIGHT                40
 

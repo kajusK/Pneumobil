@@ -34,14 +34,14 @@
 /** Margin for placing items near edges */
 #define GUI_MARGIN 5
 /** Button dimensions */
-#define GUI_BUTTON_WIDTH 100;
-#define GUI_BUTTON_HEIGHT 50;
+#define GUI_BUTTON_WIDTH 100
+#define GUI_BUTTON_HEIGHT 50
 /** Space between lines */
-#define GUI_LINES_SPACING 2;
+#define GUI_LINES_SPACING 2
 /** Space between attribute and label */
-#define GUI_OFFSET_SPACING 10;
+#define GUI_OFFSET_SPACING 10
 /** Offset for indentation */
-#define GUI_SUB_OFFSET 15;
+#define GUI_SUB_OFFSET 15
 
 typedef enum {
     GUI_FONT_TINY,

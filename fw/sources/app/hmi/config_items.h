@@ -37,6 +37,9 @@ typedef enum {
     CONFIG_UINT_BACKLIGHT, /* Default lcd backlight percentage */
     CONFIG_UINT_CONTRAST, /* Default LCD contrast */
     CONFIG_UINT_LOG_PERIOD_MS, /* Logging period on sd card in ms */
+    CONFIG_UINT_ARCADE_DEADTIME_MAX_MS, /* Maximum length of deadtime in arcade mode */
+    CONFIG_UINT_ACCELERATION_DEADTIME_MAX_MS, /* Maximum length of deadtime in acceleration mode */
+    CONFIG_UINT_LONG_DIST_DEADTIME_MAX_MS, /* Maximum length of deadtime in long distance mode */
     CONFIG_UINT_COUNT,
 } config_item_uint_t;
 
