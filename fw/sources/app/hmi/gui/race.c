@@ -192,7 +192,7 @@ void Gui_RaceUpdate(void)
     }
 
     RTCd_GetTime(&timp);
-    chsnprintf(buf, BUFSIZE, "%02d:%02d  %02d.%02d. %d", timp.tm_hour, timp.tm_min,
+    chsnprintf(buf, BUFSIZE, "%02d:%02d  %02d.%02d.%d", timp.tm_hour, timp.tm_min,
             timp.tm_mday, timp.tm_mon + 1, timp.tm_year+1900);
     Gui_LabelUpdate(ghLabelDatetime, buf);
 
