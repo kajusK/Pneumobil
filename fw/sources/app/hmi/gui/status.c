@@ -28,6 +28,7 @@
 #include <gfx.h>
 #include <chprintf.h>
 #include "state.h"
+#include "drivers/fatfs/sdc.h"
 
 #include "gui/gui.h"
 #include "gui/status.h"
@@ -88,7 +89,6 @@ void Gui_StatusInit(GHandle ghTab)
     wi.text = "Online";
     ghLabelHmi = gwinLabelCreate(0, &wi);
     gwinLabelSetAttribute(ghLabelHmi, labelOffset, "HMI:");
-    gwinSetColor(ghLabelHmi, Red);
     gwinRedraw(ghLabelHmi);
 
     wi.text = "Offline";
@@ -344,6 +344,12 @@ void Gui_StatusUpdate(void)
     gwinSetVisible(ghLabelEndstopFront, state->pneu.endstop_front);
 
     gwinProgressbarSetPosition(ghPistonProgress, state->pneu.piston_pct);
+
+    if (SDCd_IsReady()) {
+        Gui_LabelUpdate(ghLabelSdCard, "Mounted");
+    } else {
+        Gui_LabelUpdate(ghLabelSdCard, "None");
+    }
 }
 
 bool Gui_StatusProcessEvent(GEvent *ev)
