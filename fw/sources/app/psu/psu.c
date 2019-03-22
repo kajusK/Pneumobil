@@ -28,7 +28,6 @@
 #include <ch.h>
 #include <hal.h>
 #include <utils/assert.h>
-#include <modules/config.h>
 #include <modules/log.h>
 #include <modules/comm/comm.h>
 #include <drivers/adc.h>

@@ -31,7 +31,6 @@
 #include <drivers/wdg.h>
 #include <drivers/adc.h>
 #include <modules/log.h>
-#include <modules/config.h>
 #include <modules/comm/comm.h>
 
 #include "version.h"
@@ -52,7 +51,6 @@ int main(void)
 
     Wdgd_Init();
     Adcd_Init();
-    Config_Reset();
     Psu_Init();
     Log_Info(LOG_SOURCE_APP, "Init done");
 

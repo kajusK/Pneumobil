@@ -29,6 +29,8 @@
 #define __MODULES_COMM_APPLICATION_H
 
 #include <types.h>
+
+#include "setup.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/presentation.h"
 

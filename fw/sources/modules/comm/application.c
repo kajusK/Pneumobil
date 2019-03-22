@@ -31,12 +31,15 @@
 #include "utils/time.h"
 
 #include "modules/log.h"
-#include "modules/config.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/can_transport.h"
 #include "modules/comm/uart_transport.h"
 #include "modules/comm/session.h"
 #include "modules/comm/application.h"
+
+#ifdef HAS_STORAGE
+    #include "modules/config.h"
+#endif
 
 static void Commi_SendLogCan(const log_msg_t *log)
 {
@@ -107,6 +110,8 @@ comm_error_t Comm_GetLogMask(uint8_t interface, comm_log_mask_t *response)
 comm_error_t Comm_SetConfig(const comm_config_item_t *payload)
 {
     ASSERT_NOT(payload == NULL);
+
+#ifdef HAS_STORAGE
     switch (payload->type) {
         case COMM_CONFIG_TYPE_BOOL:
             if (payload->id >= CONFIG_BOOL_COUNT) {
@@ -132,12 +137,16 @@ comm_error_t Comm_SetConfig(const comm_config_item_t *payload)
             break;
     }
     return COMM_OK;
+#else
+    return COMM_ERR_UNSUPPORTED_CMD;
+#endif
 }
 
 comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
         comm_config_item_t *response)
 {
     ASSERT_NOT(response == NULL);
+#ifdef HAS_STORAGE
     response->id = id;
     response->type = type;
 
@@ -166,12 +175,21 @@ comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
             break;
     }
     return COMM_OK;
+#else
+    (void) type;
+    (void) id;
+    return COMM_ERR_UNSUPPORTED_CMD;
+#endif
 }
 
 comm_error_t Comm_ResetConfig(void)
 {
+#ifdef HAS_STORAGE
     Config_Reset();
     return COMM_OK;
+#else
+    return COMM_ERR_UNSUPPORTED_CMD;
+#endif
 }
 
 comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,

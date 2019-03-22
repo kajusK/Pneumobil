@@ -30,7 +30,6 @@
 
 #include <drivers/wdg.h>
 #include <modules/log.h>
-#include <modules/config.h>
 #include <modules/comm/comm.h>
 
 #include "version.h"
@@ -49,7 +48,6 @@ int main(void) {
     Log_Info(LOG_SOURCE_APP, "Compiled: %s", __DATE__ "-" __TIME__);
 
     Wdgd_Init();
-    Config_Reset();
     Sdu_Init();
 
     Log_Info(LOG_SOURCE_APP, "Init done");

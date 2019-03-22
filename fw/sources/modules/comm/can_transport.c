@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "utils/assert.h"
-#include "modules/config.h"
 #include "modules/log.h"
 #include "utils/crc.h"
 #include "drivers/can.h"

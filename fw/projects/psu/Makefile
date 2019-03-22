@@ -45,7 +45,6 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(SOURCES)/modules/comm/application.c \
 	$(SOURCES)/modules/comm/can_transport.c \
 	$(SOURCES)/modules/log.c \
-	$(SOURCES)/modules/config.c \
 	$(SOURCES)/drivers/can.c \
 	$(SOURCES)/drivers/wdg.c \
 	$(SOURCES)/drivers/adc.c \
