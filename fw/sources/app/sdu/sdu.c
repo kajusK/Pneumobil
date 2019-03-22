@@ -48,10 +48,9 @@ static uint8_t sdui_7seg_digits[3];
  * Show requested digit on 7 seg display
  *
  * @param [in] num      0-9
- * @param [in] bot      Turn on the decimal dot
  * @param [in] pos      Position of the segment to drive (0-2), 0 is left
  */
-static void Sdui_Set7SegVal(uint8_t num, bool dot, uint8_t pos)
+static void Sdui_Set7SegVal(uint8_t num, uint8_t pos)
 {
     ASSERT_NOT(num > 9);
 
@@ -59,7 +58,6 @@ static void Sdui_Set7SegVal(uint8_t num, bool dot, uint8_t pos)
     palWriteLine(LINE_B, (num >> 1) & 0x01);
     palWriteLine(LINE_C, (num >> 2) & 0x01);
     palWriteLine(LINE_D, (num >> 3) & 0x01);
-    palWriteLine(LINE_DP, dot);
 
     switch (pos) {
         case 0:
@@ -154,7 +152,7 @@ static THD_FUNCTION(Sdu_Thread, arg)
         if (i >= 3) {
             i = 0;
         }
-        Sdui_Set7SegVal(sdui_7seg_digits[i], i == 1, i);
+        Sdui_Set7SegVal(sdui_7seg_digits[i], i);
         i++;
 
         chThdSleepMilliseconds(10);
