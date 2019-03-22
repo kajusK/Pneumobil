@@ -564,7 +564,7 @@ void Comm_Init(void)
         severity[i] = LOG_SEVERITY_WARNING;
     }
     severity[LOG_SOURCE_SYSTEM] = LOG_SEVERITY_INFO;
-    severity[LOG_SOURCE_ECU] = LOG_SEVERITY_INFO;
+    severity[LOG_SOURCE_APP] = LOG_SEVERITY_INFO;
     Log_Subscribe(Commi_SendLogCan, severity, false);
 
     for (int i = 0; i < LOG_SOURCE_COUNT; i++) {

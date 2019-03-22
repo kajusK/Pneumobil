@@ -43,16 +43,16 @@ int main(void) {
 
     Comm_Init();
     Log_Init();
-    Log_Info(LOG_SOURCE_SYSTEM, "SDU is booting...");
-    Log_Debug(LOG_SOURCE_SYSTEM, "SYSCLK=%u", STM32_SYSCLK);
-    Log_Info(LOG_SOURCE_SYSTEM, "Version %d.%d", VER_MAJOR, VER_MINOR);
-    Log_Info(LOG_SOURCE_SYSTEM, "Compiled: %s", __DATE__ "-" __TIME__);
+    Log_Info(LOG_SOURCE_APP, "SDU is booting...");
+    Log_Debug(LOG_SOURCE_APP, "SYSCLK=%u", STM32_SYSCLK);
+    Log_Info(LOG_SOURCE_APP, "Version %d.%d", VER_MAJOR, VER_MINOR);
+    Log_Info(LOG_SOURCE_APP, "Compiled: %s", __DATE__ "-" __TIME__);
 
     Wdgd_Init();
     Config_Reset();
     Sdu_Init();
 
-    Log_Info(LOG_SOURCE_SYSTEM, "Init done");
+    Log_Info(LOG_SOURCE_APP, "Init done");
 
     while (1) {
         Comm_SendSystemStatus();

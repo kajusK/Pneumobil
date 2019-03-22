@@ -133,12 +133,12 @@ void State_UpdateNode(comm_node_t node, uint16_t uptime_s, int8_t temp_c,
             node_var = &statei_state.node.dbg;
             break;
         case COMM_NODE_HMI:
-            Log_Error(LOG_SOURCE_HMI,
+            Log_Error(LOG_SOURCE_APP,
                     "Received state of HMI that was not sent by HMI");
             return;
             break;
         default:
-            Log_Error(LOG_SOURCE_HMI, "Received state for unknown module %d",
+            Log_Error(LOG_SOURCE_APP, "Received state for unknown module %d",
                     node);
             return;
             break;
@@ -173,7 +173,7 @@ state_race_mode_t State_GetRaceMode(void)
 
 bool State_SetRaceMode(state_race_mode_t mode)
 {
-    Log_Info(LOG_SOURCE_HMI, "Setting race mode to %d", mode);
+    Log_Info(LOG_SOURCE_APP, "Setting race mode to %d", mode);
     statei_state.car.mode = mode;
     Logger_NewRaceLogFile();
     return Comm_SendEcuStartRace(mode);

@@ -78,25 +78,25 @@ bool Race_Start(race_mode_t mode)
         case RACE_MODE_LONG_DISTANCE:
             racei_deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_LONG_DIST);
             racei_filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_LONG_DIST);
-            Log_Info(LOG_SOURCE_ECU, "Switched to Long Distance");
+            Log_Info(LOG_SOURCE_APP, "Switched to Long Distance");
             break;
         case RACE_MODE_ACCELERATION:
             racei_deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_ACCELERATION);
             racei_filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_ACCELERATION);
-            Log_Info(LOG_SOURCE_ECU, "Switched to Acceleration");
+            Log_Info(LOG_SOURCE_APP, "Switched to Acceleration");
             break;
         case RACE_MODE_ARCADE:
             racei_deadtime_ms = Config_GetUint(CONFIG_UINT_DEADTIME_MS_ARCADE);
             racei_filling_pct = Config_GetUint(CONFIG_UINT_FILLING_PCT_ARCADE);
-            Log_Info(LOG_SOURCE_ECU, "Switched to Arcade");
+            Log_Info(LOG_SOURCE_APP, "Switched to Arcade");
             break;
         case RACE_MODE_DEBUG:
             racei_deadtime_ms = 0;
             racei_filling_pct = 0;
-            Log_Info(LOG_SOURCE_ECU, "Switched to Debug");
+            Log_Info(LOG_SOURCE_APP, "Switched to Debug");
             break;
         default:
-            Log_Error(LOG_SOURCE_ECU, "Trying to switch to unknown mode %d", mode);
+            Log_Error(LOG_SOURCE_APP, "Trying to switch to unknown mode %d", mode);
             return false;
     }
 

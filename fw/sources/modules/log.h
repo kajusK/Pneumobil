@@ -61,9 +61,7 @@ typedef enum {
     LOG_SOURCE_DRIVER,
     LOG_SOURCE_MODULE,
     LOG_SOURCE_COMM,
-    LOG_SOURCE_ECU,
-    LOG_SOURCE_HMI,
-    LOG_SOURCE_POWER,
+    LOG_SOURCE_APP,
     LOG_SOURCE_COUNT,
 } log_src_t;
 

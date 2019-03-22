@@ -103,26 +103,26 @@ static void ECUi_EdgesInit(ecu_control_t *control)
     ASSERT_NOT(control == NULL);
 
     if (control->state != ECU_STATE_INIT && control->state != ECU_STATE_IDLE) {
-        Log_Error(LOG_SOURCE_ECU, "Init called with state %d", control->state);
+        Log_Error(LOG_SOURCE_APP, "Init called with state %d", control->state);
         control->state = ECU_STATE_INIT;
     }
     pistonLen = Config_GetUint(CONFIG_UINT_PISTON_LEN);
 
     if (inputs->endstop_back) {
-        Log_Info(LOG_SOURCE_ECU, "Init: Back endstop hit");
+        Log_Info(LOG_SOURCE_APP, "Init: Back endstop hit");
         Encoderd_Set(0);
         if (pistonLen != 0) {
             /* Last direction */
             control->dir = ECU_DIR_BACK;
             control->state = ECU_STATE_IDLE;
-            Log_Info(LOG_SOURCE_ECU, "Fast init done, len: %d", pistonLen);
+            Log_Info(LOG_SOURCE_APP, "Fast init done, len: %d", pistonLen);
         } else {
             control->dir = ECU_DIR_FRONT;
         }
     }
 
     if (inputs->endstop_front) {
-        Log_Info(LOG_SOURCE_ECU, "Init: Front endstop hit");
+        Log_Info(LOG_SOURCE_APP, "Init: Front endstop hit");
         int16_t len = Encoderd_Get();
         if (pistonLen != 0) {
             if (Config_GetBool(CONFIG_BOOL_ENCODER_INVERT)) {
@@ -132,7 +132,7 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             /* Last direction */
             control->dir = ECU_DIR_FRONT;
             control->state = ECU_STATE_IDLE;
-            Log_Info(LOG_SOURCE_ECU, "Fast init done, len: %d", pistonLen);
+            Log_Info(LOG_SOURCE_APP, "Fast init done, len: %d", pistonLen);
         } else if (control->dir == ECU_DIR_FRONT){
             if (len < 0) {
                 Config_SetBool(CONFIG_BOOL_ENCODER_INVERT, true);
@@ -142,7 +142,7 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             }
             Config_SetUint(CONFIG_UINT_PISTON_LEN, len);
             control->state = ECU_STATE_IDLE;
-            Log_Info(LOG_SOURCE_ECU, "Init done: Piston len: %d", len);
+            Log_Info(LOG_SOURCE_APP, "Init done: Piston len: %d", len);
         }
     }
 
@@ -182,14 +182,14 @@ static uint8_t ECUi_GetPistonPosPct(const ecu_inputs_t *inputs)
 
     if (inputs->endstop_back) {
         if (encoder != 0) {
-            Log_Debug(LOG_SOURCE_ECU, "Set encoder from %d to 0", encoder);
+            Log_Debug(LOG_SOURCE_APP, "Set encoder from %d to 0", encoder);
             Encoderd_Set(0);
             encoder = 0;
         }
     }
     if (inputs->endstop_front) {
         if (encoder != len) {
-            Log_Debug(LOG_SOURCE_ECU, "Set encoder from %d to %d", encoder, len);
+            Log_Debug(LOG_SOURCE_APP, "Set encoder from %d to %d", encoder, len);
             Encoderd_Set(len);
             encoder = len;
         }
@@ -199,10 +199,10 @@ static uint8_t ECUi_GetPistonPosPct(const ecu_inputs_t *inputs)
     if (encoder < 0) {
         Encoderd_Set(0);
         encoder = 0;
-        Log_Warn(LOG_SOURCE_ECU, "Encoder underflowed");
+        Log_Warn(LOG_SOURCE_APP, "Encoder underflowed");
     } else if (encoder > len) {
         Encoderd_Set(len);
-        Log_Warn(LOG_SOURCE_ECU, "Encoder oveflowed");
+        Log_Warn(LOG_SOURCE_APP, "Encoder oveflowed");
     }
 
     posPct = ((int32_t) encoder*100)/len;
@@ -290,7 +290,7 @@ static void ECUi_PneuStep(ecu_control_t *control)
             break;
 
         default:
-            Log_Error(LOG_SOURCE_ECU, "Unexpected state occured\n");
+            Log_Error(LOG_SOURCE_APP, "Unexpected state occured\n");
             control->state = ECU_STATE_IDLE;
             break;
     }
@@ -338,7 +338,7 @@ static void ECUi_PneuStep(ecu_control_t *control)
             }
             break;
         default:
-            Log_Error(LOG_SOURCE_ECU, "Unexpected state %d", control->state);
+            Log_Error(LOG_SOURCE_APP, "Unexpected state %d", control->state);
             control->state = ECU_STATE_IDLE;
             break;
     }
@@ -353,7 +353,7 @@ static THD_FUNCTION(ECU_Thread, arg)
     control.state = ECU_STATE_INIT;
     control.dir = ECU_DIR_BACK;
 
-    Log_Info(LOG_SOURCE_ECU, "Initializing ECU");
+    Log_Info(LOG_SOURCE_APP, "Initializing ECU");
 
     while (1) {
         time = chTimeAddX(chVTGetSystemTime(), TIME_MS2I(ECU_LOOP_CYCLE_MS));

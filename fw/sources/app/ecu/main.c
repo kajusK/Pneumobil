@@ -47,10 +47,10 @@ int main(void) {
 
     Comm_Init();
     Log_Init();
-    Log_Info(LOG_SOURCE_ECU, "ECU is booting...");
-    Log_Debug(LOG_SOURCE_ECU, "SYSCLK=%u", STM32_SYSCLK);
-    Log_Info(LOG_SOURCE_ECU, "Version %d.%d", VER_MAJOR, VER_MINOR);
-    Log_Info(LOG_SOURCE_ECU, "Compiled: %s", __DATE__ "-" __TIME__);
+    Log_Info(LOG_SOURCE_APP, "ECU is booting...");
+    Log_Debug(LOG_SOURCE_APP, "SYSCLK=%u", STM32_SYSCLK);
+    Log_Info(LOG_SOURCE_APP, "Version %d.%d", VER_MAJOR, VER_MINOR);
+    Log_Info(LOG_SOURCE_APP, "Compiled: %s", __DATE__ "-" __TIME__);
 
     //Wdgd_Init();
     I2Cd_Init(true);
@@ -61,7 +61,7 @@ int main(void) {
     Race_Start(Config_GetUint(CONFIG_UINT_DEFAULT_MODE));
     Sender_Init();
 
-    Log_Info(LOG_SOURCE_ECU, "Init done");
+    Log_Info(LOG_SOURCE_APP, "Init done");
 
     while (1) {
         //TODO process the state and update led accordingly

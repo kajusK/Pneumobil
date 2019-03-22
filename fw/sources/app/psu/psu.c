@@ -194,7 +194,7 @@ static bool Psui_CheckRanges(psu_range_t *ranges, uint16_t len, const char *fmt)
         error = true;
         if (!ranges[i].reported) {
             ranges[i].reported = true;
-            Log_Error(LOG_SOURCE_POWER, fmt, ranges[i].name, ranges[i].min,
+            Log_Error(LOG_SOURCE_APP, fmt, ranges[i].name, ranges[i].min,
                     ranges[i].max, ranges[i].value);
         }
     }

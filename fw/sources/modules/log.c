@@ -298,11 +298,9 @@ const char *Log_GetSourceStr(log_src_t src)
     static const char sourceStr[LOG_SOURCE_COUNT][8] = {
         "SYSTEM",
         "DRIVER",
-		"MODULE",
+        "MODULE",
         "COMM",
-		"ECU",
-		"HMI",
-		"POWER"
+        "APP",
     };
 
     ASSERT_NOT(src >= LOG_SOURCE_COUNT);

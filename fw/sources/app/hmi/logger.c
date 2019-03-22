@@ -122,12 +122,12 @@ static void Loggeri_CardInsertedCb(void)
 
     res = f_open(&loggeri_syslog_file, "syslog.txt", FA_WRITE | FA_OPEN_APPEND);
     if (res != FR_OK) {
-        Log_Error(LOG_SOURCE_HMI, "Unable to create syslog file");
+        Log_Error(LOG_SOURCE_APP, "Unable to create syslog file");
     }
 
     res = f_mkdir(RACE_LOG_DIR);
     if (res != FR_OK && res != FR_EXIST) {
-        Log_Error(LOG_SOURCE_HMI, "Unable to create race log directory");
+        Log_Error(LOG_SOURCE_APP, "Unable to create race log directory");
     }
 
     Logger_NewRaceLogFile();
@@ -154,7 +154,7 @@ bool Logger_NewRaceLogFile(void)
     char filename[128];
 
     if (!SDCd_IsReady()) {
-        Log_Warn(LOG_SOURCE_HMI, "Unable to create log file, sd card not ready");
+        Log_Warn(LOG_SOURCE_APP, "Unable to create log file, sd card not ready");
         return false;
     }
 
@@ -172,7 +172,7 @@ bool Logger_NewRaceLogFile(void)
 
     res = f_open(&loggeri_race_file, filename, FA_WRITE | FA_CREATE_ALWAYS);
     if (res != FR_OK) {
-        Log_Error(LOG_SOURCE_HMI, "Failed to create log file %s", filename);
+        Log_Error(LOG_SOURCE_APP, "Failed to create log file %s", filename);
         return false;
     }
     loggeri_log_created_timestamp = millis();
@@ -182,7 +182,7 @@ bool Logger_NewRaceLogFile(void)
         "piston_pos [%];throttle;brake;gear\n", &loggeri_race_file);
     f_sync(&loggeri_race_file);
 
-    Log_Info(LOG_SOURCE_HMI, "Created a log file %s", filename);
+    Log_Info(LOG_SOURCE_APP, "Created a log file %s", filename);
     return true;
 }
 

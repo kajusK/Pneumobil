@@ -55,7 +55,7 @@ static THD_FUNCTION(Gui_Thread, arg)
     while (true) {
         ev = geventEventWait(&guii_event_listener, gDelayForever);
         if (Gui_TabsProcessEvent(ev) == false) {
-            Log_Warn(LOG_SOURCE_HMI, "Unknown gui event occured (%d)", ev->type);
+            Log_Warn(LOG_SOURCE_APP, "Unknown gui event occured (%d)", ev->type);
         }
     }
 }
