@@ -67,7 +67,7 @@ static bool Cand_SendFrame(const CANTxFrame *frame)
 
     memcpy(&txbuf[send_bytes], frame->data8, frame->DLC);
     send_bytes += frame->DLC;
-    id.intval = frame->SID;
+    id = Commi_SID2Struct(frame->SID);
     node_src = id.src;
     node_dest = id.dest;
     send_calls++;
@@ -124,17 +124,17 @@ static void Cand_Init(uint32_t baudrate, const cand_filter_t *filters,
 static void setMultipart(void)
 {
     comm_can_id_t id;
-    id.intval = can_frame.SID;
+    id = Commi_SID2Struct(can_frame.SID);
     id.multipart = 1;
-    can_frame.SID = id.intval;
+    can_frame.SID = Commi_Struct2SID(id);
 }
 
 static void setSrc(uint8_t src)
 {
     comm_can_id_t id;
-    id.intval = can_frame.SID;
+    id = Commi_SID2Struct(can_frame.SID);
     id.src = src;
-    can_frame.SID = id.intval;
+    can_frame.SID = Commi_Struct2SID(id);
 }
 
 /* *****************************************************************************
@@ -162,7 +162,7 @@ TEST_SETUP(Comm_CANTransport)
     id.dest = COMM_MY_ID;
     id.priority = 0;
     id.multipart = 0;
-    can_frame.SID = id.intval;
+    can_frame.SID = Commi_Struct2SID(id);
     memset(can_frame.data8, 0x00, 8);
 
     /* Clear mailboxes - defined in can_link.c */
@@ -171,6 +171,28 @@ TEST_SETUP(Comm_CANTransport)
 
 TEST_TEAR_DOWN(Comm_CANTransport)
 {
+}
+
+TEST(Comm_CANTransport, SID2Struct)
+{
+    comm_can_id_t id = Commi_SID2Struct(0x6b5);
+
+    TEST_ASSERT_EQUAL(1, id.multipart);
+    TEST_ASSERT_EQUAL(0x0a, id.dest);
+    TEST_ASSERT_EQUAL(0x05, id.src);
+    TEST_ASSERT_EQUAL(0x03, id.priority);
+}
+
+TEST(Comm_CANTransport, Struct2SID)
+{
+    comm_can_id_t id;
+
+    id.multipart = 1;
+    id.dest = 0x0A;
+    id.src = 0x05;
+    id.priority = 0x03;
+
+    TEST_ASSERT_EQUAL(0x6b5, Commi_Struct2SID(id));
 }
 
 TEST(Comm_CANTransport, ProcessFrameInvalid)
@@ -481,6 +503,8 @@ TEST(Comm_CANTransport, SendLongCrcSeparated)
 
 TEST_GROUP_RUNNER(Comm_CANTransport)
 {
+    RUN_TEST_CASE(Comm_CANTransport, SID2Struct);
+    RUN_TEST_CASE(Comm_CANTransport, Struct2SID);
     RUN_TEST_CASE(Comm_CANTransport, ProcessFrameInvalid);
     RUN_TEST_CASE(Comm_CANTransport, ProcessFrameSingleShort);
     RUN_TEST_CASE(Comm_CANTransport, ProcessFrameSingleLong);
