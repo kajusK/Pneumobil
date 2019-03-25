@@ -100,6 +100,7 @@ bool Race_Start(race_mode_t mode)
             return false;
     }
 
+    Config_SetUint(CONFIG_UINT_DEFAULT_MODE, mode);
     racei_mode = mode;
     return true;
 }
