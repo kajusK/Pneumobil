@@ -1618,15 +1618,15 @@ LED2
 Text Label 1550 3550 0    50   ~ 0
 LED3
 Wire Wire Line
-	4350 2350 3850 2350
-Text Label 3850 2350 0    50   ~ 0
+	6100 1750 5550 1750
+Text Label 5900 1750 0    50   ~ 0
 LED1
 Wire Wire Line
 	4350 2450 3850 2450
 Text Label 3850 2450 0    50   ~ 0
 LED2
 Wire Wire Line
-	5550 1750 6100 1750
-Text Label 5900 1750 0    50   ~ 0
+	3850 2350 4350 2350
+Text Label 3850 2350 0    50   ~ 0
 LED3
 $EndSCHEMATC
