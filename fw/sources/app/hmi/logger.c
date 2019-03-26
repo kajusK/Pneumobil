@@ -150,7 +150,7 @@ bool Logger_NewRaceLogFile(void)
 {
     FRESULT res;
     struct tm timeinfo;
-    state_race_mode_t mode;
+    race_mode_t mode;
     char filename[128];
 
     if (!SDCd_IsReady()) {

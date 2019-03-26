@@ -395,15 +395,15 @@ comm_error_t Comm_EcuGetPneuParams(uint8_t mode, comm_ecu_pneu_params_t *respons
  * Application layer module global functions
  *************************************************************************** */
 #ifdef BOARD_HMI
-bool Comm_SendEcuStartRace(state_race_mode_t mode)
+bool Comm_SendEcuStartRace(race_mode_t mode)
 {
     uint8_t dummy;
     return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_START_RACE,
             (uint8_t *) &mode, 1, &dummy, 1);
 }
 
-bool Comm_SendEcuDebug(state_valve_t front1, state_valve_t front2,
-        state_valve_t back1, state_valve_t back2, bool horn, bool brake,
+bool Comm_SendEcuDebug(valve_state_t front1, valve_state_t front2,
+        valve_state_t back1, valve_state_t back2, bool horn, bool brake,
         bool out1, bool out2)
 {
     comm_ecu_debug_t debug;
@@ -433,7 +433,7 @@ bool Comm_SendEcuUserIo(bool horn, bool brake, bool out1, bool out2)
             (uint8_t *) &io, sizeof(io), &dummy, 1);
 }
 
-bool Comm_SendPneuParams(state_race_mode_t mode, uint8_t filling_pct,
+bool Comm_SendPneuParams(race_mode_t mode, uint8_t filling_pct,
         uint16_t deadtime_ms)
 {
     uint8_t dummy;
@@ -447,7 +447,7 @@ bool Comm_SendPneuParams(state_race_mode_t mode, uint8_t filling_pct,
             (uint8_t *) &pneu, sizeof(pneu), &dummy, 1);
 }
 
-bool Comm_ReadPneuParams(state_race_mode_t mode, uint8_t *filling_pct,
+bool Comm_ReadPneuParams(race_mode_t mode, uint8_t *filling_pct,
         uint16_t *deadtime_ms)
 {
     comm_ecu_pneu_params_t pneu;

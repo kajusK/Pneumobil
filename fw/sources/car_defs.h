@@ -1,7 +1,7 @@
 /*
-    BUT pneumobil - Copyright (C) 2018 Jakub Kaderka.
+    BUT pneumobil - Copyright (C) 2019 Jakub Kaderka.
 
-    This file is part of BUT pneumobil ECU.
+    This file is part of BUT pneumobil.
 
     BUT pneumobil is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,29 +18,29 @@
 */
 
 /**
- * @file    hmi/logger.c
- * @brief   Logging to the SD card
+ * @file    car_defs.h
+ * @brief   Definition of car priperties that must have same value in all apps
  *
- * Handles logging the syslog (log module output) to sdcard and generating
- * a race log
- *
- * @addtogroup app-hmi
+ * @{
  */
 
-#ifndef __MODULES_LOGGER_H
-#define __MODULES_LOGGER_H
+#ifndef __CAR_DEFS_H
+#define __CAR_DEFS_H
 
-#include <types.h>
+/** Race mode selection */
+typedef enum {
+    RACE_MODE_ARCADE,
+    RACE_MODE_ACCELERATION,
+    RACE_MODE_LONG_DISTANCE,
+    RACE_MODE_DEBUG,            /** ECU logic is paused in DEBUG mode */
+} race_mode_t;
 
-/**
- * Create new race log file
- */
-extern bool Logger_NewRaceLogFile(void);
-
-/**
- * Initialize logger module
- */
-extern void Logger_Init(void);
+/** Valve state */
+typedef enum {
+    VALVE_CLOSED = 0,
+    VALVE_IN = 1,
+    VALVE_OUT = 2,
+} valve_state_t;
 
 #endif
 

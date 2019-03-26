@@ -29,6 +29,7 @@
 #define __APP_ECU_IO_H
 
 #include <types.h>
+#include <car_defs.h>
 
 /* Current sensing resistor for pressure valve current loop */
 #define ECU_RSENS_OHM 150
@@ -43,18 +44,12 @@ typedef struct {
     bool horn;
 } ecu_inputs_t;
 
-typedef enum {
-    ECU_VALVE_CLOSED = 0,
-    ECU_VALVE_IN = 1,
-    ECU_VALVE_OUT = 2,
-} ecu_valve_state_t;
-
 /* Valves state structure */
 typedef struct {
-    ecu_valve_state_t front1;
-    ecu_valve_state_t front2;
-    ecu_valve_state_t back1;
-    ecu_valve_state_t back2;
+    valve_state_t front1;
+    valve_state_t front2;
+    valve_state_t back1;
+    valve_state_t back2;
 } ecu_valves_t;
 
 /**

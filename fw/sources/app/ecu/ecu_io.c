@@ -171,22 +171,22 @@ void ECU_ValvesGet(ecu_valves_t *valves)
 
     valves->front1 = palReadLine(LINE_VALVE_F1A) | (palReadLine(LINE_VALVE_F1B) << 1);
     if (valves->front1 > 2) {
-        valves->front1 = ECU_VALVE_CLOSED;
+        valves->front1 = VALVE_CLOSED;
     }
 
     valves->back1 = palReadLine(LINE_VALVE_B1A) | (palReadLine(LINE_VALVE_B1B) << 1);
     if (valves->back1 > 2) {
-        valves->back1 = ECU_VALVE_CLOSED;
+        valves->back1 = VALVE_CLOSED;
     }
 
     valves->front2 = palReadLine(LINE_VALVE_F2A) | (palReadLine(LINE_VALVE_F2B) << 1);
     if (valves->front2 > 2) {
-        valves->front2 = ECU_VALVE_CLOSED;
+        valves->front2 = VALVE_CLOSED;
     }
 
     valves->back2 = palReadLine(LINE_VALVE_B2A) | (palReadLine(LINE_VALVE_B2B) << 1);
     if (valves->back2 > 2) {
-        valves->back2 = ECU_VALVE_CLOSED;
+        valves->back2 = VALVE_CLOSED;
     }
 }
 

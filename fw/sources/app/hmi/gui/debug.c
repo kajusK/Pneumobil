@@ -45,10 +45,10 @@ typedef struct {
     bool horn;
     bool brake;
     bool dual;
-    state_valve_t front1;
-    state_valve_t front2;
-    state_valve_t back1;
-    state_valve_t back2;
+    valve_state_t front1;
+    valve_state_t front2;
+    valve_state_t back1;
+    valve_state_t back2;
 } gui_debug_t;
 
 static GHandle ghLabelValveF1, ghLabelValveF2, ghLabelValveB1, ghLabelValveB2;

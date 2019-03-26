@@ -54,7 +54,7 @@ static void Statei_SetNodeOnline(state_node_t *module)
 }
 
 void State_UpdateCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
-        uint16_t distance_m, state_race_mode_t mode)
+        uint16_t distance_m, race_mode_t mode)
 {
     statei_car->speed_kmh = speed_dms*0.36;
     statei_car->speed_avg_kmh = speed_avg_dms*0.36;
@@ -62,8 +62,8 @@ void State_UpdateCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
     statei_car->mode = mode;
 }
 
-void State_UpdateCarIoState(state_valve_t front1, state_valve_t front2,
-        state_valve_t back1, state_valve_t back2, bool endstop_front,
+void State_UpdateCarIoState(valve_state_t front1, valve_state_t front2,
+        valve_state_t back1, valve_state_t back2, bool endstop_front,
         bool endstop_back, bool throttle, bool brake, bool horn, bool shifting,
         uint8_t gear)
 {
@@ -166,12 +166,12 @@ state_t *State_Get(void)
     return &statei_state;
 }
 
-state_race_mode_t State_GetRaceMode(void)
+race_mode_t State_GetRaceMode(void)
 {
     return statei_state.car.mode;
 }
 
-bool State_SetRaceMode(state_race_mode_t mode)
+bool State_SetRaceMode(race_mode_t mode)
 {
     Log_Info(LOG_SOURCE_APP, "Setting race mode to %d", mode);
     statei_state.car.mode = mode;

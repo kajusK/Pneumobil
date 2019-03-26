@@ -28,29 +28,17 @@
 #define __MODULES_STATE_H
 
 #include <types.h>
-
-typedef enum {
-    VALVE_CLOSED,
-    VALVE_IN,
-    VALVE_OUT,
-} state_valve_t;
-
-typedef enum {
-    RACE_MODE_ARCADE,
-    RACE_MODE_ACCELERATION,
-    RACE_MODE_LONG_DISTANCE,
-    RACE_MODE_DEBUG,
-} state_race_mode_t;
+#include <car_defs.h>
 
 typedef struct {
     uint8_t piston_pct;
     uint16_t press1_kpa;
     uint16_t press2_kpa;
     uint16_t press3_kpa;
-    state_valve_t valve_front1;
-    state_valve_t valve_front2;
-    state_valve_t valve_back1;
-    state_valve_t valve_back2;
+    valve_state_t valve_front1;
+    valve_state_t valve_front2;
+    valve_state_t valve_back1;
+    valve_state_t valve_back2;
     bool endstop_front;
     bool endstop_back;
 } state_pneu_t;
@@ -59,7 +47,7 @@ typedef struct {
     float speed_kmh;
     float speed_avg_kmh;
     uint16_t distance_m;
-    state_race_mode_t mode;
+    race_mode_t mode;
     bool throttle;
     bool brake;
     bool horn;
@@ -111,9 +99,9 @@ typedef struct {
  * Setters for the internal state variables, usually called from comm module
  */
 extern void State_UpdateCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
-        uint16_t distance_m, state_race_mode_t mode);
-extern void State_UpdateCarIoState(state_valve_t front1, state_valve_t front2,
-        state_valve_t back1, state_valve_t back2, bool endstop_front,
+        uint16_t distance_m, race_mode_t mode);
+extern void State_UpdateCarIoState(valve_state_t front1, valve_state_t front2,
+        valve_state_t back1, valve_state_t back2, bool endstop_front,
         bool endstop_back, bool throttle, bool brake, bool horn, bool shifting,
         uint8_t gear);
 extern void State_UpdatePneuState(uint16_t press1_kpa, uint16_t press2_kpa,
@@ -139,14 +127,14 @@ extern state_t *State_Get(void);
 /**
  * Get current ECU race mode
  */
-extern state_race_mode_t State_GetRaceMode(void);
+extern race_mode_t State_GetRaceMode(void);
 
 /**
  * Send command to change race mode to ecu
  *
  * @param [in] mode     Mode to be used
  */
-extern bool State_SetRaceMode(state_race_mode_t mode);
+extern bool State_SetRaceMode(race_mode_t mode);
 
 /**
  * Initialize State module

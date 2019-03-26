@@ -29,14 +29,7 @@
 #define __APP_ECU_RACE_H
 
 #include <types.h>
-
-/** Race mode selection */
-typedef enum {
-    RACE_MODE_ARCADE,
-    RACE_MODE_ACCELERATION,
-    RACE_MODE_LONG_DISTANCE,
-    RACE_MODE_DEBUG,            /** ECU logic is paused in DEBUG mode */
-} race_mode_t;
+#include <car_defs.h>
 
 /**
  * Get currently set filling percentage
