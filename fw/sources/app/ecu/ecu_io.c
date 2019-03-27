@@ -215,11 +215,11 @@ void ECU_GetRawInputs(ecu_inputs_t *inputs)
     ASSERT_NOT(inputs == NULL);
 
     if (Config_GetBool(CONFIG_BOOL_ENCODER_INVERT)) {
-        inputs->endstop_front = palReadLine(LINE_ENDSTOP_F1);
-        inputs->endstop_back = palReadLine(LINE_ENDSTOP_B1);
-    } else {
         inputs->endstop_front = !palReadLine(LINE_ENDSTOP_F1);
         inputs->endstop_back = !palReadLine(LINE_ENDSTOP_B1);
+    } else {
+        inputs->endstop_front = palReadLine(LINE_ENDSTOP_F1);
+        inputs->endstop_back = palReadLine(LINE_ENDSTOP_B1);
     }
     inputs->throttle = !palReadLine(LINE_THROTTLE);
     inputs->brake = !palReadLine(LINE_BRAKE);
