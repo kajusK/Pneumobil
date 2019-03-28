@@ -19,6 +19,7 @@ Typ: Aventics ST6 0830100629
 Datasheet: https://www.aventics.com/pneumatics-catalog/Pdf.cfm?Language=EN&Variant=internet&file=en/pdf/PDF_509814_p9196_en.pdf
 Napájení: 10-30DC (10mA?)
 Výstup: Otevřeno = Vcc, Sepnuto = GND
+Pozor - aktuální varianta má polaritu obráceně! Aktivní v 1
 
 Zapojení:
 ---------
