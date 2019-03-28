@@ -63,7 +63,7 @@ static const uint8_t cari_adc_channels[] = {
 };
 
 /** Buffer for adc data, filled by DMA */
-static uint16_t cari_adc_raw[ADC_RES_COUNT];
+static adcsample_t cari_adc_raw[ADC_RES_COUNT];
 
 /**
  * Convert voltage in mV to pressure in kPa

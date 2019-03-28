@@ -78,7 +78,7 @@ uint16_t Adcd_RefToSupplyMv(uint16_t raw)
     return ((uint32_t) 3300*REF_CAL)/raw;
 }
 
-void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
+void Adcd_AutoConversion(const uint8_t *channels, adcsample_t *buffer, uint8_t len,
         bool circular)
 {
     uint32_t chsel = 0;
@@ -91,9 +91,9 @@ void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
 #if (STM32_ADC_SUPPORTS_OVERSAMPLING)
         0,              /* CFGR2 */
 #endif
-        ADC_TR(0, 0),      /* TR treshold register*/
+        ADC_TR(0, 0),      /* TR threshold register*/
         ADC_SMPR_SMP_28P5, /* SMPR - 54 cycles long conversion */
-        0,                 /* Chanel selection */
+        0,                 /* Channel selection */
     };
 
     adcGroup.circular = circular;
@@ -105,9 +105,9 @@ void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer, uint8_t len,
     adcGroup.chselr = chsel;
 
     if (circular) {
-        adcStartConversion(&ADCD1, &adcGroup, buffer, len);
+        adcStartConversion(&ADCD1, &adcGroup, buffer, 1);
     } else {
-        adcConvert(&ADCD1, &adcGroup, buffer, len);
+        adcConvert(&ADCD1, &adcGroup, buffer, 1);
     }
 }
 

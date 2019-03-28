@@ -75,7 +75,7 @@ extern uint16_t Adcd_RefToSupplyMv(uint16_t raw);
  * @param [in] len              Amount of channels (same as buffer length), must be dividable by 2
  * @param [in] circular         True for circular conversion, false for single
  */
-extern void Adcd_AutoConversion(const uint8_t *channels, uint16_t *buffer,
+extern void Adcd_AutoConversion(const uint8_t *channels, adcsample_t *buffer,
         uint8_t len, bool circular);
 
 /**
