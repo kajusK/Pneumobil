@@ -42,7 +42,7 @@
 #define ECU_THREAD_PRIO (NORMALPRIO + 1)
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(ecui_thread_area, 256);
+THD_WORKING_AREA(ecui_thread_area, 512);
 
 /** Current ECU state */
 typedef enum {
@@ -115,7 +115,6 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             /* Last direction */
             control->dir = ECU_DIR_BACK;
             control->state = ECU_STATE_IDLE;
-            Log_Info(LOG_SOURCE_APP, "Fast init done, len: %d", pistonLen);
         } else {
             control->dir = ECU_DIR_FRONT;
         }
@@ -123,35 +122,39 @@ static void ECUi_EdgesInit(ecu_control_t *control)
 
     if (inputs->endstop_front) {
         Log_Info(LOG_SOURCE_APP, "Init: Front endstop hit");
-        int16_t len = Encoderd_Get();
+
         if (pistonLen != 0) {
-            if (Config_GetBool(CONFIG_BOOL_ENCODER_INVERT)) {
-                Encoderd_InvertDirection();
-            }
             Encoderd_Set(pistonLen);
             /* Last direction */
             control->dir = ECU_DIR_FRONT;
             control->state = ECU_STATE_IDLE;
-            Log_Info(LOG_SOURCE_APP, "Fast init done, len: %d", pistonLen);
-        } else if (control->dir == ECU_DIR_FRONT){
+        } else if (control->dir == ECU_DIR_FRONT) {
+            int16_t len = Encoderd_Get();
             if (len < 0) {
                 Config_SetBool(CONFIG_BOOL_ENCODER_INVERT, true);
                 Encoderd_InvertDirection();
-                Encoderd_Set(-len);
                 len = -len;
+                Encoderd_Set(len);
             }
             Config_SetUint(CONFIG_UINT_PISTON_LEN, len);
-            control->state = ECU_STATE_IDLE;
             Log_Info(LOG_SOURCE_APP, "Init done: Piston len: %d", len);
+            control->state = ECU_STATE_IDLE;
         }
     }
 
     /* End initialization if piston len is known, edge will be found during
      * normal mode (endstop hit fixes the encoder positon) */
-    if (control->state == ECU_STATE_INIT && pistonLen != 0) {
-        Encoderd_Set(pistonLen/2);
-        control->dir = ECU_DIR_BACK;
+    if (pistonLen != 0) {
+        if (Config_GetBool(CONFIG_BOOL_ENCODER_INVERT)) {
+            Encoderd_InvertDirection();
+        }
+        /* Edge was not hit in first run, initialize to default */
+        if (control->state == ECU_STATE_INIT) {
+            Encoderd_Set(pistonLen/2);
+            control->dir = ECU_DIR_BACK;
+        }
         control->state = ECU_STATE_IDLE;
+        Log_Info(LOG_SOURCE_APP, "Fast init done, len: %d", pistonLen);
     }
 
     /* Set valves according to current state */
@@ -234,6 +237,7 @@ static void ECUi_PneuStep(ecu_control_t *control)
 
     /** Pneumatic must not be blocked */
     if (!ECUi_PneuEnabled(&control->inputs)) {
+        control->state = ECU_STATE_IDLE;
         ECU_ValvesClose();
         return;
     }
