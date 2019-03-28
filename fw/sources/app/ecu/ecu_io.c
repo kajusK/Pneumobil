@@ -259,10 +259,6 @@ void ECU_GetInputs(ecu_inputs_t *inputs)
     inputs->shifting = Bt_Debounce(inputs->shifting, &deb[4]);
     inputs->horn = Bt_Debounce(inputs->horn, &deb[5]);
 
-    if (inputs->endstop_back == true && inputs->endstop_front == true) {
-        Log_Error(LOG_SOURCE_APP, "Both endstops are on");
-    }
-
     if (ECUi_GetBtMode()) {
         Race_NextMode();
     }
