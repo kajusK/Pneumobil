@@ -40,7 +40,7 @@ typedef enum {
     CONFIG_UINT_SENDER_PERIOD_MS, /* Send car state over can every x ms */
     CONFIG_UINT_FILLING_PCT_LONG_DIST, /* Filling percentage for long distance race */
     CONFIG_UINT_DEADTIME_MS_LONG_DIST, /* Deadtime for long distance race */
-    CONFIG_UINT_FILLING_PCT_ARCADE, /* Filling percentage for acceleration race */
+    CONFIG_UINT_FILLING_PCT_ARCADE, /* Filling percentage for arcade race */
     CONFIG_UINT_DEADTIME_MS_ARCADE, /* Deadtime for arcade race */
     CONFIG_UINT_FILLING_PCT_ACCELERATION, /* Acceleration filling percentage */
     CONFIG_UINT_DEADTIME_MS_ACCELERATION, /* Acceleration deadtime */
@@ -52,7 +52,7 @@ typedef enum {
 typedef enum {
     CONFIG_BOOL_ENCODER_INVERT, /* Invert direction of encoder counting */
     CONFIG_BOOL_PNEU_NON_BLOCK, /* Ignore checking pneu enabled */
-    CONFIG_BOOL_ENDSTOP_INVERT, /* Invert endstop polarity */
+    CONFIG_BOOL_ENDSTOP_INVERT, /* Invert endstop polarity (1 means active low) */
     CONFIG_BOOL_COUNT,
 } config_item_bool_t;
 
