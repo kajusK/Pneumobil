@@ -35,7 +35,7 @@ static void Encoderdi_Start(bool invert)
 {
     static QEIConfig config;
     config.mode = QEI_MODE_QUADRATURE;
-    config.resolution = QEI_BOTH_EDGES;
+    config.resolution = QEI_SINGLE_EDGE;
     if (invert) {
         config.dirinv = QEI_DIRINV_TRUE;
     } else {
