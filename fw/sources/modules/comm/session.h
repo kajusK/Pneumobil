@@ -39,9 +39,9 @@
 /** Command structure */
 typedef union {
     struct {
-        uint8_t response : 1;       /** Frame is response to request */
-        uint8_t error : 1;          /** Error during request processing */
         comm_cmd_id_t id : 6;       /** ID of the command */
+        uint8_t error : 1;          /** Error during request processing */
+        uint8_t response : 1;       /** Frame is response to request */
     };
     uint8_t intval;
 } comm_cmd_t;
