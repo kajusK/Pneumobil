@@ -324,13 +324,13 @@ void Log_Init(void)
 {
     int i;
 
-    (void) chThdCreateStatic(logi_thread_area, sizeof(logi_thread_area),
-                    NORMALPRIO, Logi_Thread, NULL);
-
-    /** set data buffer to memory pool */
+    /* set data buffer to memory pool */
     for (i = 0; i < LOG_BUFFER_LEN; i++) {
         chPoolFree(&logi_msg_pool, &logi_messages[i]);
     }
+
+    (void) chThdCreateStatic(logi_thread_area, sizeof(logi_thread_area),
+                    NORMALPRIO, Logi_Thread, NULL);
 }
 
 /** @} */
