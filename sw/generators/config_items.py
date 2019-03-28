@@ -73,7 +73,7 @@ def update_file(module, search, replace, header = True):
 
     if args.dry:
         print(data)
-        exit(0)
+        return
     else:
         with open(target, "w") as f:
             print("Writing to", target)
@@ -164,7 +164,7 @@ def gen_python(items):
 if args.module is not None:
     modules = [args.module]
 else:
-    modules = ["ECU", "HMI", "SDU"]
+    modules = ["ECU", "HMI"]
 
 data = get_data(SOURCE);
 for m in modules:
