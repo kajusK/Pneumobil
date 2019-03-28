@@ -55,6 +55,14 @@ uint16_t Race_GetDeadpointMs(void)
     return racei_deadtime_ms;
 }
 
+bool Race_GetValvesDual(void)
+{
+    if (racei_mode == RACE_MODE_LONG_DISTANCE) {
+        return false;
+    }
+    return true;
+}
+
 race_mode_t Race_GetMode(void)
 {
     return racei_mode;

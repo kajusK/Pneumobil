@@ -364,6 +364,7 @@ static THD_FUNCTION(ECU_Thread, arg)
         ECU_GetInputs(&control.inputs);
         control.filling_pct = Race_GetFillingPct();
         control.deadtime_ms = Race_GetDeadpointMs();
+        control.dual = Race_GetValvesDual();
 
         if (control.filling_pct == 0) {
             /* Debug mode, do nothing */

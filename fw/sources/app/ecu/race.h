@@ -42,6 +42,13 @@ extern uint8_t  Race_GetFillingPct(void);
 extern uint16_t Race_GetDeadpointMs(void);
 
 /**
+ * Get dual valve mode state
+ *
+ * @return If true, use both valves
+ */
+extern bool Race_GetValvesDual(void);
+
+/**
  * Get current ECU mode
  *
  * @return ECU mode
