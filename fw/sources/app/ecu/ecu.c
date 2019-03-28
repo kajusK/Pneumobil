@@ -334,10 +334,10 @@ static void ECUi_PneuStep(ecu_control_t *control)
             break;
         case ECU_STATE_DEADPOINT:
             if (control->dir == ECU_DIR_BACK) {
-                ECU_ValvesBackOut(control->dual);
+                ECU_ValvesBackOut(true);
                 ECU_ValvesFrontClose();
             } else {
-                ECU_ValvesFrontOut(control->dual);
+                ECU_ValvesFrontOut(true);
                 ECU_ValvesBackClose();
             }
             break;

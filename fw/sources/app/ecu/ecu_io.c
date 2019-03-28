@@ -140,14 +140,14 @@ void ECU_ValvesClose(void)
 
 void ECU_ValvesMoveFront(bool dual)
 {
-    ECU_ValvesFrontOut(dual);
+    ECU_ValvesFrontOut(true);
     ECU_ValvesBackIn(dual);
 }
 
 void ECU_ValvesMoveBack(bool dual)
 {
     ECU_ValvesFrontIn(dual);
-    ECU_ValvesBackOut(dual);
+    ECU_ValvesBackOut(true);
 }
 
 void ECU_ValvesSet(const ecu_valves_t *valves)
