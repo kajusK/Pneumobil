@@ -265,6 +265,11 @@ static void ECUi_PneuStep(ecu_control_t *control)
         case ECU_STATE_IDLE:
             if (inputs->throttle) {
                 control->state = ECU_STATE_MOVE;
+                if (pistonPct < 50) {
+                    control->dir = ECU_DIR_FRONT;
+                } else {
+                    control->dir = ECU_DIR_BACK;
+                }
             }
             break;
         case ECU_STATE_MOVE:
