@@ -64,7 +64,7 @@ static bool ECUi_GetBtMode(void)
     return false;
 }
 
-void ECU_ValvesFrontIn(bool dual)
+void ECU_ValvesFrontOut(bool dual)
 {
     palSetLine(LINE_VALVE_F1A);
     palClearLine(LINE_VALVE_F1B);
@@ -77,7 +77,7 @@ void ECU_ValvesFrontIn(bool dual)
     palClearLine(LINE_VALVE_F2B);
 }
 
-void ECU_ValvesFrontOut(bool dual)
+void ECU_ValvesFrontIn(bool dual)
 {
     palClearLine(LINE_VALVE_F1A);
     palSetLine(LINE_VALVE_F1B);
@@ -90,7 +90,7 @@ void ECU_ValvesFrontOut(bool dual)
     palClearLine(LINE_VALVE_F2A);
 }
 
-void ECU_ValvesBackIn(bool dual)
+void ECU_ValvesBackOut(bool dual)
 {
     palSetLine(LINE_VALVE_B1A);
     palClearLine(LINE_VALVE_B1B);
@@ -103,7 +103,7 @@ void ECU_ValvesBackIn(bool dual)
     palClearLine(LINE_VALVE_B2B);
 }
 
-void ECU_ValvesBackOut(bool dual)
+void ECU_ValvesBackIn(bool dual)
 {
     palClearLine(LINE_VALVE_B1A);
     palSetLine(LINE_VALVE_B1B);
