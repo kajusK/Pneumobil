@@ -64,7 +64,7 @@ typedef struct {
     ecu_state_t state;      /** Current ecu state */
     ecu_dir_t dir;          /** Direction of the movement */
     uint8_t filling_pct;    /** Amount of piston length percent to fill */
-    uint8_t deadtime_ms;    /** Delay between two pneumatic cycles */
+    uint16_t deadtime_ms;    /** Delay between two pneumatic cycles */
     systime_t timeout;      /** Time when deadpoint delay should end */
     uint8_t piston_start_pct; /** Position in moment of direction change */
     bool dual;              /** Use dual valves mode */
