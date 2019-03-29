@@ -115,6 +115,7 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             /* Last direction */
             control->dir = ECU_DIR_BACK;
             control->state = ECU_STATE_IDLE;
+            control->piston_start_pct = 0;
         } else {
             control->dir = ECU_DIR_FRONT;
         }
@@ -128,6 +129,7 @@ static void ECUi_EdgesInit(ecu_control_t *control)
             /* Last direction */
             control->dir = ECU_DIR_FRONT;
             control->state = ECU_STATE_IDLE;
+            control->piston_start_pct = 100;
         } else if (control->dir == ECU_DIR_FRONT) {
             int16_t len = Encoderd_Get();
             if (len < 0) {
@@ -151,6 +153,7 @@ static void ECUi_EdgesInit(ecu_control_t *control)
         /* Edge was not hit in first run, initialize to default */
         if (control->state == ECU_STATE_INIT) {
             Encoderd_Set(pistonLen/2);
+            control->piston_start_pct = 50;
             control->dir = ECU_DIR_BACK;
         }
         control->state = ECU_STATE_IDLE;
@@ -370,7 +373,6 @@ static THD_FUNCTION(ECU_Thread, arg)
             /* Debug mode, do nothing */
         } else if (control.state == ECU_STATE_INIT) {
             ECUi_EdgesInit(&control);
-            control.piston_start_pct = ECUi_GetPistonPosPct(&control.inputs);
         } else {
             ECUi_PneuStep(&control);
         }
