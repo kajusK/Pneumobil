@@ -36,7 +36,12 @@
 #include "utils/assert.h"
 #include "modules/log.h"
 
-#define LOG_BUFFER_LEN 16
+
+#ifdef STM32F042x6
+    #define LOG_BUFFER_LEN 4
+#else
+    #define LOG_BUFFER_LEN 16
+#endif
 
 typedef struct {
     log_severity_t sources[LOG_SOURCE_COUNT];
@@ -54,7 +59,7 @@ static log_subscription_t logi_subscriptions[LOG_CALLBACKS_NUM];
 static log_msg_t logi_messages[LOG_BUFFER_LEN];
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(logi_thread_area, 1024);
+THD_WORKING_AREA(logi_thread_area, 768);
 MEMORYPOOL_DECL(logi_msg_pool, LOG_BUFFER_LEN, 4, 0);
 static msg_t logi_letter[LOG_BUFFER_LEN];
 MAILBOX_DECL(logi_mailbox, &logi_letter, LOG_BUFFER_LEN);
