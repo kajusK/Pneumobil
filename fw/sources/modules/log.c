@@ -319,6 +319,7 @@ const char *Log_GetModuleStr(log_module_t module)
         "HMI",
         "PSU",
         "SDU",
+        "RF",
     };
 
     ASSERT_NOT(module >= LOG_MODULE_COUNT);

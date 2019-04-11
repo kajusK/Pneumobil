@@ -31,11 +31,15 @@
 #include <types.h>
 #include <hal.h>
 
+#include "version.h"
+
 typedef enum {
+    SPID_RFM,
+#ifdef BOARD_HMI
     SPID_LCD_TOUCH,
     SPID_LCD_SD,
-    SPID_RFM,
     SPID_BME,
+#endif
 } spid_device_t;
 
 /**

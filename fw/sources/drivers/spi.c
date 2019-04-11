@@ -31,13 +31,14 @@
 #include "utils/assert.h"
 #include "drivers/spi.h"
 
-#define SPID_DISP JOIN(SPID, SPI_DISP_SCK)
-#define SPID_COMM JOIN(SPID, SPI_COMM_SCK)
+#ifdef BOARD_HMI
+    #define SPID_DISP JOIN(SPID, SPI_DISP_SCK)
+    #define SPID_COMM JOIN(SPID, SPI_COMM_SCK)
 
 /*
  * Configuration for SPI driver for rf module
  *
- * SPI4 96M clk,  10M BME, nrf 10M - 16 divider to 6M
+ * SPI4 96M clk,  10M BME, rfm 10M - 16 divider to 6M
  */
 static const SPIConfig spidi_conf_comm = {
     false,
@@ -57,11 +58,30 @@ static const SPIConfig spidi_conf_disp = {
     (SPI_CR1_BR_0 | SPI_CR1_BR_1 | SPI_CR1_MSTR), /* CR1 */
     0, /* CR2 */
 };
+#else
+/*
+ * Configuration for SPI driver for rf module
+ *
+ * SPI1 48M clk, rfm 10M - 16 divider to 6M
+ */
+static const SPIConfig spidi_conf = {
+    false, /* circular */
+    NULL, /* End callback */
+    (SPI_CR1_BR_2 | SPI_CR1_MSTR), /* CR1 */
+    0, /* CR2 */
+};
+
+#endif
 
 void SPId_Init(void)
 {
+#ifdef BOARD_HMI
     spiStart(&SPID_COMM, &spidi_conf_comm);
     spiStart(&SPID_DISP, &spidi_conf_disp);
+#else
+    spiStart(&SPID1, &spidi_conf);
+
+#endif
 }
 
 void SPId_Select(spid_device_t device)
@@ -69,18 +89,20 @@ void SPId_Select(spid_device_t device)
     spiAcquireBus(SPId_GetDrv(device));
 
     switch (device) {
+        case SPID_RFM:
+            palClearLine(LINE_RFM_CS);
+            break;
+#ifdef BOARD_HMI
         case SPID_LCD_TOUCH:
             palClearLine(LINE_LCD_T_CS);
             break;
         case SPID_LCD_SD:
             palClearLine(LINE_LCD_SD_CS);
             break;
-        case SPID_RFM:
-            palClearLine(LINE_RFM_CS);
-            break;
         case SPID_BME:
             palClearLine(LINE_BME_CS);
             break;
+#endif
         default:
             ASSERT(false);
             break;
@@ -90,18 +112,20 @@ void SPId_Select(spid_device_t device)
 void SPId_Unselect(spid_device_t device)
 {
     switch (device) {
+        case SPID_RFM:
+            palSetLine(LINE_RFM_CS);
+            break;
+#ifdef BOARD_HMI
         case SPID_LCD_TOUCH:
             palSetLine(LINE_LCD_T_CS);
             break;
         case SPID_LCD_SD:
             palSetLine(LINE_LCD_SD_CS);
             break;
-        case SPID_RFM:
-            palSetLine(LINE_RFM_CS);
-            break;
         case SPID_BME:
             palSetLine(LINE_BME_CS);
             break;
+#endif
         default:
             ASSERT(false);
             break;
@@ -111,6 +135,7 @@ void SPId_Unselect(spid_device_t device)
 
 SPIDriver *SPId_GetDrv(spid_device_t device)
 {
+#ifdef BOARD_HMI
     switch (device) {
         case SPID_LCD_TOUCH:
         case SPID_LCD_SD:
@@ -124,6 +149,10 @@ SPIDriver *SPId_GetDrv(spid_device_t device)
             ASSERT(false);
             break;
     }
+#else
+    (void) device;
+    return &SPID1;
+#endif
 }
 
 /** @} */

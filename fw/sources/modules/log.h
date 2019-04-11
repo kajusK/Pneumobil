@@ -73,6 +73,7 @@ typedef enum {
     LOG_MODULE_HMI,
     LOG_MODULE_PSU,
     LOG_MODULE_SDU,
+    LOG_MODULE_RF2USB,
     LOG_MODULE_COUNT,
 } log_module_t;
 
@@ -84,6 +85,8 @@ typedef enum {
     #define LOG_MODULE_MYSELF LOG_MODULE_PSU
 #elif defined(BOARD_SDU)
     #define LOG_MODULE_MYSELF LOG_MODULE_SDU
+#elif defined(BOARD_RADIO2USB)
+    #define LOG_MODULE_MYSELF LOG_MODULE_RF2USB
 #else
     #error Undefined board
 #endif
