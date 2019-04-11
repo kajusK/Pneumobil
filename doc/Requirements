@@ -1,0 +1,44 @@
+===== Common interfaces =====
+ - CAN sběrnice
+ - UART pro debug
+ - SWD koenktor pro programování a debug
+
+===== ECU =====
+==== Outputs ====
+ - 4 pneumatické ventily na motoru (2 na každé straně)
+ - Brzdové světlo
+ - Klakson
+ - Proudová smyčka pro elektronický redukční ventil
+
+==== Inputs ====
+ - Plyn
+ - Brzda
+ - 2 senzory koncových poloh pístu (zdvojené?)
+ - Rotační enkodér pro určení absolutní polohy pístu (po inicializaci)
+ - Optická brána na měření rychlosti
+ - Senzory na převodovce - zařazený stupeň, řazení, neutrál
+ - 4 Tlakoměry (analogové)
+ - Napájecí napětí na desce (24, 12, 5 V), případně proudy
+ - Tlačítka na přepínání režimu, troubení, plyn na volantu
+
+===== HMI =====
+==== Outputs ====
+ - Piezo repráček (pípák)
+ - SD karta na záznam telemetrie
+ - Bezdrátové rozhraní pro komunikaci s pc
+
+==== Inputs ====
+ - Akcelerometr
+ - Gyroskop
+ - Teploměr
+ - Vlhkoměr
+ - Tlakoměr
+ - Dotyková obrazovka
+ - GPS
+
+===== PSU =====
+==== Inputs ====
+ - Napětí jednotlivých článků
+ - Napětí jednotlivých větví
+ - Proud baterie
+ - Proud do jednotlivých větví
