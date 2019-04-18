@@ -211,6 +211,10 @@ void __early_init(void) {
 
   stm32_gpio_init();
   stm32_clock_init();
+
+  /* remap pins pa11 and pa12 */
+  RCC->APB2ENR |= RCC_APB2ENR_SYSCFGCOMPEN;
+  SYSCFG->CFGR1 |= SYSCFG_CFGR1_PA11_PA12_RMP;
 }
 
 #if HAL_USE_SDC || defined(__DOXYGEN__)
