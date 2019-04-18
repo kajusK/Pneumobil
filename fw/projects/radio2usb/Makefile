@@ -44,6 +44,7 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(SOURCES)/drivers/wdg.c \
 	$(SOURCES)/drivers/spi.c \
 	$(SOURCES)/drivers/rfm69.c \
+	$(SOURCES)/drivers/crs.c \
 	$(wildcard $(SOURCES)/utils/*.c)
 
 USRINC = $(CONFDIR) $(SOURCES) $(APP_DIR)

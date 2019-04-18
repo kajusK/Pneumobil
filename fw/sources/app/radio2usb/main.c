@@ -30,6 +30,7 @@
 #include <chprintf.h>
 
 #include <drivers/wdg.h>
+#include <drivers/crs.h>
 #include "usb.h"
 
 #include "version.h"
@@ -56,6 +57,9 @@ int main(void) {
     chSysInit();
 
     usb_init();
+
+    /* Synchronize system clock to usb sync events for precise USB timing */
+    Crsd_SyncToUsb();
 
 //    Wdgd_Init();
 
