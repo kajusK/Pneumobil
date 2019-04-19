@@ -22,6 +22,9 @@ CHIBIOS_USE_CONTRIB = TRUE
 PORT = STM32/STM32F0xx
 PORTV = v6m
 
+# Compiler optimizations
+OPT = -O0
+
 ##############################################################################
 # Project, sources and paths
 

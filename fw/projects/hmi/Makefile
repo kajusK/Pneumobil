@@ -22,6 +22,9 @@ CHIBIOS_USE_CONTRIB = FALSE
 PORT = STM32/STM32F4xx
 PORTV = v7m
 
+# Compiler optimizations
+OPT = -O0
+
 ##############################################################################
 # Project, sources and paths
 

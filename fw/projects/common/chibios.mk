@@ -4,7 +4,7 @@
 
 ##############################################################################
 # Compiler options here.
-USE_OPT = -Os -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu11 \
+USE_OPT = ${OPT} -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu11 \
 		--specs=nano.specs --specs=nosys.specs
 
 # C specific options here (added to USE_OPT).
