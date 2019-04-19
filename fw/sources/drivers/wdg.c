@@ -38,7 +38,9 @@ THD_WORKING_AREA(wdgi_thread_area, 32);
 static const WDGConfig wdgdi_config = {
   STM32_IWDG_PR_64,
   STM32_IWDG_RL(1000),
+#if STM32_IWDG_IS_WINDOWED
   STM32_IWDG_WIN_DISABLED
+#endif
 };
 
 static THD_FUNCTION(Wdgd_Thread, arg)
