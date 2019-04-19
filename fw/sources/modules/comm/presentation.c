@@ -47,10 +47,10 @@ bool Comm_SendLog(comm_send_cb_t iface, const log_msg_t *msg)
     packet.priority = priority;
     packet.cmd.intval = 0;
     packet.cmd.id = COMM_CMD_LOG_MESSAGE;
-    packet.len = strlen(msg->msg) + 2;
+    packet.len = strlen(msg->msg) + 3;
     log->severity = msg->severity;
     log->source = msg->src;
-    strncpy((char *)log->message, msg->msg, LOG_MSG_LEN);
+    memcpy(log->message, msg->msg, strlen(msg->msg)+1);
 
     res = Comm_SendPayload(&packet, NULL, iface);
     if (res == COMM_OK) {
