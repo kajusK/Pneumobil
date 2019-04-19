@@ -210,6 +210,8 @@ static void Psui_ProcessData(void)
     uint16_t u12, u5, u24;
     uint16_t i5, i12, i24, ibat;
     uint8_t charge;
+    bool currentError;
+    bool voltageError;
 
     bat1 = (Adcd_RawToMv(psui_adc_raw[ADC_RES_U_B1]) * (uint32_t) 133) / 33;
     u24 = (Adcd_RawToMv(psui_adc_raw[ADC_RES_U_B2]) * (uint32_t) 377) / 47;
@@ -239,12 +241,15 @@ static void Psui_ProcessData(void)
     psui_range_voltages[2].value = i12;
     psui_range_voltages[3].value = i24;
 
-    palWriteLine(LINE_LED_VOLTAGE, !Psui_CheckRanges(psui_range_voltages,
+    voltageError = !Psui_CheckRanges(psui_range_voltages,
                 sizeof(psui_range_voltages)/sizeof(psui_range_voltages[0]),
-                "Voltage %s out of range (%d - %d) mV - %d mV"));
-    palWriteLine(LINE_LED_CURRENT, !Psui_CheckRanges(psui_range_currents,
+                "Voltage %s out of range (%d - %d) mV - %d mV");
+    currentError = !Psui_CheckRanges(psui_range_currents,
                 sizeof(psui_range_currents)/sizeof(psui_range_currents[0]),
-                "Current %s out of range (%d - %d) mA - %d mA"));
+                "Current %s out of range (%d - %d) mA - %d mA");
+
+    palWriteLine(LINE_LED_VOLTAGE, voltageError);
+    palWriteLine(LINE_LED_CURRENT, currentError);
 }
 
 static THD_FUNCTION(Psu_Thread, arg)
@@ -257,6 +262,7 @@ static THD_FUNCTION(Psu_Thread, arg)
         ref_mv = Adcd_RefToSupplyMv(psui_adc_raw[ADC_RES_INTREF]);
         Adcd_SetReferenceMv(ref_mv);
         Psui_ProcessData();
+        Comm_SendSystemStatus();
 
         chThdSleepMilliseconds(100);
     }

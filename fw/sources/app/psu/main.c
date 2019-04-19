@@ -55,8 +55,7 @@ int main(void)
     Log_Info(LOG_SOURCE_APP, "Init done");
 
     while (1) {
-        Comm_SendSystemStatus();
-        chThdSleepMilliseconds(500);
+        chThdSleepMilliseconds(1000);
     }
 }
 
