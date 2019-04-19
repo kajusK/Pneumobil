@@ -230,7 +230,8 @@ void ECU_GetRawInputs(ecu_inputs_t *inputs)
 uint8_t ECU_GetGear(void)
 {
     bool gear1 = !palReadLine(LINE_GEARBOX_1);
-    bool gear2 = !palReadLine(LINE_GEARBOX_2);
+    bool gear2 = false;
+//    bool gear2 = !palReadLine(LINE_GEARBOX_2);
 
     if (!gear1 && !gear2) {
         return 0;
