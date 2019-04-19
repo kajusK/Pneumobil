@@ -71,6 +71,7 @@ bool Cand_SendFrame(const CANTxFrame *frame)
     ASSERT_NOT(frame == NULL);
 
     res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
+
     if (res != MSG_OK) {
         return false;
     }
@@ -100,7 +101,7 @@ void Cand_Init(uint32_t baudrate, const cand_filter_t *filters, uint8_t count)
             count, driver_filters);
 
     /* Auto wakeup, auto recovery */
-    config.mcr = CAN_MCR_ABOM | CAN_MCR_AWUM;
+    config.mcr = CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP;
     /*
      * bit time = tq (3 + TS[3:0] + TS[2:0]) = tq * 16
      * tq = (BRP[9:0] + 1) * APB period (1/STM32_PCLK)
