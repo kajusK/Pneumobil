@@ -36,11 +36,9 @@
 THD_WORKING_AREA(wdgi_thread_area, 32);
 
 static const WDGConfig wdgdi_config = {
-    0, /* Prescaler, running from 40 kHz, 0 == /4 */
-    1000, /* Reload reg == 10 Hz */
-#if STM32_IWDG_IS_WINDOWED
-    0,
-#endif
+  STM32_IWDG_PR_64,
+  STM32_IWDG_RL(1000),
+  STM32_IWDG_WIN_DISABLED
 };
 
 static THD_FUNCTION(Wdgd_Thread, arg)
@@ -49,16 +47,16 @@ static THD_FUNCTION(Wdgd_Thread, arg)
 
     while (true) {
         wdgReset(&WDGD1);
-        chThdSleep(TIME_MS2I(50));
+        chThdSleepMilliseconds(50);
     }
 }
 
 void Wdgd_Init(void)
 {
+    wdgStart(&WDGD1, &wdgdi_config);
+
     (void) chThdCreateStatic(wdgi_thread_area, sizeof(wdgi_thread_area),
                     WDG_THREAD_PRIO, Wdgd_Thread, NULL);
-
-    wdgStart(&WDGD1, &wdgdi_config);
 }
 
 /** @} */
