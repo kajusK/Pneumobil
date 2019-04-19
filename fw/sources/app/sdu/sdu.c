@@ -155,7 +155,7 @@ static THD_FUNCTION(Sdu_Thread, arg)
         Sdui_Set7SegVal(sdui_7seg_digits[i], i);
         i++;
 
-        chThdSleepMilliseconds(10);
+        chThdSleepMilliseconds(1);
     }
 }
 
