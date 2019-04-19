@@ -36,7 +36,7 @@
 
 #define PSU_THREAD_PRIO NORMALPRIO
 /** Stack and stuff for thread */
-THD_WORKING_AREA(psui_thread_area, 128);
+THD_WORKING_AREA(psui_thread_area, 512);
 
 /** Gain of the current measurement IO */
 #define GAIN_CUR_BAT 20
@@ -239,10 +239,10 @@ static void Psui_ProcessData(void)
     psui_range_voltages[2].value = i12;
     psui_range_voltages[3].value = i24;
 
-    palWriteLine(LINE_LED_VOLTAGE, Psui_CheckRanges(psui_range_voltages,
+    palWriteLine(LINE_LED_VOLTAGE, !Psui_CheckRanges(psui_range_voltages,
                 sizeof(psui_range_voltages)/sizeof(psui_range_voltages[0]),
                 "Voltage %s out of range (%d - %d) mV - %d mV"));
-    palWriteLine(LINE_LED_CURRENT, Psui_CheckRanges(psui_range_currents,
+    palWriteLine(LINE_LED_CURRENT, !Psui_CheckRanges(psui_range_currents,
                 sizeof(psui_range_currents)/sizeof(psui_range_currents[0]),
                 "Current %s out of range (%d - %d) mA - %d mA"));
 }

@@ -39,8 +39,10 @@
 
 #ifdef STM32F042x6
     #define LOG_BUFFER_LEN 4
+    #define LOG_THREAD_AREA 512
 #else
     #define LOG_BUFFER_LEN 16
+    #define LOG_THREAD_AREA 768
 #endif
 
 typedef struct {
@@ -59,7 +61,7 @@ static log_subscription_t logi_subscriptions[LOG_CALLBACKS_NUM];
 static log_msg_t logi_messages[LOG_BUFFER_LEN];
 
 /** Stack and stuff for thread */
-THD_WORKING_AREA(logi_thread_area, 768);
+THD_WORKING_AREA(logi_thread_area, LOG_THREAD_AREA);
 MEMORYPOOL_DECL(logi_msg_pool, LOG_BUFFER_LEN, 4, 0);
 static msg_t logi_letter[LOG_BUFFER_LEN];
 MAILBOX_DECL(logi_mailbox, &logi_letter, LOG_BUFFER_LEN);
