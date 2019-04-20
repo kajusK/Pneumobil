@@ -50,6 +50,8 @@ typedef uint32_t mutex_t;
 #define TIME_IMMEDIATE 0
 #define NORMALPRIO 100
 #define MUTEX_DECL(name)    mutex_t name
+#define binary_semaphore_t mutex_t
+#define MSG_OK 0
 
 typedef void *msg_t;
 typedef uint32_t systime_t;
@@ -64,6 +66,10 @@ systime_t chVTTimeElapsedSinceX(systime_t time);
 void chMtxLock(mutex_t *mp);
 void chMtxUnlock(mutex_t *mp);
 uint32_t chTimeI2S(uint32_t time);
+void chBSemReset(mutex_t *sem, bool b);
+msg_t chBSemWaitTimeout(mutex_t *sem, uint32_t time);
+void chBSemSignal(mutex_t *sem);
+void chBSemObjectInit(mutex_t *sem, bool b);
 
 #endif
 

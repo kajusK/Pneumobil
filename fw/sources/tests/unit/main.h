@@ -34,6 +34,7 @@
 extern void Log_RunTests(void);
 extern void Comm_UartTransport_RunTests(void);
 extern void Comm_CanTransport_RunTests(void);
+extern void Comm_Session_RunTests(void);
 extern void Eeprom_RunTests(void);
 extern void CRC_RunTests(void);
 extern void Config_RunTests(void);

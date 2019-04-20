@@ -36,6 +36,7 @@ static void RunAll(void)
     Log_RunTests();
     Comm_UartTransport_RunTests();
     Comm_CanTransport_RunTests();
+    Comm_Session_RunTests();
     Eeprom_RunTests();
     Config_RunTests();
 

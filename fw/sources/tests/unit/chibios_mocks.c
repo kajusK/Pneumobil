@@ -82,4 +82,28 @@ uint32_t chTimeI2S(uint32_t time)
     return time;
 }
 
+void chBSemReset(mutex_t *sem, bool b)
+{
+    (void) sem;
+    (void) b;
+}
+
+msg_t chBSemWaitTimeout(mutex_t *sem, uint32_t timeout)
+{
+    (void) sem;
+    (void) timeout;
+    return MSG_OK;
+}
+
+void chBSemSignal(mutex_t *sem)
+{
+    (void) sem;
+}
+
+void chBSemObjectInit(mutex_t *sem, bool b)
+{
+    (void) sem;
+    (void) b;
+}
+
 /** @} */
