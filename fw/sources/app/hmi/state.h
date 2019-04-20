@@ -130,6 +130,13 @@ extern state_t *State_Get(void);
 extern race_mode_t State_GetRaceMode(void);
 
 /**
+ * Get time since the last call to SetRaceMode
+ *
+ * @return time in milliseconds
+ */
+extern uint32_t State_GetRaceTimeMs(void);
+
+/**
  * Send command to change race mode to ecu
  *
  * @param [in] mode     Mode to be used

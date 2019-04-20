@@ -167,8 +167,13 @@ void Gui_RaceUpdate(void)
 {
     char buf[BUFSIZE];
     struct tm timp;
+    uint32_t time;
 
     state_t *state = State_Get();
+    time = State_GetRaceTimeMs()/1000;
+    if (time > 3600) {
+        time = 3600;
+    }
 
     chsnprintf(buf, BUFSIZE, "%4d kpa", state->pneu.press1_kpa);
     Gui_LabelUpdate(ghLabelPress1, buf);
@@ -181,6 +186,10 @@ void Gui_RaceUpdate(void)
     Gui_LabelUpdate(ghLabelSpeed, buf);
     chsnprintf(buf, BUFSIZE, "%3.1f km/h", state->car.speed_avg_kmh);
     Gui_LabelUpdate(ghLabelSpeedAvg, buf);
+
+    chsnprintf(buf, BUFSIZE, "%02d:%02d", time/60, time%60);
+    Gui_LabelUpdate(ghLabelRaceTime, buf);
+
     chsnprintf(buf, BUFSIZE, "%5d m", state->car.distance_m);
     Gui_LabelUpdate(ghLabelDistance, buf);
 

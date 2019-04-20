@@ -51,7 +51,6 @@ THD_WORKING_AREA(loggeri_thread_area, 1024);
 
 static FIL loggeri_syslog_file;
 static FIL loggeri_race_file;
-static uint32_t loggeri_log_created_timestamp;
 
 static const char loggeri_race_mode_str[4][14] = {
     "arcade",
@@ -92,19 +91,17 @@ static void Loggeri_LogCb(const log_msg_t *log)
 static void Loggeri_AddRaceLogEntry(void)
 {
     char speed[6];
-    uint32_t time;
     state_t *state = State_Get();
 
     if (!SDCd_IsReady()) {
         return;
     }
 
-    time = millis() - loggeri_log_created_timestamp;
-
     chsnprintf(speed, sizeof(speed), "%.1f", state->car.speed_kmh);
 
     f_printf(&loggeri_race_file, "%d;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",
-            time, speed, state->car.distance_m, state->pneu.press1_kpa,
+            State_GetRaceTimeMs(), speed,
+            state->car.distance_m, state->pneu.press1_kpa,
             state->pneu.press2_kpa, state->pneu.press3_kpa,
             state->pneu.piston_pct, state->car.throttle, state->car.brake,
             state->car.gear);
@@ -175,7 +172,6 @@ bool Logger_NewRaceLogFile(void)
         Log_Error(LOG_SOURCE_APP, "Failed to create log file %s", filename);
         return false;
     }
-    loggeri_log_created_timestamp = millis();
 
     f_puts("time [ms];speed [km/h];distance [m];"
         "pressure1 [kpa];pressure2 [kpa];pressure3 [kpa];"

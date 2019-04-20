@@ -37,6 +37,7 @@
 /** Time from last module seen time to consider it online */
 #define STATE_CONSIDER_ONLINE_MS 5000
 
+static uint32_t statei_race_start_ts;
 static state_t statei_state;
 static state_pneu_t * const statei_pneu = &statei_state.pneu;
 static state_car_t * const statei_car = &statei_state.car;
@@ -171,11 +172,17 @@ race_mode_t State_GetRaceMode(void)
     return statei_state.car.mode;
 }
 
+uint32_t State_GetRaceTimeMs(void)
+{
+    return millis() - statei_race_start_ts;
+}
+
 bool State_SetRaceMode(race_mode_t mode)
 {
     Log_Info(LOG_SOURCE_APP, "Setting race mode to %d", mode);
     statei_state.car.mode = mode;
     Logger_NewRaceLogFile();
+    statei_race_start_ts = millis();
     return Comm_SendEcuStartRace(mode);
 }
 
