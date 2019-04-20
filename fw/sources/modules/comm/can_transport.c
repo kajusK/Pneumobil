@@ -26,6 +26,7 @@
  */
 
 #include <string.h>
+#include <ch.h>
 
 #include "utils/assert.h"
 #include "modules/log.h"
@@ -57,6 +58,9 @@ typedef struct {
 
 /** Storage area for multipart messages */
 static comm_can_mbox_t cani_rx_mbox[COMM_CAN_MBOX_SLOTS];
+
+/** Mutex for sending multipart messages */
+MUTEX_DECL(cani_mpart_mutex);
 
 /**
  * Convert received sid into can id structure
@@ -266,6 +270,7 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
     uint8_t offset;
     uint8_t crc;
     bool crcSent;
+    bool ret = true;
     CANTxFrame frame;
     comm_can_id_t id;
 
@@ -306,6 +311,8 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
     crc = CRC8(payload, len);
     crcSent = false;
 
+    /* Lock sending by mutex so multipart message is sent as whole */
+    chMtxLock(&cani_mpart_mutex);
     while (sent <= len && crcSent != true) {
         uint8_t remaining = len - sent;
         uint8_t sublen;
@@ -322,15 +329,16 @@ bool Comm_CanSend(comm_node_t dest, comm_priority_t priority,
         memcpy(&frame.data8[offset], payload+sent, sublen);
 
         if (!Cand_SendFrame(&frame)) {
-            Log_Debug(LOG_SOURCE_COMM, "Failed to send CAN frame");
-            return false;
+            ret = false;
+            break;
         }
         sent += sublen;
         seq++;
         offset = 1;
     }
+    chMtxUnlock(&cani_mpart_mutex);
 
-    return true;
+    return ret;
 }
 
 void Comm_CanInit(void)

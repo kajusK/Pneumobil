@@ -30,6 +30,7 @@
 #include <hal.h>
 
 #include "utils/assert.h"
+#include "modules/log.h"
 #include "drivers/can.h"
 
 #define CAND_THREAD_PRIO   NORMALPRIO
@@ -73,6 +74,7 @@ bool Cand_SendFrame(const CANTxFrame *frame)
     res = canTransmitTimeout(&CAND, CAN_ANY_MAILBOX, frame, chTimeMS2I(CAN_TIMEOUT_MS));
 
     if (res != MSG_OK) {
+        Log_Debug(LOG_SOURCE_DRIVER, "Failed to send CAN frame");
         return false;
     }
     return true;
