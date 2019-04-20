@@ -26,12 +26,15 @@
  */
 
 #include <gfx.h>
+#include <chprintf.h>
 
 #include <modules/comm/comm.h>
 
 #include "state.h"
 #include "gui/gui.h"
 #include "gui/debug.h"
+
+#define BUFSIZE 12
 
 #define RADIO_GROUP_F1 1
 #define RADIO_GROUP_F2 2
@@ -57,10 +60,11 @@ static GHandle ghRadioF2In, ghRadioF2Out, ghRadioF2Close;
 static GHandle ghRadioB1In, ghRadioB1Out, ghRadioB1Close;
 static GHandle ghRadioB2In, ghRadioB2Out, ghRadioB2Close;
 
-static GHandle ghLabelValves, ghLabelOutputs;
+static GHandle ghLabelValves, ghLabelOutputs, ghLabelPistonLen;
 static GHandle ghChboxDual, ghChboxHorn, ghChboxBrake, ghChboxOut1, ghChboxOut2;
 static GHandle ghChboxEnable;
 static GHandle ghRadioFront, ghRadioBack, ghRadioClose;
+static GHandle ghBtLenReset;
 
 static gui_debug_t guii_debug;
 
@@ -191,7 +195,23 @@ void Gui_DebugInit(GHandle ghTab)
     wi.text = "Out2";
     ghChboxOut2 = gwinCheckboxCreate(0, &wi);
 
+    /* Reset piston length register */
+    wi.customDraw = NULL;
+    wi.g.x = (tabWidth - 2*GUI_MARGIN)/2;
+    wi.g.y += wi.g.height + GUI_OFFSET_SPACING*2;
+    wi.g.width = (tabWidth - GUI_OFFSET_SPACING)/4;
+    wi.text = "00000";
+    ghLabelPistonLen = gwinLabelCreate(0, &wi);
+    gwinLabelSetAttribute(ghLabelPistonLen, 100, "Len:");
+    wi.text = "Reset len";
+    wi.g.x += wi.g.width + GUI_OFFSET_SPACING;
+    ghBtLenReset = gwinButtonCreate(0, &wi);
+
+    wi.g.x += wi.g.width + GUI_OFFSET_SPACING;
+
     /* Mode control */
+    wi.customDraw = gwinCheckboxDraw_Button;
+    wi.g.width = GUI_BUTTON_WIDTH;
     wi.g.x = tabWidth - wi.g.width - GUI_MARGIN;
     wi.g.y = tabHeight - wi.g.height - GUI_MARGIN;
     wi.text = "Enable";
@@ -200,7 +220,14 @@ void Gui_DebugInit(GHandle ghTab)
 
 void Gui_DebugUpdate(void)
 {
+    char buf[BUFSIZE];
+    //TODO
+    uint32_t pistonLen = 0;
+
     gwinCheckboxCheck(ghChboxEnable, State_GetRaceMode() == RACE_MODE_DEBUG);
+
+    chsnprintf(buf, BUFSIZE, "%5d", pistonLen);
+    Gui_LabelUpdate(ghLabelPistonLen, buf);
 }
 
 bool Gui_DebugProcessEvent(GEvent *ev)
@@ -209,6 +236,14 @@ bool Gui_DebugProcessEvent(GEvent *ev)
     handle = ((GEventGWin *)ev)->gwin;
 
     switch (ev->type) {
+        case GEVENT_GWIN_BUTTON:
+            if (handle == ghBtLenReset) {
+
+            } else {
+                return false;
+            }
+            break;
+
         case GEVENT_GWIN_CHECKBOX:
             if (handle == ghChboxEnable) {
                 if (gwinCheckboxIsChecked(ghChboxEnable)) {
