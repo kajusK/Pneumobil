@@ -286,11 +286,13 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
 
     if (replyRequired) {
         response.cmd.response = 1;
+        response.cmd.id = packet->cmd.id;
         if (response.len == 0 || retval != COMM_OK) {
             response.len = 1;
             response.payload[0] = retval;
+            response.node = packet->node;
             if (retval != COMM_OK) {
-                response.cmd.error = true;
+                response.cmd.error = 1;
             }
         }
 
