@@ -211,7 +211,11 @@ bool Gui_DebugProcessEvent(GEvent *ev)
     switch (ev->type) {
         case GEVENT_GWIN_CHECKBOX:
             if (handle == ghChboxEnable) {
-                State_SetRaceMode(RACE_MODE_DEBUG);
+                if (gwinCheckboxIsChecked(ghChboxEnable)) {
+                    State_SetRaceMode(RACE_MODE_DEBUG);
+                } else {
+                    State_SetRaceMode(RACE_MODE_ARCADE);
+                }
             } else if (handle == ghChboxDual) {
                 guii_debug.dual = gwinCheckboxIsChecked(ghChboxDual);
             } else if (handle == ghChboxHorn) {
