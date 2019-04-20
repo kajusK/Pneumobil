@@ -61,7 +61,8 @@ static void Gui_StatusUpdateNode(GHandle label, state_node_t *node)
         state= "Off";
     }
 
-    chsnprintf(buf, BUFSIZE, "%s, %4d mV, %3d", state, node->core_mv, node->temp_c);
+    chsnprintf(buf, BUFSIZE, "%s, %4d mV, up %4d s", state, node->core_mv,
+            node->uptime_s/1000);
     Gui_LabelUpdate(label, buf);
 }
 
