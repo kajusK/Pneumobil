@@ -26,7 +26,10 @@
  */
 
 #include <gfx.h>
+#include <chprintf.h>
 
+#include "state.h"
+#include "gui/gui.h"
 #include "gui/race.h"
 #include "gui/status.h"
 #include "gui/setup.h"
@@ -35,13 +38,16 @@
 
 #include "gui/tabs.h"
 
+#define BUFSIZE 64
+
 static GHandle ghTabset;
 static GHandle ghTabRace, ghTabStatus, ghTabSetup, ghTabDebug, ghTabConsole;
-static GHandle ghLabelMode, ghLabelBattery;
+static GHandle ghLabelBattery;
 
 void Gui_TabsInit(void)
 {
     GWidgetInit wi;
+    font_t font;
 
     gwinWidgetClearInit(&wi);
     wi.g.show = gTrue;
@@ -63,19 +69,13 @@ void Gui_TabsInit(void)
     Gui_DebugInit(ghTabDebug);
     Gui_ConsoleInit(ghTabConsole);
 
-    /*
-    wi.g.width = 100;
-    wi.g.height = 20;
-    wi.g.y = 0;
+    font = gwinGetDefaultFont();
+    wi.g.height = gdispGetFontMetric(font, fontHeight);
+    wi.g.width = gdispGetStringWidth("0000 mA 0000 mV 000%", font);
+    wi.g.y = GUI_OFFSET_SPACING;
     wi.g.x = gdispGetWidth() - wi.g.width;
-    wi.text = "Unknown";
-    ghLabelMode = gwinLabelCreate(0, &wi);
-
-    wi.g.y = 0;
-    wi.g.x -= wi.g.width;
-    wi.text = "0 mA, 0%";
+    wi.text = "   0 mA    0 mV   0%";
     ghLabelBattery = gwinLabelCreate(0, &wi);
-    */
 }
 
 gui_tab_t Gui_TabsGetActive(void)
@@ -101,6 +101,10 @@ gui_tab_t Gui_TabsGetActive(void)
 
 bool Gui_TabsUpdate(void)
 {
+    state_t *state;
+    char buf[BUFSIZE];
+    state = State_Get();
+
     switch (Gui_TabsGetActive()) {
         case TAB_RACE:
             Gui_RaceUpdate();
@@ -121,6 +125,11 @@ bool Gui_TabsUpdate(void)
             return false;
             break;
     }
+
+    chsnprintf(buf, BUFSIZE, "%4d mA %4d mV %3d%%", state->psu.battery.cur_ma,
+            state->psu.battery.bat2_mv, state->psu.battery.charge_pct);
+    Gui_LabelUpdate(ghLabelBattery, buf);
+
     return true;
 }
 
@@ -130,6 +139,8 @@ bool Gui_TabsProcessEvent(GEvent *ev)
         if (((GEventGWinTabset *)ev)->ghPage == ghTabConsole) {
             Gui_ConsoleSetUrgent(false);
         }
+        /* On tab change, battery label is moved to background by redraw */
+        gwinRaise(ghLabelBattery);
         return true;
     }
 
