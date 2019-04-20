@@ -312,10 +312,12 @@ static void ECUi_PneuStep(ecu_control_t *control)
         switch (control->state) {
             case ECU_STATE_MOVE:
                 control->piston_start_pct = pistonPct;
-                if (control->dir == ECU_DIR_BACK) {
-                    control->dir = ECU_DIR_FRONT;
-                } else {
-                    control->dir = ECU_DIR_BACK;
+                if (prevState != ECU_STATE_IDLE) {
+                    if (control->dir == ECU_DIR_BACK) {
+                        control->dir = ECU_DIR_FRONT;
+                    } else {
+                        control->dir = ECU_DIR_BACK;
+                    }
                 }
                 break;
             case ECU_STATE_DEADPOINT:
