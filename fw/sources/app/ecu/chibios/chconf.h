@@ -38,6 +38,9 @@
  */
 /*===========================================================================*/
 
+/* workaround for compiling without optimizations - larger code causing overflows */
+#define PORT_INT_REQUIRED_STACK 128
+
 /**
  * @brief   System time counter resolution.
  * @note    Allowed values are 16 or 32 bits.
