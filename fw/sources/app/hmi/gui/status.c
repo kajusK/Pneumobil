@@ -305,7 +305,7 @@ void Gui_StatusUpdate(void)
     Gui_LabelUpdate(ghLabelBat2, buf);
     chsnprintf(buf, BUFSIZE, "%4d mA", state->psu.battery.cur_ma);
     Gui_LabelUpdate(ghLabelCurrent, buf);
-    chsnprintf(buf, BUFSIZE, "%3d %", state->psu.battery.charge_pct);
+    chsnprintf(buf, BUFSIZE, "%3d %%", state->psu.battery.charge_pct);
     Gui_LabelUpdate(ghLabelCharge, buf);
 
     chsnprintf(buf, BUFSIZE, "%4d mV", state->psu.psu5_mv);
