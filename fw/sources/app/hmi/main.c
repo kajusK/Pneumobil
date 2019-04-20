@@ -49,8 +49,8 @@ int main(void) {
     /** Kernel becomes thread, rtos is activated */
     chSysInit();
 
-    Comm_Init();
     Log_Init();
+    Comm_Init();
     Log_Info(LOG_SOURCE_APP, "HMI is booting...");
     Log_Debug(LOG_SOURCE_APP, "SYSCLK=%u", STM32_SYSCLK);
     Log_Info(LOG_SOURCE_APP, "Version %d.%d", VER_MAJOR, VER_MINOR);
