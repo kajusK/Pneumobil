@@ -59,6 +59,7 @@ comm_error_t Comm_SendPayload(const comm_packet_t *packet,
     /* If response is required, sending must be locked using mutex */
     if (response != NULL) {
         chMtxLock(&commi_session_mutex);
+        chBSemReset(&commi_session.bsem, true);
     }
 
     if (link_iface(packet->node, packet->priority, (uint8_t *) &packet->cmd,
@@ -76,7 +77,6 @@ comm_error_t Comm_SendPayload(const comm_packet_t *packet,
     commi_session.cmd = packet->cmd;
     commi_session.dest = packet->node;
     commi_session.response = response;
-    chBSemReset(&commi_session.bsem, true);
     msg = chBSemWaitTimeout(&commi_session.bsem, TIME_MS2I(COMM_SESSION_TIMEOUT_MS));
 
     /* Store session content and return mutex */
