@@ -383,7 +383,10 @@ static THD_FUNCTION(ECU_Thread, arg)
         } else {
             ECUi_PneuStep(&control);
         }
-        chThdSleepUntil(time);
+
+        if (chVTGetSystemTime() < time) {
+            chThdSleepUntil(time);
+        }
     }
 }
 
