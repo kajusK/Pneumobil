@@ -52,6 +52,9 @@ THD_WORKING_AREA(loggeri_thread_area, 1024);
 static FIL loggeri_syslog_file;
 static FIL loggeri_race_file;
 
+/** Log file is ready to be written */
+static bool loggeri_racelog_ready;
+
 static const char loggeri_race_mode_str[4][14] = {
     "arcade",
     "acceleration",
@@ -93,7 +96,7 @@ static void Loggeri_AddRaceLogEntry(void)
     char speed[6];
     state_t *state = State_Get();
 
-    if (!SDCd_IsReady()) {
+    if (!SDCd_IsReady() && !loggeri_racelog_ready) {
         return;
     }
 
@@ -153,6 +156,7 @@ bool Logger_NewRaceLogFile(void)
     race_mode_t mode;
     char filename[128];
 
+    loggeri_racelog_ready = false;
     if (!SDCd_IsReady()) {
         Log_Warn(LOG_SOURCE_APP, "Unable to create log file, sd card not ready");
         return false;
@@ -182,6 +186,7 @@ bool Logger_NewRaceLogFile(void)
     f_sync(&loggeri_race_file);
 
     Log_Info(LOG_SOURCE_APP, "Created a log file %s", filename);
+    loggeri_racelog_ready = true;
     return true;
 }
 
