@@ -167,6 +167,9 @@ static THD_FUNCTION(Storagei_Thread, arg)
             events1 = chEvtWaitAnyTimeout(ALL_EVENTS,
                     TIME_S2I(STORAGE_SAVE_DELAY_S));
             events2 |= events1;
+            if (events1 & STORAGE_UPDATE_IMMEDIATELY) {
+                break;
+            }
         } while (events1 != 0 || events2 == 0);
 
         if (events2 & STORAGE_UPDATE_BOOL) {
@@ -239,6 +242,11 @@ bool Storage_LoadAll(void)
 void Storage_Update(storage_update_t update)
 {
     chEvtSignal(storagei_thread, (eventmask_t) update);
+}
+
+void Storage_WriteImmediately(void)
+{
+    chEvtSignal(storagei_thread, (eventmask_t) STORAGE_UPDATE_IMMEDIATELY);
 }
 
 void Storage_Init(void)

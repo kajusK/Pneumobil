@@ -36,7 +36,8 @@
 typedef enum {
     STORAGE_UPDATE_UINT = 0x01,
     STORAGE_UPDATE_BOOL = 0x02,
-    STORAGE_UPDATE_FLOAT = 0x04
+    STORAGE_UPDATE_FLOAT = 0x04,
+    STORAGE_UPDATE_IMMEDIATELY = 0x08, /* write pending items immediately */
 } storage_update_t;
 
 /**
@@ -59,6 +60,11 @@ extern bool Storage_LoadAll(void);
  * @param [in] update       Which item should be updated in storage
  */
 extern void Storage_Update(storage_update_t update);
+
+/**
+ * Write changed storage items immediately without waiting for save delay
+ */
+extern void Storage_WriteImmediately(void);
 
 /**
  * Initialize storage module
