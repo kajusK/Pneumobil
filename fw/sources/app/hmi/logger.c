@@ -133,13 +133,16 @@ static void Loggeri_CardInsertedCb(void)
 static THD_FUNCTION(Logger_Thread, arg)
 {
     systime_t time;
+    uint32_t period = Config_GetUint(CONFIG_UINT_LOG_PERIOD_MS);
     (void) arg;
 
     while (true) {
-        time = chTimeAddX(chVTGetSystemTime(),
-                TIME_MS2I(Config_GetUint(CONFIG_UINT_LOG_PERIOD_MS)));
+        time = chTimeAddX(chVTGetSystemTime(), TIME_MS2I(period));
         Loggeri_AddRaceLogEntry();
-        chThdSleepUntil(time);
+
+        if (chVTGetSystemTime() < time) {
+            chThdSleepUntil(time);
+        }
     }
 }
 
