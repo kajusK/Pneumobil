@@ -162,7 +162,7 @@ state_t *State_Get(void)
     statei_state.node.hmi.online = true;
     statei_state.node.hmi.core_mv = 0;
     statei_state.node.hmi.temp_c = 0;
-    statei_state.node.hmi.uptime_s = millis();
+    statei_state.node.hmi.uptime_s = millis()/1000;
 
     return &statei_state;
 }

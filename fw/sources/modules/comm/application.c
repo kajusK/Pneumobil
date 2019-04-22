@@ -561,7 +561,7 @@ void Comm_SendSystemStatus(void)
 
     status.device_id = COMM_MY_ID;
     status.state = 0;
-    status.uptime_s = millis();
+    status.uptime_s = millis()/1000;
     status.core_temp_c = 0;
     status.core_voltage_mv = 0;
 
