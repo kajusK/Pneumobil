@@ -37,9 +37,9 @@
 
 #define BUFSIZE 32
 #define RADIO_GROUP_MODE 0
+#define GUI_HORN_TIME_MS 800
 
 static GHandle ghLabelSpeedUnit;
-
 static GHandle ghLabelSpeed, ghLabelDistance, ghLabelRaceTime, ghLabelSpeedAvg, ghLabelDatetime, ghLabelGear;
 static GHandle ghLabelPress1, ghLabelPress2, ghLabelPress3;
 static GHandle ghBtRaceReset, ghRadioSetArcade, ghRadioSetAcceleration, ghRadioSetLongDist, ghBtHorn;
@@ -216,8 +216,14 @@ void Gui_RaceUpdate(void)
 
 bool Gui_RaceProcessEvent(GEvent *ev)
 {
+    static systime_t hornTimeout;
     GHandle handle;
     handle = ((GEventGWin *)ev)->gwin;
+
+    if (hornTimeout != 0 && chVTGetSystemTime() > hornTimeout) {
+        hornTimeout = 0;
+        Comm_SendEcuUserIo(false, 0, 0, 0);
+    }
 
     switch (ev->type) {
         case GEVENT_GWIN_RADIO:
@@ -238,7 +244,8 @@ bool Gui_RaceProcessEvent(GEvent *ev)
 
         case GEVENT_GWIN_BUTTON:
             if (handle == ghBtHorn) {
-                //TODO
+                Comm_SendEcuUserIo(true, 0, 0, 0);
+                hornTimeout = chTimeAddX(chVTGetSystemTime(), TIME_MS2I(GUI_HORN_TIME_MS));
             } else if (handle == ghBtRaceReset) {
                 State_SetRaceMode(State_GetRaceMode());
             } else {
