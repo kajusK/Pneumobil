@@ -166,11 +166,7 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
             break;
         case COMM_CMD_RESET_CONFIG:
             if (packet->len == 4) {
-                if (*((uint32_t *)packet->payload) == 0xdeadbeef) {
-                    retval = Comm_ResetConfig();
-                } else {
-                    retval = COMM_ERR_INCORRECT_PARAM;
-                }
+                retval = Comm_ResetConfig(*((uint32_t *) packet->payload));
             }
             break;
         case COMM_CMD_LOG_MESSAGE:

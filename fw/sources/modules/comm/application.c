@@ -184,12 +184,16 @@ comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
 #endif
 }
 
-comm_error_t Comm_ResetConfig(void)
+comm_error_t Comm_ResetConfig(uint32_t magic)
 {
 #ifdef HAS_STORAGE
-    Config_Reset();
-    return COMM_OK;
+    if (magic == 0xdeadbeef) {
+        Config_Reset();
+        return COMM_OK;
+    }
+    return COMM_ERR_INCORRECT_PARAM;
 #else
+    (void) magic;
     return COMM_ERR_UNSUPPORTED_CMD;
 #endif
 }

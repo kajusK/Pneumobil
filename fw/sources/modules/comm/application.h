@@ -41,7 +41,7 @@ extern comm_error_t Comm_GetLogMask(uint8_t interface,
 extern comm_error_t Comm_SetConfig(const comm_config_item_t *payload);
 extern comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
         comm_config_item_t *response);
-extern comm_error_t Comm_ResetConfig(void);
+extern comm_error_t Comm_ResetConfig(uint32_t magic);
 extern comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload);
 extern comm_error_t Comm_Reboot(uint32_t magic);
