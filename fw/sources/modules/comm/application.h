@@ -44,6 +44,7 @@ extern comm_error_t Comm_GetConfig(uint8_t id, uint8_t type,
 extern comm_error_t Comm_ResetConfig(void);
 extern comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
         const comm_log_msg_t *payload);
+extern comm_error_t Comm_Reboot(uint32_t magic);
 extern void Comm_CarState(const comm_car_state_t *payload);
 
 #ifdef BOARD_HMI

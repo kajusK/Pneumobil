@@ -195,6 +195,9 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
         case COMM_CMD_FLASH_FINISH:
         break;
         case COMM_CMD_REBOOT:
+            if (packet->len == 4) {
+                retval = Comm_Reboot(*((uint32_t *) packet->payload));
+            }
         break;
 
         /* ECU commands*/

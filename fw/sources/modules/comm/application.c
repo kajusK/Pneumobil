@@ -31,11 +31,13 @@
 #include "utils/time.h"
 
 #include "modules/log.h"
+#include "modules/storage.h"
 #include "modules/comm/comm.h"
 #include "modules/comm/can_transport.h"
 #include "modules/comm/uart_transport.h"
 #include "modules/comm/session.h"
 #include "modules/comm/application.h"
+#include "drivers/sys.h"
 
 #ifdef HAS_STORAGE
     #include "modules/config.h"
@@ -223,6 +225,18 @@ comm_error_t Comm_LogMessage(uint16_t len, comm_node_t node,
             (const char *) payload->message);
 #endif
     return COMM_OK;
+}
+
+comm_error_t Comm_Reboot(uint32_t magic)
+{
+    if (magic == 0xdeadbeef) {
+#ifdef HAS_STORAGE
+        Storage_WriteImmediately();
+#endif
+        Sysd_Reboot();
+        return COMM_OK;
+    }
+    return COMM_ERR_INCORRECT_PARAM;
 }
 
 void Comm_CarState(const comm_car_state_t *payload)

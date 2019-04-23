@@ -53,6 +53,7 @@ USRSRC = $(wildcard $(APP_DIR)/*.c) \
 	$(SOURCES)/drivers/wdg.c \
 	$(SOURCES)/drivers/rtc.c \
 	$(SOURCES)/drivers/spi.c \
+	$(SOURCES)/drivers/sys.c \
 	$(SOURCES)/drivers/rfm69.c \
 	$(wildcard $(SOURCES)/drivers/ugfx/*.c) \
 	$(wildcard $(SOURCES)/utils/*.c)
