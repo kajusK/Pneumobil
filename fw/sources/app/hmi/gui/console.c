@@ -47,6 +47,20 @@
 static GHandle ghConsole;
 static GHandle ghTabConsole;
 
+/**
+ * Set console label to urgent
+ *
+ * @param [in] urgent   If true, set to urgent, else to normal
+ */
+static void Guii_ConsoleSetUrgent(bool urgent)
+{
+    if (urgent) {
+        gwinTabsetSetTitle(ghTabConsole, "Console (!)", FALSE);
+    } else {
+        gwinTabsetSetTitle(ghTabConsole, "Console", FALSE);
+    }
+}
+
 void Gui_ConsoleInit(GHandle ghTab)
 {
     GWidgetInit     wi;
@@ -78,9 +92,7 @@ void Gui_ConsoleLogCb(const log_msg_t *log)
             log->severity >= LOG_SEVERITY_COUNT);
 
     RTCd_GetTime(&timeinfo);
-    asctime_r(&timeinfo, buf);
-    /* Remove trailing new line */
-    buf[strlen(buf)-2] = '\0';
+    strftime(buf, sizeof(buf), "%H:%M:%S", &timeinfo);
 
     switch (log->severity) {
         case LOG_SEVERITY_ERROR:
@@ -98,18 +110,14 @@ void Gui_ConsoleLogCb(const log_msg_t *log)
             buf, Log_GetModuleStr(log->module), Log_GetSourceStr(log->src),
             color, Log_GetSeverityStr(log->severity), log->msg);
 
-    if (log->severity > LOG_SEVERITY_INFO && Gui_TabsGetActive() != TAB_CONSOLE) {
-        Gui_ConsoleSetUrgent(true);
+    if (log->severity < LOG_SEVERITY_INFO && Gui_TabsGetActive() != TAB_CONSOLE) {
+        Guii_ConsoleSetUrgent(true);
     }
 }
 
-void Gui_ConsoleSetUrgent(bool urgent)
+void Gui_ConsoleOnSelect(void)
 {
-    if (urgent) {
-        gwinTabsetSetTitle(ghTabConsole, "Console (!)", FALSE);
-    } else {
-        gwinTabsetSetTitle(ghTabConsole, "Console", FALSE);
-    }
+    Guii_ConsoleSetUrgent(false);
 }
 
 void Gui_ConsoleUpdate(void)

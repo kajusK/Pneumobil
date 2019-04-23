@@ -407,6 +407,23 @@ comm_error_t Comm_EcuGetPneuParams(uint8_t mode, comm_ecu_pneu_params_t *respons
     return COMM_OK;
 
 }
+
+comm_error_t Comm_EcuReinit(uint32_t magic)
+{
+    if (magic == 0xdeadbeef) {
+        Config_SetUint(CONFIG_UINT_PISTON_LEN, 0);
+        return COMM_OK;
+    }
+    return COMM_ERR_INCORRECT_PARAM;
+}
+
+comm_error_t Comm_EcuGetPneuVars(uint16_t *piston_len)
+{
+    ASSERT_NOT(piston_len == 0);
+
+    *piston_len = Config_GetUint(CONFIG_UINT_PISTON_LEN);
+    return COMM_OK;
+}
 #endif
 
 /* ***************************************************************************
@@ -482,6 +499,30 @@ bool Comm_ReadPneuParams(race_mode_t mode, uint8_t *filling_pct,
     *filling_pct = pneu.filling_pct;
     *deadtime_ms = pneu.deadtime_ms;
     return true;
+}
+
+bool Comm_ReadPneuVars(uint16_t *piston_len)
+{
+    ASSERT_NOT(piston_len == NULL);
+
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_GET_PNEU_VARS,
+            NULL, 0, (uint8_t *) piston_len, sizeof(*piston_len));
+}
+
+bool Comm_SendPneuReinit(void)
+{
+    uint32_t magic = 0xdeadbeef;
+
+    return Comm_SendPacketCmd(COMM_NODE_ECU, COMM_CMD_PNEU_REINIT,
+            (uint8_t *) &magic, sizeof(magic), NULL, 0);
+}
+
+bool Comm_SendReboot(comm_node_t node)
+{
+    uint32_t magic = 0xdeadbeef;
+
+    return Comm_SendPacketCmd(node, COMM_CMD_REBOOT,
+            (uint8_t *) &magic, sizeof(magic), NULL, 0);
 }
 #endif
 

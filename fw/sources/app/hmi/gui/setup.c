@@ -424,6 +424,11 @@ void Gui_SetupInit(GHandle ghTab)
             Config_GetUint(CONFIG_UINT_LONG_DIST_DEADTIME_MAX_MS));
 }
 
+void Gui_SetupOnSelect(void)
+{
+    return;
+}
+
 void Gui_SetupUpdate(void)
 {
     char buf[BUFSIZE];

@@ -218,16 +218,22 @@ void Gui_DebugInit(GHandle ghTab)
     ghChboxEnable = gwinCheckboxCreate(0, &wi);
 }
 
-void Gui_DebugUpdate(void)
+void Gui_DebugOnSelect(void)
 {
     char buf[BUFSIZE];
-    //TODO
-    uint32_t pistonLen = 0;
+    uint16_t pistonLen = 0;
 
-    gwinCheckboxCheck(ghChboxEnable, State_GetRaceMode() == RACE_MODE_DEBUG);
+    if (Comm_ReadPneuVars(&pistonLen) == false) {
+        return;
+    }
 
     chsnprintf(buf, BUFSIZE, "%5d", pistonLen);
     Gui_LabelUpdate(ghLabelPistonLen, buf);
+}
+
+void Gui_DebugUpdate(void)
+{
+    gwinCheckboxCheck(ghChboxEnable, State_GetRaceMode() == RACE_MODE_DEBUG);
 }
 
 bool Gui_DebugProcessEvent(GEvent *ev)
@@ -238,7 +244,9 @@ bool Gui_DebugProcessEvent(GEvent *ev)
     switch (ev->type) {
         case GEVENT_GWIN_BUTTON:
             if (handle == ghBtLenReset) {
-
+                Comm_SendPneuReinit();
+                Comm_SendReboot(COMM_NODE_ECU);
+                Gui_LabelUpdate(ghLabelPistonLen, "0");
             } else {
                 return false;
             }

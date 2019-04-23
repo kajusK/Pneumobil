@@ -37,6 +37,11 @@
 extern void Gui_RaceInit(GHandle ghTab);
 
 /**
+ * Called on switching to this tab
+ */
+extern void Gui_RaceOnSelect(void);
+
+/**
  * Update values on Race screen
  */
 extern void Gui_RaceUpdate(void);

@@ -135,9 +135,20 @@ bool Gui_TabsUpdate(void)
 
 bool Gui_TabsProcessEvent(GEvent *ev)
 {
+    GHandle handle;
+    handle = ((GEventGWin *)ev)->gwin;
+
     if (ev->type == GEVENT_GWIN_TABSET) {
-        if (((GEventGWinTabset *)ev)->ghPage == ghTabConsole) {
-            Gui_ConsoleSetUrgent(false);
+        if (handle == ghTabRace) {
+            Gui_RaceOnSelect();
+        } else if (handle == ghTabStatus) {
+            Gui_StatusOnSelect();
+        } else if (handle == ghTabSetup) {
+            Gui_SetupOnSelect();
+        } else if (handle == ghTabDebug) {
+            Gui_DebugOnSelect();
+        } else if (handle == ghTabConsole) {
+            Gui_ConsoleOnSelect();
         }
         /* On tab change, battery label is moved to background by redraw */
         gwinRaise(ghLabelBattery);

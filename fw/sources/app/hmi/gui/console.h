@@ -45,11 +45,9 @@ extern void Gui_ConsoleInit(GHandle ghTab);
 extern void Gui_ConsoleLogCb(const log_msg_t *log);
 
 /**
- * Set console label to urgent
- *
- * @param [in] urgent   If true, set to urgent, else to normal
+ * Called on switching to this tab
  */
-extern void Gui_ConsoleSetUrgent(bool urgent);
+extern void Gui_ConsoleOnSelect(void);
 
 /**
  * Update data on this screen

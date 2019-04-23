@@ -276,6 +276,17 @@ bool Comm_HandlePacket(comm_node_t dest, const comm_packet_t *packet,
                 response.len = sizeof(comm_ecu_pneu_params_t);
             }
             break;
+        case COMM_CMD_PNEU_REINIT:
+            if (packet->len == 4) {
+                retval = Comm_EcuReinit(*((uint32_t *) packet->payload));
+            }
+            break;
+
+        case COMM_CMD_GET_PNEU_VARS:
+            if (packet->len == 0) {
+                retval = Comm_EcuGetPneuVars((uint16_t *) packet->payload);
+            }
+            break;
 #endif
 
         default:

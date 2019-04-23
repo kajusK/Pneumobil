@@ -287,6 +287,11 @@ void Gui_StatusInit(GHandle ghTab)
     ghPistonProgress = gwinProgressbarCreate(NULL, &wi);
 }
 
+void Gui_StatusOnSelect(void)
+{
+    return;
+}
+
 void Gui_StatusUpdate(void)
 {
     char buf[BUFSIZE];

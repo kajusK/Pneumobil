@@ -37,6 +37,11 @@
 extern void Gui_SetupInit(GHandle ghTab);
 
 /**
+ * Called on switching to this tab
+ */
+extern void Gui_SetupOnSelect(void);
+
+/**
  * Update data on this screen
  */
 extern void Gui_SetupUpdate(void);

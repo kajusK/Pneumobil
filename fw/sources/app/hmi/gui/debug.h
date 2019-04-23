@@ -37,6 +37,11 @@
 extern void Gui_DebugInit(GHandle ghTab);
 
 /**
+ * Called on switching to this tab
+ */
+extern void Gui_DebugOnSelect(void);
+
+/**
  * Update data on this screen
  */
 extern void Gui_DebugUpdate(void);

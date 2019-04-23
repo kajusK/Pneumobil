@@ -37,6 +37,11 @@
 extern void Gui_StatusInit(GHandle ghTab);
 
 /**
+ * Called on switching to this tab
+ */
+extern void Gui_StatusOnSelect(void);
+
+/**
  * Update the values on status screen
  */
 extern void Gui_StatusUpdate(void);

@@ -163,6 +163,11 @@ void Gui_RaceInit(GHandle ghTab)
     ghBtHorn = gwinButtonCreate(0, &wi);
 }
 
+void Gui_RaceOnSelect(void)
+{
+    return;
+}
+
 void Gui_RaceUpdate(void)
 {
     char buf[BUFSIZE];
