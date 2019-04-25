@@ -166,9 +166,9 @@ static uint8_t Psui_GetCharge(uint16_t bat_mv)
  */
 static uint16_t Psui_Raw2mA(uint16_t raw_volt, uint8_t gain)
 {
-    uint32_t voltage = Adcd_RawToMv(raw_volt) * gain;
+    uint32_t voltage = Adcd_RawToMv(raw_volt);
 
-    return (voltage * 1000) / CUR_SENSE_MOHM;
+    return (voltage * 1000) / CUR_SENSE_MOHM / gain;
 }
 
 /**
@@ -213,6 +213,8 @@ static void Psui_ProcessData(void)
     bool currentError;
     bool voltageError;
 
+    Adcd_SetReferenceMv(Adcd_RefToSupplyMv(psui_adc_raw[ADC_RES_INTREF]));
+
     bat1 = (Adcd_RawToMv(psui_adc_raw[ADC_RES_U_B1]) * (uint32_t) 133) / 33;
     u24 = (Adcd_RawToMv(psui_adc_raw[ADC_RES_U_B2]) * (uint32_t) 377) / 47;
     bat2 = u24 - bat1;
@@ -224,7 +226,7 @@ static void Psui_ProcessData(void)
     i12 = Psui_Raw2mA(psui_adc_raw[ADC_RES_I_12], GAIN_CUR);
     i24 = Psui_Raw2mA(psui_adc_raw[ADC_RES_I_24], GAIN_CUR);
 
-    charge = (Psui_GetCharge(bat1) + Psui_GetCharge(bat2))/2;
+    charge = Psui_GetCharge(u24/2);
 
     Comm_SendBatteryState(bat1, bat2, ibat, charge);
     Comm_SendPSUCurrent(i5, i12, i24);
