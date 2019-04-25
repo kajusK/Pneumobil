@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __INCLUDE_HMI_GUI_GUI_H
-#define __INCLUDE_HMI_GUI_GUI_H
+#ifndef __HMI_GUI_GUI_H
+#define __HMI_GUI_GUI_H
 
 #include <types.h>
 #include <gfx.h>

@@ -27,8 +27,8 @@
  * @{
  */
 
-#ifndef __MODULES_CONFIG_ITEMS_H
-#define __MODULES_CONFIG_ITEMS_H
+#ifndef __HMI_CONFIG_ITEMS_H
+#define __HMI_CONFIG_ITEMS_H
 
 #include <types.h>
 

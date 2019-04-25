@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __VERSION_H
-#define __VERSION_H
+#ifndef __RF2USB_VERSION_H
+#define __RF2USB_VERSION_H
 
 #define VER_MAJOR 0
 #define VER_MINOR 1

@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __APP_ECU_SENDER_H
-#define __APP_ECU_SENDER_H
+#ifndef __ECU_SENDER_H
+#define __ECU_SENDER_H
 
 #include <types.h>
 

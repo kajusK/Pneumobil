@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __INCLUDE_HMI_GUI_RACE_H
-#define __INCLUDE_HMI_GUI_RACE_H
+#ifndef __HMI_GUI_RACE_H
+#define __HMI_GUI_RACE_H
 
 #include <types.h>
 #include <gfx.h>

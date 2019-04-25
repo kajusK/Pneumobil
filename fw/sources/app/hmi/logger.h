@@ -27,8 +27,8 @@
  * @addtogroup app-hmi
  */
 
-#ifndef __MODULES_LOGGER_H
-#define __MODULES_LOGGER_H
+#ifndef __HMI_LOGGER_H
+#define __HMI_LOGGER_H
 
 #include <types.h>
 

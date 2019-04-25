@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __APP_ECU_IO_H
-#define __APP_ECU_IO_H
+#ifndef __ECU_IO_H
+#define __ECU_IO_H
 
 #include <types.h>
 #include <car_defs.h>

@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __APP_ECU_H
-#define __APP_ECU_H
+#ifndef __ECU_ECU_H
+#define __ECU_ECU_H
 
 #include <types.h>
 

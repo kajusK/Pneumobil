@@ -24,8 +24,8 @@
  * @addtogroup app-hmi
  */
 
-#ifndef __MODULES_STATE_H
-#define __MODULES_STATE_H
+#ifndef __HMI_STATE_H
+#define __HMI_STATE_H
 
 #include <types.h>
 #include <car_defs.h>

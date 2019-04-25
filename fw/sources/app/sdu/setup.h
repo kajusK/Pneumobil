@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef __APP_SETUP_H
-#define __APP_SETUP_H
+#ifndef __SDU_SETUP_H
+#define __SDU_SETUP_H
 
 /** If defined, config will be saved to external storage */
 //#define HAS_STORAGE
