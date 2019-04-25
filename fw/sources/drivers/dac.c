@@ -34,7 +34,7 @@ void Dacd_SetOutputMv(uint16_t out_mv)
 {
     uint16_t val;
     val = ((uint32_t)DAC_MAX_VAL * out_mv) / DAC_MAX_OUT_MV;
-    dacPutChannelX(&DACD1, 1, val);
+    dacPutChannelX(&DACD1, 0, val);
 }
 
 void Dacd_Init(void)
