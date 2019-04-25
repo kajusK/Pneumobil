@@ -426,7 +426,7 @@ void Gui_SetupInit(GHandle ghTab)
 
 void Gui_SetupOnSelect(void)
 {
-    return;
+    Guii_SetupParamsLoad();
 }
 
 void Gui_SetupUpdate(void)
