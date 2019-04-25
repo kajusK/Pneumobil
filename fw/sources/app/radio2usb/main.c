@@ -61,7 +61,7 @@ int main(void) {
     /* Synchronize system clock to usb sync events for precise USB timing */
     Crsd_SyncToUsb();
 
-//    Wdgd_Init();
+    Wdgd_Init();
 
     while (1) {
         chThdSleepMilliseconds(500);
