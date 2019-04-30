@@ -2184,7 +2184,7 @@ F 1 "BAT60" H 2900 2450 50  0000 C CNN
 F 2 "Diode_SMD:D_SOD-323" H 2700 2500 50  0001 C CNN
 F 3 "~" H 2700 2500 50  0001 C CNN
 	1    2700 2500
-	-1   0    0    1   
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	2850 2500 3150 2500
