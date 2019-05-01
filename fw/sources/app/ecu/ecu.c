@@ -376,7 +376,7 @@ static THD_FUNCTION(ECU_Thread, arg)
         control.deadtime_ms = Race_GetDeadpointMs();
         control.dual = Race_GetValvesDual();
 
-        if (control.filling_pct == 0) {
+        if (Race_GetMode() == RACE_MODE_DEBUG) {
             /* Debug mode, do nothing */
         } else if (control.state == ECU_STATE_INIT) {
             ECUi_EdgesInit(&control);
