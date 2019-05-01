@@ -106,7 +106,7 @@ extern void rfm69_Send(uint8_t dest, const void* buffer, uint8_t len);
  *
  * @return  Amount of bytes received or 0 if nothing was received
  */
-extern uint8_t rfm69_Receive(char *buffer, uint8_t max_len);
+extern uint8_t rfm69_Receive(uint8_t *buffer, uint8_t max_len);
 
 /*
  * Initialize rfm module
