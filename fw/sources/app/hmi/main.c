@@ -41,6 +41,7 @@
 #include "logger.h"
 #include "version.h"
 #include "gui/gui.h"
+#include "rf.h"
 
 int main(void) {
     int slowCount = 0;
@@ -65,6 +66,7 @@ int main(void) {
     Logger_Init();
 
     SPId_Init();
+    Rf_Init();
     Gui_Init();
 
     while (1) {

@@ -61,6 +61,10 @@ void State_UpdateCarState(uint16_t speed_dms, uint16_t speed_avg_dms,
     statei_car->speed_avg_kmh = speed_avg_dms*0.36;
     statei_car->distance_m = distance_m;
     statei_car->mode = mode;
+
+    if (statei_car->speed_kmh > statei_car->speed_max_kmh) {
+        statei_car->speed_max_kmh = statei_car->speed_kmh;
+    }
 }
 
 void State_UpdateCarIoState(valve_state_t front1, valve_state_t front2,
@@ -183,6 +187,7 @@ bool State_SetRaceMode(race_mode_t mode)
     statei_state.car.mode = mode;
     Logger_NewRaceLogFile();
     statei_race_start_ts = millis();
+    statei_car->speed_max_kmh = 0;
     return Comm_SendEcuStartRace(mode);
 }
 

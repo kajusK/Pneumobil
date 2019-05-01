@@ -46,6 +46,7 @@ typedef struct {
 typedef struct {
     float speed_kmh;
     float speed_avg_kmh;
+    float speed_max_kmh;
     uint16_t distance_m;
     race_mode_t mode;
     bool throttle;
