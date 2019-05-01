@@ -53,9 +53,12 @@ static GHandle ghBtTimeDayInc, ghBtTimeDayDec, ghBtTimeMonInc, ghBtTimeMonDec;
 static GHandle ghBtTimeHourInc, ghBtTimeHourDec, ghBtTimeMinInc, ghBtTimeMinDec;
 static GHandle ghBtTimeYearInc, ghBtTimeYearDec;
 static GHandle ghFrameTime, ghBtTimeSave, ghBtTimeCancel;
+static GHandle ghSliderBacklight, ghSliderContrast, ghBtLcdSet;
+static GHandle ghFrameLcd, ghBtLcdSave, ghBtLcdCancel;
 
 static GHandle ghLabelDatetime;
 static GHandle ghBtTimeSet;
+
 
 static GHandle ghBtArcadeFilDec, ghBtArcadeFilInc, ghBtArcadeDeadInc, ghBtArcadeDeadDec;
 static GHandle ghSliderArcadeFil, ghSliderArcadeDead;
@@ -161,6 +164,46 @@ static void Guii_SetupTimeInit(GHandle ghTab)
     ghBtTimeCancel = gwinButtonCreate(0, &wi);
 }
 
+static void Guii_SetupLcdInit(GHandle ghTab)
+{
+    GWidgetInit wi;
+
+    gwinWidgetClearInit(&wi);
+    wi.g.show = gFalse;
+    wi.g.parent = ghTab;
+
+    wi.g.width = 530;
+    wi.g.height = 200;
+    wi.g.x = gwinGetInnerWidth(ghTab)/2 - wi.g.width/2;
+    wi.g.y = gwinGetInnerHeight(ghTab)/2 - wi.g.height/2;
+    wi.text = "LCD setup";
+    ghFrameLcd = gwinFrameCreate(0, &wi, 0);
+
+    wi.g.parent = ghFrameLcd;
+    wi.g.show = gTrue;
+    wi.g.x = GUI_MARGIN;
+    wi.g.y = GUI_MARGIN;
+    wi.g.width = wi.g.width - GUI_MARGIN*2;
+    wi.g.height = SLIDER_HEIGHT;
+    wi.text = "Backlight";
+    ghSliderBacklight = gwinSliderCreate(0, &wi);
+
+    wi.g.y += wi.g.height + GUI_MARGIN;
+    wi.text = "Contrast";
+    ghSliderContrast = gwinSliderCreate(0, &wi);
+
+    wi.g.x = gwinGetInnerWidth(ghFrameTime) - GUI_BUTTON_WIDTH - GUI_MARGIN;
+    wi.g.y = gwinGetInnerHeight(ghFrameTime) - GUI_BUTTON_HEIGHT - GUI_MARGIN;
+    wi.g.width = GUI_BUTTON_WIDTH;
+    wi.g.height = GUI_BUTTON_HEIGHT;
+    wi.text = "Save";
+    ghBtLcdSave = gwinButtonCreate(0, &wi);
+
+    wi.g.x -= wi.g.width + GUI_OFFSET_SPACING;
+    wi.text = "Cancel";
+    ghBtLcdCancel = gwinButtonCreate(0, &wi);
+}
+
 static void Guii_SetupGenSlide(GWidgetInit *wi, const char *str, GHandle *label,
         GHandle *up, GHandle *down, GHandle *slider, gCoord width)
 {
@@ -238,6 +281,20 @@ static void Guii_SetupTimeLoad(void)
 static void Guii_SetupTimeSave(void)
 {
     RTCd_SetTime(&guii_tm);
+}
+
+static void Guii_SetupLcdLoad(void)
+{
+    gwinSliderSetPosition(ghSliderBacklight,
+            Config_GetUint(CONFIG_UINT_BACKLIGHT));
+    gwinSliderSetPosition(ghSliderContrast,
+            Config_GetUint(CONFIG_UINT_CONTRAST));
+}
+
+static void Guii_SetupLcdSave(void)
+{
+    Config_SetUint(CONFIG_UINT_BACKLIGHT, gwinSliderGetPosition(ghSliderBacklight));
+    Config_SetUint(CONFIG_UINT_CONTRAST, gwinSliderGetPosition(ghSliderContrast));
 }
 
 /**
@@ -368,6 +425,11 @@ void Gui_SetupInit(GHandle ghTab)
     wi.text = "Set";
     ghBtTimeSet = gwinButtonCreate(0, &wi);
 
+    /* Lcd config */
+    wi.g.x += wi.g.width + GUI_OFFSET_SPACING*2;
+    wi.text = "LCD";
+    ghBtLcdSet = gwinButtonCreate(0, &wi);
+
     /* Arcade parameters */
     wi.g.y += wi.g.height;
     wi.g.x = GUI_MARGIN;
@@ -414,6 +476,7 @@ void Gui_SetupInit(GHandle ghTab)
 
     /* Called last to get frame in foreground */
     Guii_SetupTimeInit(ghTab);
+    Guii_SetupLcdInit(ghTab);
 
     /* Slider ranges */
     gwinSliderSetRange(ghSliderArcadeDead, 0,
@@ -488,6 +551,15 @@ bool Gui_SetupProcessEvent(GEvent *ev)
             } else if (handle == ghBtTimeSave) {
                 Guii_SetupTimeSave();
                 gwinSetVisible(ghFrameTime, false);
+            /* Gui saving/loading */
+            } else if (handle == ghBtLcdSet) {
+                Guii_SetupLcdLoad();
+                gwinSetVisible(ghFrameLcd, true);
+            } else if (handle == ghBtLcdCancel) {
+                gwinSetVisible(ghFrameLcd, false);
+            } else if (handle == ghBtLcdSave) {
+                Guii_SetupLcdSave();
+                gwinSetVisible(ghFrameLcd, false);
             /* Time inc/dec buttons */
             } else if (handle == ghBtTimeDayDec) {
                 guii_tm.tm_mday--;
@@ -565,6 +637,10 @@ bool Gui_SetupProcessEvent(GEvent *ev)
                 guii_long_dist.filling_pct = ((GEventGWinSlider *)ev)->position;
             } else if (handle == ghSliderLongDead) {
                 guii_long_dist.deadtime_ms = ((GEventGWinSlider *)ev)->position;
+            } else if (handle == ghSliderBacklight) {
+                gdispSetBacklight(((GEventGWinSlider *)ev)->position);
+            } else if (handle == ghSliderContrast) {
+                gdispSetContrast(((GEventGWinSlider *)ev)->position);
             } else {
                 return false;
             }
