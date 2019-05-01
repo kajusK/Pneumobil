@@ -222,7 +222,7 @@ void ECU_GetRawInputs(ecu_inputs_t *inputs)
         inputs->endstop_back = palReadLine(LINE_ENDSTOP_B1);
     }
     inputs->throttle = !palReadLine(LINE_THROTTLE);
-    inputs->brake = !palReadLine(LINE_BRAKE);
+    inputs->brake = palReadLine(LINE_BRAKE);
     inputs->shifting = palReadLine(LINE_BT_SHIFTING);
     inputs->horn = !palReadLine(LINE_BT_HORN);
 }
