@@ -29,11 +29,16 @@
 #include <hal.h>
 #include <chprintf.h>
 
+#include <utils/crc.h>
 #include <drivers/wdg.h>
 #include <drivers/crs.h>
+#include <drivers/rfm69.h>
 #include "usb.h"
 
 #include "version.h"
+
+#define NODE_ID 0x11
+#define NETWORK_ID 0x20
 
 static void usb_init(void)
 {
@@ -51,21 +56,47 @@ static void usb_init(void)
     usbConnectBus(serusbcfg.usbp);
 }
 
-int main(void) {
+static void rf_loop(void)
+{
+    uint8_t len, i, crc;
+    uint8_t buf[128];
+
+    len = rfm69_Receive(buf, sizeof(buf));
+    if (len == 0) {
+        return;
+    }
+
+    streamPut((BaseSequentialStream *)&SDU1, 0xff);
+    streamPut((BaseSequentialStream *)&SDU1, len);
+    crc = CRC8_Add(0xff, CRC8_INITIAL_VALUE);
+    crc = CRC8_Add(len, crc);
+    for (i = 0; i < len; i++) {
+        streamPut((BaseSequentialStream *)&SDU1, buf[i]);
+        crc = CRC8_Add(buf[i], crc);
+    }
+    streamPut((BaseSequentialStream *)&SDU1, crc);
+}
+
+int main(void)
+{
     halInit();
     /** main() becomes thread, rtos is activated */
     chSysInit();
 
     usb_init();
-
     /* Synchronize system clock to usb sync events for precise USB timing */
     Crsd_SyncToUsb();
-
     Wdgd_Init();
 
+    if (rfm69_Init(NODE_ID, NETWORK_ID, true, false) == false) {
+        chprintf((BaseSequentialStream *)&SDU1, "Failed to initialize RF node\r\n");
+    }
+    rfm69_SetBitrate(115200);
+
+    chprintf((BaseSequentialStream *)&SDU1, "Waiting for data\r\n");
+
     while (1) {
-        chThdSleepMilliseconds(500);
-        chprintf((BaseSequentialStream *)&SDU1, "\r\n\nrunning\r\n");
+        rf_loop();
     }
 }
 
