@@ -66,7 +66,7 @@ int main(void) {
     Logger_Init();
 
     SPId_Init();
-    Rf_Init();
+    //Rf_Init();
     Gui_Init();
 
     while (1) {
