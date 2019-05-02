@@ -38,6 +38,9 @@
 /** Run control thread every x ms */
 #define ECU_LOOP_CYCLE_MS 5
 
+/** Default piston len for case when endstop died and init len is 0 */
+#define ECU_DEFAULT_LEN 4000
+
 /* Priority of the ECU thread should be higher than other threads */
 #define ECU_THREAD_PRIO (NORMALPRIO + 1)
 
@@ -137,6 +140,10 @@ static void ECUi_EdgesInit(ecu_control_t *control)
                 Encoderd_InvertDirection();
                 len = -len;
                 Encoderd_Set(len);
+            }
+            if (len == 0) {
+                Log_Error(LOG_SOURCE_APP, "Encoder dead? Piston len measured was 0");
+                len = ECU_DEFAULT_LEN;
             }
             Config_SetUint(CONFIG_UINT_PISTON_LEN, len);
             Log_Info(LOG_SOURCE_APP, "Init done: Piston len: %d", len);
