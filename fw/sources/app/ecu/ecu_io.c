@@ -92,21 +92,8 @@ void ECU_ValvesFrontIn(bool dual)
 
 void ECU_ValvesBackOut(bool dual)
 {
-    palSetLine(LINE_VALVE_B1A);
-    palClearLine(LINE_VALVE_B1B);
-
-    if (dual) {
-        palSetLine(LINE_VALVE_B2A);
-    } else {
-        palClearLine(LINE_VALVE_B2A);
-    }
-    palClearLine(LINE_VALVE_B2B);
-}
-
-void ECU_ValvesBackIn(bool dual)
-{
-    palClearLine(LINE_VALVE_B1A);
     palSetLine(LINE_VALVE_B1B);
+    palClearLine(LINE_VALVE_B1A);
 
     if (dual) {
         palSetLine(LINE_VALVE_B2B);
@@ -114,6 +101,19 @@ void ECU_ValvesBackIn(bool dual)
         palClearLine(LINE_VALVE_B2B);
     }
     palClearLine(LINE_VALVE_B2A);
+}
+
+void ECU_ValvesBackIn(bool dual)
+{
+    palClearLine(LINE_VALVE_B1B);
+    palSetLine(LINE_VALVE_B1A);
+
+    if (dual) {
+        palSetLine(LINE_VALVE_B2A);
+    } else {
+        palClearLine(LINE_VALVE_B2A);
+    }
+    palClearLine(LINE_VALVE_B2B);
 }
 
 void ECU_ValvesBackClose(void)
