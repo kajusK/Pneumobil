@@ -44,7 +44,6 @@ MUTEX_DECL(rfi_mutex);
 
 /** Structure for sending data */
 typedef struct {
-    uint8_t magic;
     uint16_t speed_dms;
     uint16_t speed_avg_dms;
     uint16_t speed_max_dms;
@@ -94,7 +93,6 @@ static void Rfi_SendState(void)
     state = State_Get();
     time = State_GetRaceTimeMs()/1000;
 
-    data.magic = 0xff;  /* car state */
     data.speed_dms = state->car.speed_kmh/3.6*100;
     data.speed_avg_dms = state->car.speed_avg_kmh/3.6*100;
     data.speed_max_dms = state->car.speed_max_kmh/3.6*100;
