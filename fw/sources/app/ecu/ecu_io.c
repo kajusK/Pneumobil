@@ -64,72 +64,140 @@ static bool ECUi_GetBtMode(void)
     return false;
 }
 
-void ECU_ValvesFrontOut(bool dual)
+static void ECUi_ValveFront1(valve_state_t state)
 {
-    palSetLine(LINE_VALVE_F1A);
-    palClearLine(LINE_VALVE_F1B);
-
-    if (dual) {
-        palSetLine(LINE_VALVE_F2A);
-    } else {
-        palClearLine(LINE_VALVE_F2A);
+    switch (state) {
+        case VALVE_CLOSED:
+            palClearLine(LINE_VALVE_F1B);
+            palClearLine(LINE_VALVE_F1B);
+            break;
+        case VALVE_IN:
+            palClearLine(LINE_VALVE_F1A);
+            palSetLine(LINE_VALVE_F1B);
+            break;
+        case VALVE_OUT:
+            palSetLine(LINE_VALVE_F1A);
+            palClearLine(LINE_VALVE_F1B);
+            break;
     }
-    palClearLine(LINE_VALVE_F2B);
 }
 
-void ECU_ValvesFrontIn(bool dual)
+static valve_state_t ECUi_ValveFront1Get(void)
 {
-    palClearLine(LINE_VALVE_F1A);
-    palSetLine(LINE_VALVE_F1B);
+    bool a = palReadLine(LINE_VALVE_F1A);
+    bool b = palReadLine(LINE_VALVE_F1B);
 
-    if (dual) {
-        palSetLine(LINE_VALVE_F2B);
-    } else {
-        palClearLine(LINE_VALVE_F2B);
+    if (a == true && b == false) {
+        return VALVE_OUT;
+    } else if (a == false && b == true) {
+        return VALVE_IN;
     }
-    palClearLine(LINE_VALVE_F2A);
+    return VALVE_CLOSED;
 }
 
-void ECU_ValvesBackOut(bool dual)
+static void ECUi_ValveFront2(valve_state_t state)
 {
-    palSetLine(LINE_VALVE_B1B);
-    palClearLine(LINE_VALVE_B1A);
-
-    if (dual) {
-        palSetLine(LINE_VALVE_B2B);
-    } else {
-        palClearLine(LINE_VALVE_B2B);
+    switch (state) {
+        case VALVE_CLOSED:
+            palClearLine(LINE_VALVE_F2B);
+            palClearLine(LINE_VALVE_F2B);
+            break;
+        case VALVE_IN:
+            palClearLine(LINE_VALVE_F2A);
+            palSetLine(LINE_VALVE_F2B);
+            break;
+        case VALVE_OUT:
+            palSetLine(LINE_VALVE_F2A);
+            palClearLine(LINE_VALVE_F2B);
+            break;
     }
-    palClearLine(LINE_VALVE_B2A);
 }
 
-void ECU_ValvesBackIn(bool dual)
+static valve_state_t ECUi_ValveFront2Get(void)
 {
-    palClearLine(LINE_VALVE_B1B);
-    palSetLine(LINE_VALVE_B1A);
+    bool a = palReadLine(LINE_VALVE_F2A);
+    bool b = palReadLine(LINE_VALVE_F2B);
 
-    if (dual) {
-        palSetLine(LINE_VALVE_B2A);
-    } else {
-        palClearLine(LINE_VALVE_B2A);
+    if (a == true && b == false) {
+        return VALVE_OUT;
+    } else if (a == false && b == true) {
+        return VALVE_IN;
     }
-    palClearLine(LINE_VALVE_B2B);
+    return VALVE_CLOSED;
+}
+
+static void ECUi_ValveBack1(valve_state_t state)
+{
+    switch (state) {
+        case VALVE_CLOSED:
+            palClearLine(LINE_VALVE_B1B);
+            palClearLine(LINE_VALVE_B1B);
+            break;
+        case VALVE_OUT:
+            palClearLine(LINE_VALVE_B1A);
+            palSetLine(LINE_VALVE_B1B);
+            break;
+        case VALVE_IN:
+            palSetLine(LINE_VALVE_B1A);
+            palClearLine(LINE_VALVE_B1B);
+            break;
+    }
+}
+
+static valve_state_t ECUi_ValveBack1Get(void)
+{
+    bool a = palReadLine(LINE_VALVE_B1A);
+    bool b = palReadLine(LINE_VALVE_B1B);
+
+    if (a == true && b == false) {
+        return VALVE_IN;
+    } else if (a == false && b == true) {
+        return VALVE_OUT;
+    }
+    return VALVE_CLOSED;
+}
+
+static void ECUi_ValveBack2(valve_state_t state)
+{
+    switch (state) {
+        case VALVE_CLOSED:
+            palClearLine(LINE_VALVE_B2B);
+            palClearLine(LINE_VALVE_B2B);
+            break;
+        case VALVE_OUT:
+            palClearLine(LINE_VALVE_B2A);
+            palSetLine(LINE_VALVE_B2B);
+            break;
+        case VALVE_IN:
+            palSetLine(LINE_VALVE_B2A);
+            palClearLine(LINE_VALVE_B2B);
+            break;
+    }
+}
+
+static valve_state_t ECUi_ValveBack2Get(void)
+{
+    bool a = palReadLine(LINE_VALVE_B2A);
+    bool b = palReadLine(LINE_VALVE_B2B);
+
+    if (a == true && b == false) {
+        return VALVE_IN;
+    } else if (a == false && b == true) {
+        return VALVE_OUT;
+    }
+    return VALVE_CLOSED;
 }
 
 void ECU_ValvesBackClose(void)
 {
-    palClearLine(LINE_VALVE_B1A);
-    palClearLine(LINE_VALVE_B1B);
-    palClearLine(LINE_VALVE_B2A);
-    palClearLine(LINE_VALVE_B2B);
+    ECUi_ValveBack1(VALVE_CLOSED);
+    ECUi_ValveBack2(VALVE_CLOSED);
 }
 
 void ECU_ValvesFrontClose(void)
 {
-    palClearLine(LINE_VALVE_F1A);
-    palClearLine(LINE_VALVE_F1B);
-    palClearLine(LINE_VALVE_F2A);
-    palClearLine(LINE_VALVE_F2B);
+    ECUi_ValveFront1(VALVE_CLOSED);
+    ECUi_ValveFront2(VALVE_CLOSED);
 }
 
 void ECU_ValvesClose(void)
@@ -140,54 +208,48 @@ void ECU_ValvesClose(void)
 
 void ECU_ValvesMoveFront(bool dual)
 {
-    ECU_ValvesFrontOut(true);
-    ECU_ValvesBackIn(dual);
+    ECUi_ValveFront1(VALVE_OUT);
+    ECUi_ValveFront2(VALVE_OUT);
+
+    ECUi_ValveBack1(VALVE_IN);
+    if (dual) {
+        ECUi_ValveBack2(VALVE_IN);
+    } else {
+        ECUi_ValveBack2(VALVE_CLOSED);
+    }
 }
 
 void ECU_ValvesMoveBack(bool dual)
 {
-    ECU_ValvesFrontIn(dual);
-    ECU_ValvesBackOut(true);
+    ECUi_ValveBack1(VALVE_OUT);
+    ECUi_ValveBack2(VALVE_OUT);
+
+    ECUi_ValveFront1(VALVE_IN);
+    if (dual) {
+        ECUi_ValveFront2(VALVE_IN);
+    } else {
+        ECUi_ValveFront2(VALVE_CLOSED);
+    }
 }
 
 void ECU_ValvesSet(const ecu_valves_t *valves)
 {
     ASSERT_NOT(valves == NULL);
 
-    palWriteLine(LINE_VALVE_F1A, valves->front1 & 0x01);
-    palWriteLine(LINE_VALVE_F1B, (valves->front1 >> 1) & 0x01);
-    palWriteLine(LINE_VALVE_F2A, valves->front2 & 0x01);
-    palWriteLine(LINE_VALVE_F2B, (valves->front2 >> 1) & 0x01);
-
-    palWriteLine(LINE_VALVE_B1A, valves->back1 & 0x01);
-    palWriteLine(LINE_VALVE_B1B, (valves->back1 >> 1) & 0x01);
-    palWriteLine(LINE_VALVE_B2A, valves->back2 & 0x01);
-    palWriteLine(LINE_VALVE_B2B, (valves->back2 >> 1) & 0x01);
+    ECUi_ValveBack1(valves->back1);
+    ECUi_ValveBack2(valves->back2);
+    ECUi_ValveFront1(valves->front1);
+    ECUi_ValveFront2(valves->front2);
 }
 
 void ECU_ValvesGet(ecu_valves_t *valves)
 {
     ASSERT_NOT(valves == NULL);
 
-    valves->front1 = palReadLine(LINE_VALVE_F1A) | (palReadLine(LINE_VALVE_F1B) << 1);
-    if (valves->front1 > 2) {
-        valves->front1 = VALVE_CLOSED;
-    }
-
-    valves->back1 = palReadLine(LINE_VALVE_B1A) | (palReadLine(LINE_VALVE_B1B) << 1);
-    if (valves->back1 > 2) {
-        valves->back1 = VALVE_CLOSED;
-    }
-
-    valves->front2 = palReadLine(LINE_VALVE_F2A) | (palReadLine(LINE_VALVE_F2B) << 1);
-    if (valves->front2 > 2) {
-        valves->front2 = VALVE_CLOSED;
-    }
-
-    valves->back2 = palReadLine(LINE_VALVE_B2A) | (palReadLine(LINE_VALVE_B2B) << 1);
-    if (valves->back2 > 2) {
-        valves->back2 = VALVE_CLOSED;
-    }
+    valves->back1 = ECUi_ValveBack1Get();
+    valves->back2 = ECUi_ValveBack2Get();
+    valves->front1 = ECUi_ValveFront1Get();
+    valves->front2 = ECUi_ValveFront2Get();
 }
 
 void ECU_SetRegulatorPressure(uint32_t pressure_hpa)

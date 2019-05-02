@@ -53,34 +53,6 @@ typedef struct {
 } ecu_valves_t;
 
 /**
- * Set front valves to inputs to piston
- *
- * @param [in] dual Use dual valves mode
- */
-extern void ECU_ValvesFrontIn(bool dual);
-
-/**
- * Set front valves to exhausts
- *
- * @param [in] dual Use dual valves mode
- */
-extern void ECU_ValvesFrontOut(bool dual);
-
-/**
- * Set back valves to inputs
- *
- * @param [in] dual Use dual valves mode
- */
-extern void ECU_ValvesBackIn(bool dual);
-
-/**
- * Set back valves to exhausts
- *
- * @param [in] dual Use dual valves mode
- */
-extern void ECU_ValvesBackOut(bool dual);
-
-/**
  * Close back valves
  */
 extern void ECU_ValvesBackClose(void);
