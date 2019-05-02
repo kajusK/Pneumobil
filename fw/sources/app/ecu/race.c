@@ -28,6 +28,7 @@
 #include <utils/assert.h>
 #include <modules/log.h>
 #include <modules/config.h>
+#include <drivers/speed.h>
 #include <utils/time.h>
 
 #include "race.h"
@@ -80,6 +81,7 @@ void Race_NextMode(void)
 
 bool Race_Start(race_mode_t mode)
 {
+    Speedd_Reset();
     racei_start_timestamp = millis();
 
     switch (mode) {

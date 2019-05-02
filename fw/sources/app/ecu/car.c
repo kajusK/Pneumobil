@@ -114,7 +114,7 @@ void Car_GetState(car_data_t *state)
 
     state->speed_dms = Speedd_GetSpeedDms();
     state->distance_m = Speedd_GetDistanceM();
-    state->speed_avg_dms = (state->distance_m * 10) / (Race_GetDurationMs() / 1000);
+    state->speed_avg_dms = ((uint32_t) state->distance_m * 10) / (Race_GetDurationMs() / 1000);
 }
 
 void Car_Init(void)
