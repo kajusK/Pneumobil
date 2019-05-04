@@ -54,7 +54,7 @@ static GHandle ghBtTimeHourInc, ghBtTimeHourDec, ghBtTimeMinInc, ghBtTimeMinDec;
 static GHandle ghBtTimeYearInc, ghBtTimeYearDec;
 static GHandle ghFrameTime, ghBtTimeSave, ghBtTimeCancel;
 static GHandle ghSliderBacklight, ghSliderContrast, ghBtLcdSet;
-static GHandle ghFrameLcd, ghBtLcdSave, ghBtLcdCancel;
+static GHandle ghFrameLcd, ghBtLcdSave, ghBtLcdCancel, ghChboxLcdRotate;
 
 static GHandle ghLabelDatetime;
 static GHandle ghBtTimeSet;
@@ -192,10 +192,17 @@ static void Guii_SetupLcdInit(GHandle ghTab)
     wi.text = "Contrast";
     ghSliderContrast = gwinSliderCreate(0, &wi);
 
-    wi.g.x = gwinGetInnerWidth(ghFrameTime) - GUI_BUTTON_WIDTH - GUI_MARGIN;
     wi.g.y = gwinGetInnerHeight(ghFrameTime) - GUI_BUTTON_HEIGHT - GUI_MARGIN;
     wi.g.width = GUI_BUTTON_WIDTH;
     wi.g.height = GUI_BUTTON_HEIGHT;
+
+    wi.g.x = GUI_MARGIN;
+    wi.text = "Rotate";
+    wi.customDraw = gwinCheckboxDraw_Button;
+    ghChboxLcdRotate = gwinCheckboxCreate(0, &wi);
+
+    wi.customDraw = NULL;
+    wi.g.x = gwinGetInnerWidth(ghFrameTime) - GUI_BUTTON_WIDTH - GUI_MARGIN;
     wi.text = "Save";
     ghBtLcdSave = gwinButtonCreate(0, &wi);
 
@@ -289,12 +296,14 @@ static void Guii_SetupLcdLoad(void)
             Config_GetUint(CONFIG_UINT_BACKLIGHT));
     gwinSliderSetPosition(ghSliderContrast,
             Config_GetUint(CONFIG_UINT_CONTRAST));
+    gwinCheckboxCheck(ghChboxLcdRotate, Config_GetBool(CONFIG_BOOL_LCD_ROTATE));
 }
 
 static void Guii_SetupLcdSave(void)
 {
     Config_SetUint(CONFIG_UINT_BACKLIGHT, gwinSliderGetPosition(ghSliderBacklight));
     Config_SetUint(CONFIG_UINT_CONTRAST, gwinSliderGetPosition(ghSliderContrast));
+    Config_SetBool(CONFIG_BOOL_LCD_ROTATE, gwinCheckboxIsChecked(ghChboxLcdRotate));
 }
 
 /**
@@ -536,6 +545,15 @@ bool Gui_SetupProcessEvent(GEvent *ev)
     handle = ((GEventGWin *)ev)->gwin;
 
     switch (ev->type) {
+        case GEVENT_GWIN_CHECKBOX:
+            if (handle == ghChboxLcdRotate) {
+                if (gwinCheckboxIsChecked(ghChboxLcdRotate)) {
+                     gdispSetOrientation(GDISP_ROTATE_180);
+                } else {
+                     gdispSetOrientation(GDISP_ROTATE_0);
+                }
+            }
+            break;
         case GEVENT_GWIN_BUTTON:
             /* Mode saving/loading */
             if (handle == ghBtParamSave) {
