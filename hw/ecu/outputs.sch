@@ -367,32 +367,6 @@ F 3 "" H 5150 6450 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5150 6950 5200 6950
-$Comp
-L Amplifier_Operational:TSV912IDT U?
-U 1 1 61A2F93D
-P 2900 6900
-AR Path="/61A2F93D" Ref="U?"  Part="1" 
-AR Path="/61A01E90/61A2F93D" Ref="U8"  Part="1" 
-F 0 "U8" H 3050 7050 50  0000 C CNN
-F 1 "TSV912" H 3050 7150 50  0000 C CNN
-F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 2900 6900 50  0001 C CNN
-F 3 "www.st.com/resource/en/datasheet/tsv911.pdf" H 2900 6900 50  0001 C CNN
-	1    2900 6900
-	1    0    0    1   
-$EndComp
-$Comp
-L Amplifier_Operational:TSV912IDT U?
-U 2 1 61A2F944
-P 3700 6800
-AR Path="/61A2F944" Ref="U?"  Part="2" 
-AR Path="/61A01E90/61A2F944" Ref="U8"  Part="2" 
-F 0 "U8" H 3750 7000 50  0000 C CNN
-F 1 "TSV912" H 3650 7100 50  0000 C CNN
-F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 3700 6800 50  0001 C CNN
-F 3 "www.st.com/resource/en/datasheet/tsv911.pdf" H 3700 6800 50  0001 C CNN
-	2    3700 6800
-	1    0    0    1   
-$EndComp
 Wire Wire Line
 	2500 7000 2600 7000
 $Comp
@@ -743,7 +717,7 @@ AR Path="/61C396EC" Ref="U?"  Part="3"
 AR Path="/5F2321E1/61C396EC" Ref="U?"  Part="3" 
 AR Path="/61A01E90/61C396EC" Ref="U8"  Part="3" 
 F 0 "U8" H 6208 6946 50  0000 L CNN
-F 1 "TSV912" H 6208 6855 50  0000 L CNN
+F 1 "TS912" H 6208 6855 50  0000 L CNN
 F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 6250 6900 50  0001 C CNN
 F 3 "www.st.com/resource/en/datasheet/tsv911.pdf" H 6250 6900 50  0001 C CNN
 	3    6250 6900
@@ -1504,4 +1478,30 @@ Wire Wire Line
 Connection ~ 4450 6550
 Wire Wire Line
 	4450 6550 3350 6550
+$Comp
+L Amplifier_Operational:TSV912IDT U?
+U 2 1 61A2F944
+P 3700 6800
+AR Path="/61A2F944" Ref="U?"  Part="2" 
+AR Path="/61A01E90/61A2F944" Ref="U8"  Part="2" 
+F 0 "U8" H 3750 7000 50  0000 C CNN
+F 1 "TS912" H 3650 7100 50  0000 C CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 3700 6800 50  0001 C CNN
+F 3 "www.st.com/resource/en/datasheet/tsv911.pdf" H 3700 6800 50  0001 C CNN
+	2    3700 6800
+	1    0    0    1   
+$EndComp
+$Comp
+L Amplifier_Operational:TSV912IDT U?
+U 1 1 61A2F93D
+P 2900 6900
+AR Path="/61A2F93D" Ref="U?"  Part="1" 
+AR Path="/61A01E90/61A2F93D" Ref="U8"  Part="1" 
+F 0 "U8" H 3050 7050 50  0000 C CNN
+F 1 "TS912" H 3050 7150 50  0000 C CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 2900 6900 50  0001 C CNN
+F 3 "www.st.com/resource/en/datasheet/tsv911.pdf" H 2900 6900 50  0001 C CNN
+	1    2900 6900
+	1    0    0    1   
+$EndComp
 $EndSCHEMATC
