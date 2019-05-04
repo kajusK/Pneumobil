@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/kajus/Prace/projekty/pneumobil2019/hw/ecu/ecu.sch)
-    (date So 4. května 2019, 08:49:22 CEST)
+    (date So 4. května 2019, 09:13:30 CEST)
     (tool "Eeschema 5.0.1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -949,7 +949,7 @@
       (sheetpath (names /inputs/) (tstamps /5F2321E1/))
       (tstamp 5FE85F9E))
     (comp (ref R43)
-      (value 10k)
+      (value 1k)
       (footprint Resistor_SMD:R_0805_2012Metric)
       (datasheet ~)
       (libsource (lib Device) (part R) (description Resistor))
@@ -1159,7 +1159,7 @@
       (sheetpath (names /inputs/) (tstamps /5F2321E1/))
       (tstamp 6069BB7F))
     (comp (ref R55)
-      (value 10k)
+      (value 1k)
       (footprint Resistor_SMD:R_0805_2012Metric)
       (datasheet ~)
       (libsource (lib Device) (part R) (description Resistor))
