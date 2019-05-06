@@ -48,16 +48,16 @@ static GHandle ghConsole;
 static GHandle ghTabConsole;
 
 /**
- * Set console label to urgent
+ * Set error led to indicate console contains error/warning message
  *
  * @param [in] urgent   If true, set to urgent, else to normal
  */
 static void Guii_ConsoleSetUrgent(bool urgent)
 {
     if (urgent) {
-        gwinTabsetSetTitle(ghTabConsole, "Console (!)", FALSE);
+        palClearLine(LINE_LED_USER);
     } else {
-        gwinTabsetSetTitle(ghTabConsole, "Console", FALSE);
+        palSetLine(LINE_LED_USER);
     }
 }
 
