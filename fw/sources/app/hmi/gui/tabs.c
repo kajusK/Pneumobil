@@ -136,19 +136,26 @@ bool Gui_TabsUpdate(void)
 bool Gui_TabsProcessEvent(GEvent *ev)
 {
     GHandle handle;
+    gui_tab_t tab;
     handle = ((GEventGWin *)ev)->gwin;
 
     if (ev->type == GEVENT_GWIN_TABSET) {
-        if (handle == ghTabRace) {
-            Gui_RaceOnSelect();
-        } else if (handle == ghTabStatus) {
-            Gui_StatusOnSelect();
-        } else if (handle == ghTabSetup) {
-            Gui_SetupOnSelect();
-        } else if (handle == ghTabDebug) {
-            Gui_DebugOnSelect();
-        } else if (handle == ghTabConsole) {
-            Gui_ConsoleOnSelect();
+        switch (Gui_TabsGetActive()) {
+            case TAB_RACE:
+                Gui_RaceOnSelect();
+                break;
+            case TAB_SETUP:
+                Gui_SetupOnSelect();
+                break;
+            case TAB_STATUS:
+                Gui_StatusOnSelect();
+                break;
+            case TAB_DEBUG:
+                Gui_DebugOnSelect();
+                break;
+            case TAB_CONSOLE:
+                Gui_ConsoleOnSelect();
+                break;
         }
         /* On tab change, battery label is moved to background by redraw */
         gwinRaise(ghLabelBattery);
