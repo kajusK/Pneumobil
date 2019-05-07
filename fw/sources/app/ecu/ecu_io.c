@@ -44,7 +44,7 @@ static bool ECUi_GetBtThrottle(void)
     static bt_debounce_t deb = { 0 };
     bool state;
 
-    state = Bt_Debounce(palReadLine(LINE_BT_SHIFTING), &deb);
+    state = Bt_Debounce(palReadLine(LINE_BT_THROTTLE), &deb);
     if (Bt_GetEdge(state, &prev) == BT_EDGE_RISING) {
         return true;
     }
@@ -57,7 +57,7 @@ static bool ECUi_GetBtMode(void)
     static bt_debounce_t deb = { 0 };
     bool state;
 
-    state = Bt_Debounce(palReadLine(LINE_BT_MODE), &deb);
+    state = Bt_Debounce(!palReadLine(LINE_BT_MODE), &deb);
     if (Bt_GetEdge(state, &prev) == BT_EDGE_RISING) {
         return true;
     }
@@ -286,7 +286,8 @@ void ECU_GetRawInputs(ecu_inputs_t *inputs)
     inputs->throttle = !palReadLine(LINE_THROTTLE);
     inputs->brake = palReadLine(LINE_BRAKE);
     inputs->shifting = palReadLine(LINE_BT_SHIFTING);
-    inputs->horn = !palReadLine(LINE_BT_HORN);
+    /* TODO workaround using bt throttle */
+    inputs->horn = !palReadLine(LINE_BT_THROTTLE);
 }
 
 uint8_t ECU_GetGear(void)
@@ -317,11 +318,12 @@ void ECU_GetInputs(ecu_inputs_t *inputs)
     inputs->endstop_back = Bt_Debounce(inputs->endstop_back, &deb[1]);
     inputs->endstop_back = Bt_GetEdge(inputs->endstop_back, &prev[1]) == BT_EDGE_RISING;
 
-    inputs->throttle = Bt_Debounce(inputs->throttle, &deb[2]) | ECUi_GetBtThrottle();
+    inputs->throttle = Bt_Debounce(inputs->throttle, &deb[2]); //| ECUi_GetBtThrottle();
     inputs->brake = Bt_Debounce(inputs->brake, &deb[3]);
     inputs->shifting = Bt_Debounce(inputs->shifting, &deb[4]);
     inputs->horn = Bt_Debounce(inputs->horn, &deb[5]);
 
+    ECU_SetHorn(inputs->horn);
     if (ECUi_GetBtMode()) {
         Race_NextMode();
     }
