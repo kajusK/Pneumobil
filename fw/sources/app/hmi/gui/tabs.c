@@ -135,10 +135,6 @@ bool Gui_TabsUpdate(void)
 
 bool Gui_TabsProcessEvent(GEvent *ev)
 {
-    GHandle handle;
-    gui_tab_t tab;
-    handle = ((GEventGWin *)ev)->gwin;
-
     if (ev->type == GEVENT_GWIN_TABSET) {
         switch (Gui_TabsGetActive()) {
             case TAB_RACE:
@@ -155,6 +151,8 @@ bool Gui_TabsProcessEvent(GEvent *ev)
                 break;
             case TAB_CONSOLE:
                 Gui_ConsoleOnSelect();
+                break;
+            default:
                 break;
         }
         /* On tab change, battery label is moved to background by redraw */
