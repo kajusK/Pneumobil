@@ -39,7 +39,7 @@
 /*===========================================================================*/
 
 /* workaround for compiling without optimizations - larger code causing overflows */
-#define PORT_INT_REQUIRED_STACK 128
+#define PORT_INT_REQUIRED_STACK 512
 
 /**
  * @brief   System time counter resolution.
