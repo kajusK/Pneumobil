@@ -25,9 +25,11 @@
  */
 
 #include <hal.h>
+#include <string.h>
 
 #include <modules/log.h>
 #include <modules/config.h>
+#include <modules/comm/comm.h>
 #include <drivers/rfm69.h>
 #include "state.h"
 #include "rf.h"
@@ -44,6 +46,7 @@ MUTEX_DECL(rfi_mutex);
 
 /** Structure for sending data */
 typedef struct {
+    uint8_t cmd;
     uint16_t speed_dms;
     uint16_t speed_avg_dms;
     uint16_t speed_max_dms;
@@ -69,6 +72,14 @@ typedef struct {
     };
 } __attribute__((packed)) rf_data_t;
 
+typedef struct {
+    uint8_t cmd;
+    uint8_t module;
+    uint8_t source;
+    uint8_t severity;
+    char msg[LOG_MSG_LEN];
+} __attribute__((packed)) rf_log_t;
+
 /**
  * Callback for log module, will send log messages to PC
  *
@@ -76,8 +87,16 @@ typedef struct {
  */
 static void Rfi_LogCb(const log_msg_t *log)
 {
+    rf_log_t data;
+
+    data.cmd = COMM_CMD_LOG_MESSAGE;
+    data.module = log->module;
+    data.severity = log->severity;
+    data.source = log->src;
+    strcpy(data.msg, log->msg);
+
     chMtxLock(&rfi_mutex);
-    rfm69_Send(DEST_ID, (uint8_t *) log, sizeof(log));
+    rfm69_Send(DEST_ID, (uint8_t *) &data, strlen(log->msg)+4);
     chMtxUnlock(&rfi_mutex);
 }
 
@@ -93,6 +112,7 @@ static void Rfi_SendState(void)
     state = State_Get();
     time = State_GetRaceTimeMs()/1000;
 
+    data.cmd = COMM_CMD_TELEMETRY;
     data.speed_dms = state->car.speed_kmh/3.6*100;
     data.speed_avg_dms = state->car.speed_avg_kmh/3.6*100;
     data.speed_max_dms = state->car.speed_max_kmh/3.6*100;

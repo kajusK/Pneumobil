@@ -108,6 +108,7 @@ typedef enum {
     COMM_CMD_PSU_VOLTAGE = 0x32,    /* Voltages of all branches */
 
 /* HMI commands*/
+    COMM_CMD_TELEMETRY = 0x3a,    /* System telemetry (intended for RF link) */
 } comm_cmd_id_t;
 
 #ifdef BOARD_ECU
