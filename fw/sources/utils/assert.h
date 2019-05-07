@@ -28,9 +28,12 @@
 #ifndef __UTILS_ASSERT_H
 #define __UTILS_ASSERT_H
 
+#include "drivers/sys.h"
+
 #ifndef ASSERT
     #define ASSERT(condition) \
         if (!(condition)) { \
+            Sysd_Reboot(); \
             while (1); \
         }
 #endif
