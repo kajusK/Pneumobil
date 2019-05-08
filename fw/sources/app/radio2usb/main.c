@@ -33,6 +33,7 @@
 #include <drivers/wdg.h>
 #include <drivers/crs.h>
 #include <drivers/rfm69.h>
+#include <drivers/spi.h>
 #include "usb.h"
 
 #include "version.h"
@@ -86,6 +87,7 @@ int main(void)
     usb_init();
     /* Synchronize system clock to usb sync events for precise USB timing */
     Crsd_SyncToUsb();
+    SPId_Init();
     Wdgd_Init();
 
     if (rfm69_Init(NODE_ID, NETWORK_ID, true, false) == false) {
