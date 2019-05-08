@@ -68,7 +68,7 @@ static void ECUi_ValveFront1(valve_state_t state)
 {
     switch (state) {
         case VALVE_CLOSED:
-            palClearLine(LINE_VALVE_F1B);
+            palClearLine(LINE_VALVE_F1A);
             palClearLine(LINE_VALVE_F1B);
             break;
         case VALVE_IN:
@@ -99,7 +99,7 @@ static void ECUi_ValveFront2(valve_state_t state)
 {
     switch (state) {
         case VALVE_CLOSED:
-            palClearLine(LINE_VALVE_F2B);
+            palClearLine(LINE_VALVE_F2A);
             palClearLine(LINE_VALVE_F2B);
             break;
         case VALVE_IN:
@@ -130,7 +130,7 @@ static void ECUi_ValveBack1(valve_state_t state)
 {
     switch (state) {
         case VALVE_CLOSED:
-            palClearLine(LINE_VALVE_B1B);
+            palClearLine(LINE_VALVE_B1A);
             palClearLine(LINE_VALVE_B1B);
             break;
         case VALVE_OUT:
@@ -161,7 +161,7 @@ static void ECUi_ValveBack2(valve_state_t state)
 {
     switch (state) {
         case VALVE_CLOSED:
-            palClearLine(LINE_VALVE_B2B);
+            palClearLine(LINE_VALVE_B2A);
             palClearLine(LINE_VALVE_B2B);
             break;
         case VALVE_OUT:
