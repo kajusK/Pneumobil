@@ -96,6 +96,7 @@ class Uart:
         # thread for receiving data over uart
         state = UART_STATE_START
         length = 0
+        count = 0
         buf = []
 
         while self.thread_run:
@@ -110,6 +111,7 @@ class Uart:
                 if c == UART_SOF:
                     state = UART_STATE_LEN
                     length = 0
+                    count = 0
                     crc = 0
                     buf = []
             elif state == UART_STATE_LEN:
@@ -117,12 +119,12 @@ class Uart:
                 length = c
             elif state == UART_STATE_DATA:
                 buf.append(c)
-                length -= 1
-                if length == 0:
+                count += 1
+                if count == length:
                     state = UART_STATE_CRC
             elif state == UART_STATE_CRC:
                 state = UART_STATE_START
-                if self._crcVerify(c, [0xff, length]+buf):
+                if self._crcVerify(c, [UART_SOF, length]+buf):
                     self.log.debug("Received: {}".format(''.join('%02x ' % b for b in buf)))
                     self._processData(buf)
                 else:
