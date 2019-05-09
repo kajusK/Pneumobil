@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.btDisconnect.clicked.connect(self.doUartDisconnect)
 
     def doUartConnect(self):
-        if self.con.connect() == False:
+        if self.con.connect(self.leDevice.text(), self.leBaudrate.text()) == False:
             return
 
         self.leDevice.setEnabled(False)
