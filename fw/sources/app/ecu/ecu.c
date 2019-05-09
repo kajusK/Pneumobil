@@ -87,7 +87,7 @@ static bool ECUi_PneuEnabled(const ecu_inputs_t *inputs)
         return true;
     }
 
-    if (!inputs->brake && !inputs->shifting) {
+    if (!inputs->shifting) {
         return true;
     }
     return false;
