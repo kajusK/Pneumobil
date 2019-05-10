@@ -76,6 +76,8 @@ static void rf_loop(void)
         crc = CRC8_Add(buf[i], crc);
     }
     streamPut((BaseSequentialStream *)&SDU1, crc);
+
+    palToggleLine(LINE_RX_LED);
 }
 
 int main(void)
@@ -88,7 +90,7 @@ int main(void)
     /* Synchronize system clock to usb sync events for precise USB timing */
     Crsd_SyncToUsb();
     SPId_Init();
-    Wdgd_Init();
+//    Wdgd_Init();
 
     if (rfm69_Init(NODE_ID, NETWORK_ID, true, false) == false) {
         chprintf((BaseSequentialStream *)&SDU1, "Failed to initialize RF node\r\n");
