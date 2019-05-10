@@ -19,20 +19,20 @@ class Telemetry(CommStructure):
     MSG_LEN = 27
 
     def decode(self, buf):
-        self.speed_kmh = unpack_uint16(buf[0:1])/100*3.6
-        self.speed_avg_kmh = unpack_uint16(buf[2:3])/100*3.6
-        self.speed_max_kmh = unpack_uint16(buf[4:5])/100*3.6
-        self.distance_m = unpack_uint16(buf[6:7])
+        self.speed_kmh = unpack_uint16(buf[0:2])/100*3.6
+        self.speed_avg_kmh = unpack_uint16(buf[2:4])/100*3.6
+        self.speed_max_kmh = unpack_uint16(buf[4:6])/100*3.6
+        self.distance_m = unpack_uint16(buf[6:8])
         self.race_mode = unpack_uint8(buf[8])
         self.filling_pct = unpack_uint8(buf[9])
-        self.deadtime_ms = unpack_uint16(buf[10:11])
-        self.press1_kpa = unpack_uint16(buf[12:13])
-        self.press2_kpa = unpack_uint16(buf[14:15])
-        self.press3_kpa = unpack_uint16(buf[16:17])
+        self.deadtime_ms = unpack_uint16(buf[10:12])
+        self.press1_kpa = unpack_uint16(buf[12:14])
+        self.press2_kpa = unpack_uint16(buf[14:16])
+        self.press3_kpa = unpack_uint16(buf[16:18])
         self.time_s = unpack_uint8(buf[18])
         self.time_m = unpack_uint8(buf[19])
-        self.bat_mv = unpack_uint16(buf[20:21])
-        self.bat_ma = unpack_uint16(buf[22:23])
+        self.bat_mv = unpack_uint16(buf[20:22])
+        self.bat_ma = unpack_uint16(buf[22:24])
         self.piston_pct = unpack_uint8(buf[24])
 
         byte = unpack_uint8(buf[25])
