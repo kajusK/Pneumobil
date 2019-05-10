@@ -125,7 +125,6 @@ class Uart:
             elif state == UART_STATE_CRC:
                 state = UART_STATE_START
                 if self._crcVerify(c, [UART_SOF, length]+buf):
-                    self.log.debug("Received: {}".format(''.join('%02x ' % b for b in buf)))
                     self._processData(buf)
                 else:
                     self.log.warn("Received uart crc does not match")
