@@ -195,7 +195,7 @@
             <item row="4" column="3">
              <widget class="QLabel" name="lbBatVoltage">
               <property name="text">
-               <string>24000 mV</string>
+               <string>00000 mV</string>
               </property>
              </widget>
             </item>
@@ -229,7 +229,7 @@
             <item row="5" column="3">
              <widget class="QLabel" name="lbBatCurrent">
               <property name="text">
-               <string>2182 mA</string>
+               <string>0000 mA</string>
               </property>
              </widget>
             </item>
