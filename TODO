@@ -1,0 +1,24 @@
+FW
+==
+- Comm session layer should allow multiple responses to single command (eg. senging status as broadcast and collecting replies)
+
+- Comm layer should run in it's own thread and communicatie using fifo or something like that, currently all communicating
+threads must have large stack to contain whole comm calltrace
+
+- Optimize stack usage
+
+- Refactor GUI - each module should only contain init function that fills structure with
+calls to on select, button update, etc. This structure is given to tab_register or
+something like that
+
+- migrate from uGFX to littlevgl
+
+
+HW
+==
+- SDU has inverted order of DSUB 9 interface connector
+- Remake PSU - burning MCU and 12 V is not able to supply enough current for horn (1,5 A).
+- Update ECU to support servo control (automatic shifting)
+- Update ECU to support polarity change of the Brake signal
+- Update ECU to wire horn control through MCU
+- Replace TSV912 by TS912 (working on higher voltages)
