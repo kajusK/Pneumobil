@@ -26,5 +26,5 @@ Placement in the car
 ![box](./img/box.jpg)
 
 Python telemetry program
-![telemetry](./img/telemetry.jpg)
+![telemetry](./img/telemetry.png)
 
